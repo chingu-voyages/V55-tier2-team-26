@@ -1,41 +1,65 @@
-# voyage-tasks
+# Our App Name
 
-Your project's `readme` is as important to success as your code. For 
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+Our App Name Description... Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. 
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point - 
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+## Features
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+***Project Name*** includes the following utilities:
 
-> Own it & Make it your Own!
+- **Feature 1:** Feature Description.
 
-## Team Documents
+More about our features... Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. 
 
-You may find these helpful as you work together to organize your project.
+## App Experience
 
-- [Team Project Ideas](./docs/team_project_ideas.md)
-- [Team Decision Log](./docs/team_decision_log.md)
+Visit ***Our app name*** online [here](https://github.com/chingu-voyages/v55-tier2-team-26) to experience the tools firsthand. Below, you will find screenshots of ***our app*** page.
 
-Meeting Agenda templates (located in the `/docs` directory in this repo):
+![Our App Feature or page Example ](https://tenor.com/pp9oI08Syt1.gif)
 
-- Meeting - Voyage Kickoff --> ./docs/meeting-voyage_kickoff.docx
-- Meeting - App Vision & Feature Planning --> ./docs/meeting-vision_and_feature_planning.docx
-- Meeting - Sprint Retrospective, Review, and Planning --> ./docs/meeting-sprint_retrospective_review_and_planning.docx
-- Meeting - Sprint Open Topic Session --> ./docs/meeting-sprint_open_topic_session.docx
+# Tech Stack
+
+- React
+- Vite
+- Tailwind CSS
+- Google Gemini API (maybe...)
+
+## Getting Started
+
+Follow these steps to get ***our app*** running on your local machine:
+
+1. **Clone the repository:**
+
+   Use the following command to clone the project repository to your local system: 
+   `git clone https://github.com/chingu-voyages/v55-tier2-team-26.git` 
+   
+2. **Navigate to the project directory:**
+After cloning, move into the 'front-end' or 'back-end' directory by running: `cd front-end` or `cd back-end`
+
+3. **Install dependencies:**
+Install the project's dependencies to ensure it runs smoothly: `npm install`
+
+4. **Start the development server:**
+Launch the application in development mode with Vite: `npm run dev`  
+
+This command starts a local development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the app.
+
+By following these steps, you should have a local instance of DevEx Tools running and ready for development or exploration.
 
 ## Our Team
 
-Everyone on your team should add their name along with a link to their GitHub
-& optionally their LinkedIn profiles below. Do this in Sprint #1 to validate
-your repo access and to practice PR'ing with your team *before* you start
-coding!
+### Product Owners:
+- Xochitl Farias — [Github](https://github.com/xochfa)|[LinkedIn](https://www.linkedin.com/in/xfarias-scrum-master/)
 
-- Xochitl Farias #1: [GitHub](https://github.com/xochfa) / [LinkedIn](https://www.linkedin.com/in/xfarias-scrum-master/)
-- Mikala Franks #2: [GitHub](https://github.com/mikalafranks) / [LinkedIn](https://www.linkedin.com/in/mikala-franks-8b21b52a3/)
+### Scrum Masters:
+- Mikala Franks — [Github](https://github.com/mikalafranks)|[LinkedIn](https://www.linkedin.com/in/mikala-franks-8b21b52a3/)
+- Oghenerukevwe Egbaivwie — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
 
-   ...
-- Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+### UI/UX Designer: 
+- Alice — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+
+### Web Developers: 
+- Bryan — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Kristine — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Matthew — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Steven Rubio Perez — [Github](https://github.com/Stevensauro?tab=repositories)|[LinkedIn](https://www.linkedin.com/in/steverp/)
+
