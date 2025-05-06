@@ -1,5 +1,4 @@
-import DemoComponent from "./components/DemoComponents.jsx";
-import './App.css'
+import DemoComponent from "./components/DemoComponent/DemoComponent";
 
 export default function App() {
   return (
