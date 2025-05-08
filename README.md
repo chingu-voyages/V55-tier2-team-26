@@ -58,7 +58,7 @@ By following these steps, you should have a local instance of DevEx Tools runnin
 - Alice — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
 
 ### Web Developers: 
-- Bryan — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Bryan Hoyem — [Github](https://github.com/bhoyem)|[LinkedIn](https://www.linkedin.com/in/bryanhoyem/)
 - Kristine — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
 - Matthew — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
 - Steven Rubio Perez — [Github](https://github.com/Stevensauro?tab=repositories)|[LinkedIn](https://www.linkedin.com/in/steverp/)
