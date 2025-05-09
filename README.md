@@ -55,7 +55,7 @@ By following these steps, you should have a local instance of DevEx Tools runnin
 - Oghenerukevwe Egbaivwie — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
 
 ### UI/UX Designer: 
-- Alice — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Jessica Hackett — [Github](https://github.com/mooglemoxie0018)|[LinkedIn](https://www.linkedin.com/in/jessica-hackett-6725a4325/)
 
 ### Web Developers: 
 - Bryan Hoyem — [Github](https://github.com/bhoyem)|[LinkedIn](https://www.linkedin.com/in/bryanhoyem/)
