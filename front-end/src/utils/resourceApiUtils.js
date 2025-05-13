@@ -3,13 +3,7 @@ async function fetchResources() {
 //https://seshatbe.up.railway.app/resources
     try {
     const data = await fetch("https://seshatbe.up.railway.app/resources", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Headers": "Content-Type"
-      },
+      method: "GET"
     });
     console.log(await data.json());
   } catch (error) {
@@ -20,9 +14,9 @@ async function fetchResources() {
 async function fetchTags() {
   try {
     const data = await fetch("https://seshatbe.up.railway.app/tags", {
-      method: "GET",
+      method: "GET"
     });
-    console.log(data);
+    console.log(await data.json());
   } catch (error) {
     throw new Error(error);
   }
