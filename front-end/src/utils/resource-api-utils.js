@@ -162,11 +162,4 @@ function searchBy({ data, keywords, tags = null }) {
   return sortByPriority(keywordsPriorityArray);
 }
 
-console.log(
-  searchBy({
-    data: dummyData,
-    keywords: "l",
-  })
-);
-
-export { fetchResources, fetchTags };
+export { fetchResources, fetchTags, searchBy };
