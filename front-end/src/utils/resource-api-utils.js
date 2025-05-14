@@ -1,22 +1,3 @@
-const dummyData = [
-  {
-    author: "andresc1310",
-    name: "Lazygit",
-    appliedTags: ["1048174499905937428"],
-    url: "https://www.freecodecamp.org/news/how-to-use-lazygit-to-improve-your-git-workflow/",
-    createdAt: "2025-04-12T18:04:11.224Z",
-    id: "1360676892071559340",
-  },
-  {
-    author: "jdmedlock",
-    name: "Faster shuffling in Go with batching",
-    appliedTags: ["1303349202444615730", "1048174499905937428"],
-    url: "https://lemire.me/blog/2025/04/06/faster-shuffling-in-go-with-batching/",
-    createdAt: "2025-04-10T18:39:07.722Z",
-    id: "1359960909690175570",
-  },
-];
-
 async function fetchResources() {
   try {
     const data = await fetch("https://seshatbe.up.railway.app/resources", {
@@ -40,7 +21,7 @@ async function fetchTags() {
   }
 }
 
-function searchBy({ data, keywords, tags = null }) {
+function searchBy({ data, keywords, tags }) {
   if (keywords === null)
     return console.log(
       new Error(`"keywords" property missing when parsing object...`)
@@ -117,7 +98,7 @@ function searchBy({ data, keywords, tags = null }) {
 
   const keywordsPriorityArray = [];
 
-  if (tags) {
+  if (tags.length!==0) {
     const tagPriorityArray = [];
 
     const filteredByTagPosts = data.filter(({ appliedTags }, idx) => {
