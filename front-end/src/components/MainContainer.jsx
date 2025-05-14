@@ -1,4 +1,4 @@
-import { fetchResources, fetchTags } from "../utils/resourceApiUtils"
+import { fetchResources, fetchTags } from "../utils/resource-api-utils"
 
 export default function MainContainer({children}){
     fetchResources()
