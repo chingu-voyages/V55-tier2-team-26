@@ -41,8 +41,10 @@ async function fetchTags() {
 }
 
 function searchBy({ data, keywords, tags = null }) {
-  if(keywords===null)
-    return console.log(new Error(`"keywords" property missing when parsing object...`))
+  if (keywords === null)
+    return console.log(
+      new Error(`"keywords" property missing when parsing object...`)
+    );
 
   const sanitizedKeywords = keywords.toLowerCase().trim();
 
@@ -100,9 +102,23 @@ function searchBy({ data, keywords, tags = null }) {
     return { isMatch: false, priority: -1 };
   };
 
+  const sortByPriority = (priorityArr) => {
+    priorityArr.sort(({ priority: priorityA }, { priority: priorityB }) => {
+      if (priorityA > priorityB) return -1;
+      if (priorityA < priorityB) return 1;
+
+      return 0;
+    });
+
+    const sortedByPriority = priorityArr.map(({ idx }) => data[idx]);
+
+    return sortedByPriority.length===0?{error: "No post was found with those keywords. Try with different keywords..."}:sortedByPriority;
+  };
+
+  const keywordsPriorityArray = [];
+
   if (tags) {
     const tagPriorityArray = [];
-    const keywordsPriorityArray = [];
 
     const filteredByTagPosts = data.filter(({ appliedTags }, idx) => {
       const { isMatch, priority } = checkMatchTags(appliedTags);
@@ -129,28 +145,27 @@ function searchBy({ data, keywords, tags = null }) {
       idx: tagPriorityObj.idx,
     }));
 
-    console.log(bothPrioritiesArr);
-
-    bothPrioritiesArr.sort(
-      ({ priority: priorityA }, { priority: priorityB }) => {
-        if (priorityA > priorityB) return -1;
-        if (priorityA < priorityB) return 1;
-
-        return 0;
-      }
-    );
-
-    const sortedByPriority = bothPrioritiesArr.map(({ idx }) => data[idx]);
-
-    return sortedByPriority;
+    return sortByPriority(bothPrioritiesArr);
   }
+
+  if (keywords.length === 0) return data;
+
+  data.forEach(({ name }, idx) => {
+    const { isMatch, priority } = checkMatchKeywords(name);
+    if (isMatch) {
+      keywordsPriorityArray.push({ idx, isMatch, priority });
+    }
+
+    return isMatch;
+  });
+
+  return sortByPriority(keywordsPriorityArray);
 }
 
 console.log(
   searchBy({
     data: dummyData,
-    keywords: "ling",
-    tags: ["1048174499905937428"],
+    keywords: "l",
   })
 );
 
