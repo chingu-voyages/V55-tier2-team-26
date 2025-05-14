@@ -40,7 +40,10 @@ async function fetchTags() {
   }
 }
 
-function searchBy({ data, keywords, tags }) {
+function searchBy({ data, keywords, tags = null }) {
+  if(keywords===null)
+    return console.log(new Error(`"keywords" property missing when parsing object...`))
+
   const sanitizedKeywords = keywords.toLowerCase().trim();
 
   console.log(data, sanitizedKeywords, tags);
@@ -49,7 +52,7 @@ function searchBy({ data, keywords, tags }) {
     const tagRegExp = `(${tags.join(")|(")})`;
     const matches = [...appliedTags.join(" ").matchAll(tagRegExp, "gm")];
 
-    if (matches) {
+    if (matches.length !== 0) {
       if (appliedTags.length === tags.length)
         return { isMatch: true, priority: 3 };
 
@@ -82,9 +85,7 @@ function searchBy({ data, keywords, tags }) {
 
     const matches = [...name.toLowerCase().matchAll(keywordsRegEx, "gm")];
 
-    console.log(name,matches)
-
-    if (matches.length!==0) {
+    if (matches.length !== 0) {
       if (name === sanitizedKeywords) return { isMatch: true, priority: 3 };
 
       if (Number(matches.length / nameKeywordsArr.length).toFixed(2) >= 0.5)
@@ -96,56 +97,60 @@ function searchBy({ data, keywords, tags }) {
       return { isMatch: true, priority: 0 };
     }
 
-    return { isMatch: false, priority: -1};
+    return { isMatch: false, priority: -1 };
   };
 
-  if (keywords && tags) {
+  if (tags) {
     const tagPriorityArray = [];
     const keywordsPriorityArray = [];
 
     const filteredByTagPosts = data.filter(({ appliedTags }, idx) => {
       const { isMatch, priority } = checkMatchTags(appliedTags);
-      tagPriorityArray.push({ idx, isMatch, priority });
+      if (isMatch) {
+        tagPriorityArray.push({ idx, isMatch, priority });
+      }
 
       return isMatch;
     });
 
-    filteredByTagPosts.forEach(
-      ({ name, idx }) => {
-        const {isMatch, priority=0} = checkMatchKeywords(name)
-        keywordsPriorityArray.push({idx, isMatch, priority})
+    if (tagPriorityArray.length === 1) {
+      return filteredByTagPosts;
+    }
 
-        return isMatch
+    filteredByTagPosts.forEach(({ name }, idx) => {
+      const { isMatch, priority } = checkMatchKeywords(name);
+      keywordsPriorityArray.push({ idx, isMatch, priority });
+    });
+
+    const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj) => ({
+      priority:
+        tagPriorityObj.priority +
+        keywordsPriorityArray[tagPriorityObj.idx].priority,
+      idx: tagPriorityObj.idx,
+    }));
+
+    console.log(bothPrioritiesArr);
+
+    bothPrioritiesArr.sort(
+      ({ priority: priorityA }, { priority: priorityB }) => {
+        if (priorityA > priorityB) return -1;
+        if (priorityA < priorityB) return 1;
+
+        return 0;
       }
-    ); 
+    );
 
-    const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj)=>(
-      {priority: tagPriorityObj.priority + keywordsPriorityArray[tagPriorityObj.idx].priority, idx: tagPriorityObj.idx}
-    ))    
+    const sortedByPriority = bothPrioritiesArr.map(({ idx }) => data[idx]);
 
-
-    console.log(bothPrioritiesArr)
-
-    bothPrioritiesArr.sort(({priority: priorityA},{priority: priorityB})=>{
-      if(priorityA > priorityB)
-        return -1
-      if(priorityA < priorityB)
-        return 1
-
-      return 0
-    })
-
-    const sortedByPriority = bothPrioritiesArr.map(({idx})=>data[idx])
-
-    return sortedByPriority
+    return sortedByPriority;
   }
 }
 
 console.log(
   searchBy({
     data: dummyData,
-    keywords: "",
-    tags: ["1303349202444615730"],
+    keywords: "ling",
+    tags: ["1048174499905937428"],
   })
 );
 
