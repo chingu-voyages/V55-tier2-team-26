@@ -29,8 +29,6 @@ function searchBy({ data, keywords, tags }) {
 
   const sanitizedKeywords = keywords.toLowerCase().trim();
 
-  console.log(data, sanitizedKeywords, tags);
-
   const checkMatchTags = (appliedTags) => {
     const tagRegExp = `(${tags.join(")|(")})`;
     const matches = [...appliedTags.join(" ").matchAll(tagRegExp, "gm")];
@@ -114,15 +112,17 @@ function searchBy({ data, keywords, tags }) {
       return filteredByTagPosts;
     }
 
-    filteredByTagPosts.forEach(({ name }, idx) => {
+    filteredByTagPosts.forEach(({ name, idx }) => {
       const { isMatch, priority } = checkMatchKeywords(name);
       keywordsPriorityArray.push({ idx, isMatch, priority });
     });
 
-    const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj) => ({
+    console.log(tagPriorityArray, keywordsPriorityArray)
+
+    const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj, idx) => ({
       priority:
         tagPriorityObj.priority +
-        keywordsPriorityArray[tagPriorityObj.idx].priority,
+        keywordsPriorityArray[idx].priority,
       idx: tagPriorityObj.idx,
     }));
 

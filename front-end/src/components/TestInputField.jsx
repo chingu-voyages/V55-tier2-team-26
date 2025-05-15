@@ -1,8 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
 
 export default function TestInputField() {
-  const { tags, activeTags, isFetching, handleUserInput, handleTagsInput } = useContext(ResourcesContext);
+  const {
+    tags,
+    activeTags,
+    isFetching,
+    searchInputRef,
+    handleUserInput,
+    handleTagsInput,
+  } = useContext(ResourcesContext);
 
   const loadTags = () => {
     return (
@@ -10,11 +17,19 @@ export default function TestInputField() {
         {isFetching.tags ? (
           <select disabled></select>
         ) : (
-          <select size={10} onChange={handleTagsInput}>
-            {tags.map(({tag, id}) => (<>
-                <option key={id} id={id} value={id} className={activeTags.includes(id)?'bg-amber-300':null}>{tag}</option>
-            </>
-            ))}
+          <select size={10} onClick={handleTagsInput}>
+            {tags.map(({ tag, id }) => {
+              return (
+                <option
+                  key={id}
+                  id={id}
+                  value={id}
+                  className={activeTags.findIndex((activeTag)=>activeTag.id===id)!==-1 ? "bg-amber-300" : null}
+                >
+                  {tag}
+                </option>
+              );
+            })}
           </select>
         )}
       </>
@@ -23,7 +38,12 @@ export default function TestInputField() {
 
   return (
     <div className="w-40">
-      <input type="search" className="p-4 border-2" onChange={handleUserInput}/>
+      <input
+        ref={searchInputRef}
+        type="search"
+        className="p-4 border-2"
+        onChange={handleUserInput}
+      />
       {loadTags()}
     </div>
   );
