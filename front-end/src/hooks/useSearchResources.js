@@ -1,4 +1,4 @@
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { searchBy } from "../utils/resource-api-utils";
 
 export default function useSearchResources({ resources, isFetching }) {

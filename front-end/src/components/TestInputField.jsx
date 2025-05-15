@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ResourcesContext } from "../context/resources-context";
 
 export default function TestInputField() {

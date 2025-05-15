@@ -1,9 +1,8 @@
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import {
   fetchResources,
   fetchTags,
-  searchBy,
 } from "../utils/resource-api-utils";
 import useSearchResources from "../hooks/useSearchResources";
 
