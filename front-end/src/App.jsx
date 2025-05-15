@@ -4,12 +4,15 @@ import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
 
 import SearchBar from "./components/SearchBar";
+import TestInputField from "./components/TestInputField";
 
 export default function App() {
   return (
     <>
       <Header />
-      <SearchBar />
+        <MainContainer>
+          <SearchBar/>
+        </MainContainer>
       <Footer />
     </>
   );
