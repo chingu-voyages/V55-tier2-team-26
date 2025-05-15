@@ -117,8 +117,6 @@ function searchBy({ data, keywords, tags }) {
       keywordsPriorityArray.push({ idx, isMatch, priority });
     });
 
-    console.log(tagPriorityArray, keywordsPriorityArray)
-
     const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj, idx) => ({
       priority:
         tagPriorityObj.priority +

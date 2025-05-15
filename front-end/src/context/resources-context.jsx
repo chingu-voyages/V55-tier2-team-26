@@ -29,8 +29,6 @@ export default function ResourceContextProvider({ children }) {
   const { results, activeTags, searchInputRef, handleUserInput, handleTagsInput } =
     useSearchResources({ resources, tags, isFetching });
 
-  console.log(results);
-
   const ctxValue = {
     tags,
     resources,

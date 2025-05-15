@@ -11,7 +11,6 @@ export default function useSearchResources({ resources, isFetching }) {
   const [results, setResults] = useState(null);
 
   const handleUserInput = (e) => {
-    console.log(e);
     const refactoredTags = activeTags.map(({ id }) => id);
     setUserInput({ keywords: e.target.value, tags: refactoredTags });
   };
@@ -23,7 +22,6 @@ export default function useSearchResources({ resources, isFetching }) {
     if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
       const filteredTags = activeTags.filter(({ id }) => id !== tagId);
       searchInputRef.current.focus();
-      console.log(activeTags, filteredTags);
       return setActiveTags(filteredTags);
     }
     searchInputRef.current.focus();
@@ -46,7 +44,6 @@ export default function useSearchResources({ resources, isFetching }) {
   }, [activeTags]);
 
   useEffect(() => {
-    console.log("queryValue has changed", queryValue, isFetching);
     if (!isFetching.resources && !isFetching.tags) {
       if (queryValue === null)
         return setResults(() =>
