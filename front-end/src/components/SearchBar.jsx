@@ -4,7 +4,28 @@ export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
-  const tags = ["JavaScript", "Python"];
+  const tags = [
+    "JavaScript",
+    "Python",
+    "CSS",
+    "SQL",
+    "Golang",
+    "General",
+    "HTML",
+    "React",
+    "TypeScript",
+    "Node.js",
+    "Next.js",
+    "Vue",
+    "Git",
+    "Github",
+    "JS Frameworks",
+    "Career",
+    "UI/UX Design",
+    "Ruby",
+    "DevOps",
+    "AI",
+  ];
 
   const filteredTags = tags.filter((tag) =>
     tag.toLowerCase().includes(filter.toLowerCase())
@@ -13,19 +34,15 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-md m-auto mt-20 flex flex-col gap-y-20"
+      className="w-[80%] m-auto mt-20 mb-20 flex gap-[10px] items-center justify-center"
     >
-      <div id="clearButton">
-        <h1>Clear </h1>
-      </div>
-
-      <div id="searchTextBar">
-        <div className="flex flex-col items-center space-y-6 p-6">
+      <div id="searchBarContainer">
+        <div className="flex items-center ">
           <form className="w-full flex">
-            <div className="relative w-full max-w-sm rounded-[20px] outline-[1px] flex">
+            <div className="relative w-full max-w-md rounded-[20px] h-[50px] outline-[1px] flex">
               <button
                 type="submit"
-                className="absolute left-0 top-0 h-full w-10 rounded-tl-[20px] rounded-bl-[20px] flex items-center justify-center bg-blue-500 text-pink-500 text-lg border border-gray-400 border-l-0 hover:bg-orange-500"
+                className="absolute left-0 top-0 h-full w-10 rounded-tl-[20px] rounded-bl-[20px] flex items-center justify-center cursor-pointer focus:bg-orange-500 bg-blue-500 text-pink-500 text-lg border border-gray-400 border-l-0 hover:bg-orange-500"
               >
                 <i className="fa fa-search"></i>
               </button>
@@ -39,16 +56,20 @@ export default function SearchBar() {
         </div>
       </div>
 
-      <div id="tagsDropdown">
+      <div id="tagsDropdownContainer">
         <div className="dropdown">
-          <button className="[bg-#04AA6D] text-[purple] p-[16px] text-[16px] cursor-pointer"
+          <button
+            className="w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
             type="button"
             onClick={() => setDropdownOpen((open) => !open)}
           >
             Dropdown
           </button>
           {dropdownOpen && (
-            <div id="myDropdown">
+            <div
+              id="myDropdown"
+              className="absolute w-full p-2 flex flex-col bg-[#f6f6f6]"
+            >
               <input
                 type="text"
                 placeholder="Tag..."
@@ -57,7 +78,11 @@ export default function SearchBar() {
                 onChange={(e) => setFilter(e.target.value)}
               />
               {filteredTags.map((tag) => (
-                <a href={`#${tag.toLowerCase()}`} key={tag}>
+                <a
+                  href={`#${tag.toLowerCase()}`}
+                  key={tag}
+                  className="block w-full p-2 hover:bg-gray-200 rounded-md text-gray-700"
+                >
                   {tag}
                 </a>
               ))}
@@ -66,45 +91,11 @@ export default function SearchBar() {
         </div>
       </div>
 
-      {/*             
-          <div id="myDropdown">
-            <input
-              type="text"
-              placeholder="Search.."
-              id="myInput"
-              onkeyup="filterFunction()"
-            />
-            <a href="#about">About</a>
-            <a href="#base">Base</a>
-            <a href="#blog">Blog</a>
-            <a href="#contact">Contact</a>
-            <a href="#custom">Custom</a>
-            <a href="#support">Support</a>
-            <a href="#tools">Tools</a>
-          </div>
-        </div>
-      </div> */}
-      {/* <script>
-
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-function filterFunction() {
-  const input = document.getElementById("myInput");
-  const filter = input.value.toUpperCase();
-  const div = document.getElementById("myDropdown");
-  const a = div.getElementsByTagName("a");
-  for (let i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-}
-</script> */}
+      <div id="clearButton" className="w-[10%]">
+        <button className="h-[50px] w-full rounded-[20px] cursor-pointer focus:bg-amber-700 hover:bg-amber-700 bg-amber-900 text-yellow-400">
+          Clear
+        </button>
+      </div>
     </div>
   );
 }
