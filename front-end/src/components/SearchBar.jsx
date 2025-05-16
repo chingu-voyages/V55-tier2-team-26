@@ -1,35 +1,33 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ResourcesContext } from "../context/resources-context";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
-  const tags = [
-    "JavaScript",
-    "Python",
-    "CSS",
-    "SQL",
-    "Golang",
-    "General",
-    "HTML",
-    "React",
-    "TypeScript",
-    "Node.js",
-    "Next.js",
-    "Vue",
-    "Git",
-    "Github",
-    "JS Frameworks",
-    "Career",
-    "UI/UX Design",
-    "Ruby",
-    "DevOps",
-    "AI",
-  ];
+  const { tags, results, searchInputRef, activeTags, handleUserInput, handleTagsInput } = useContext(ResourcesContext);
 
-  const filteredTags = tags.filter((tag) =>
-    tag.toLowerCase().includes(filter.toLowerCase())
-  );
+  let filteredTags = [];
+
+  if (tags !== null) {
+      filteredTags = tags.filter(({tag: originalTagName, id}) =>
+        ({tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id})
+    );
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const currentSearchText = searchInputRef.current.value;
+    const tagIds = activeTags.map(tag => tag.id);
+
+    const searchData = {
+      keywords: currentSearchText,
+      tags: tagIds,
+    };
+
+    console.log("Search data:", searchData);
+    console.log("Search results:", results);
+  };
 
   return (
     <div
@@ -38,7 +36,7 @@ export default function SearchBar() {
     >
       <div id="searchBarContainer">
         <div className="flex items-center ">
-          <form className="w-full flex">
+          <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[50px] outline-[1px] flex">
               <button
                 type="submit"
@@ -47,8 +45,10 @@ export default function SearchBar() {
                 <i className="fa fa-search"></i>
               </button>
               <input
+                ref={searchInputRef}
                 type="text"
                 placeholder="Search..."
+                onChange={handleUserInput}
                 className="w-full p-2 pl-12 text-lg rounded-[20px] border border-gray-400 bg-green-500 text-white focus:outline-none"
               />
             </div>
@@ -77,15 +77,26 @@ export default function SearchBar() {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               />
-              {filteredTags.map((tag) => (
-                <a
+              {filteredTags.length === 0 ? null : filteredTags.map(({ tag, id }) => {
+                return (<a
+                  id={id}
                   href={`#${tag.toLowerCase()}`}
                   key={tag}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("Selected tag ID:", id);
+                    handleTagsInput({
+                      target: {
+                        value: id,
+                        textContent: tag,
+                      }
+                    });
+                  }}
                   className="block w-full p-2 hover:bg-gray-200 rounded-md text-gray-700"
                 >
                   {tag}
-                </a>
-              ))}
+                </a>)
+              })}
             </div>
           )}
         </div>
