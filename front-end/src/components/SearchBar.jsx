@@ -1,13 +1,35 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
-
-  const { tags, results, searchInputRef, activeTags, handleUserInput, handleTagsInput } = useContext(ResourcesContext);
+  const [errors, setErrors] = useState({
+    searchText: "",
+    tags: "",
+  });
 
   let filteredTags = [];
+  const { 
+    tags, 
+    results, 
+    searchInputRef, 
+    activeTags, 
+    handleUserInput: baseHandleUserInput, 
+    handleTagsInput: baseHandleTagsInput 
+  } = useContext(ResourcesContext);
+
+  const handleUserInput = (e) => {
+    if (validateSearchText(e.target.value)) {
+      baseHandleUserInput(e);
+    }
+  }
+
+  const handleTagsInput = (e) => {
+    if (validateTags([...activeTags, { id: e.target.value }])) {
+      baseHandleTagsInput(e);
+    }
+  };
 
   if (tags !== null) {
       filteredTags = tags.filter(({tag: originalTagName, id}) =>
@@ -27,6 +49,61 @@ export default function SearchBar() {
 
     console.log("Search data:", searchData);
     console.log("Search results:", results);
+  };
+
+  const handleClear = () => {
+    searchInputRef.current.value = "";
+
+    activeTags.forEach(tag => {
+      baseHandleTagsInput({
+        target: {
+          value: tag.id,
+          textContent: tag.name,
+        },
+      });
+    });
+
+    baseHandleUserInput({
+      target: {
+        value: "",
+      },
+    });
+  }
+
+  const validateSearchText = (text) => {
+    setErrors(prev => ({...prev, searchText: ""}));
+
+    if (!text || text.trim() === "") {
+      return true;
+    }
+
+    if (text.trim().length > 100) {
+      setErrors(prev => ({
+        ...prev,
+        searchText: "Search text cannot exceed 100 characters.",
+      }));
+      return false;
+    }
+    
+    return true;
+  };
+
+  const validateTags = (tags) => {
+    setErrors(prev => ({...prev, tags: ""}));
+
+    if (!tags || tags.length === 0) {
+      return true;
+    }
+
+    if (tags.length > 5) {
+      setErrors(prev => ({
+        ...prev,
+        tags: "Please select 5 or fewer tags."
+      }));
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -49,9 +126,14 @@ export default function SearchBar() {
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
-                className="w-full p-2 pl-12 text-lg rounded-[20px] border border-gray-400 bg-green-500 text-white focus:outline-none"
+                className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-red-500" : "border-gray-400"} bg-green-500 text-white focus:outline-none`}
               />
             </div>
+            {errors.searchText && (
+              <div className="absolute mt-[52px] text-red-500 text-sm">
+                {errors.searchText}
+              </div>
+            )}
           </form>
         </div>
       </div>
@@ -59,7 +141,7 @@ export default function SearchBar() {
       <div id="tagsDropdownContainer">
         <div className="dropdown">
           <button
-            className="w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
+            className={`w-full h-[50px] outline-[1px] rounded-[20px] ${errors.tags ? "border-red-500" : "border-gray-400"} focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer`}
             type="button"
             onClick={() => setDropdownOpen((open) => !open)}
           >
@@ -100,10 +182,18 @@ export default function SearchBar() {
             </div>
           )}
         </div>
+        {errors.tags && (
+          <div className="text-red-500 text-sm mt-1">
+            {errors.tags}
+          </div>
+        )}
       </div>
 
       <div id="clearButton" className="w-[10%]">
-        <button className="h-[50px] w-full rounded-[20px] cursor-pointer focus:bg-amber-700 hover:bg-amber-700 bg-amber-900 text-yellow-400">
+        <button 
+          onClick={handleClear}
+          className="h-[50px] w-full rounded-[20px] cursor-pointer focus:bg-amber-700 hover:bg-amber-700 bg-amber-900 text-yellow-400"
+        >
           Clear
         </button>
       </div>
