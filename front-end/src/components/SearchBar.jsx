@@ -4,10 +4,7 @@ import { ResourcesContext } from "../context/resources-context";
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const [errors, setErrors] = useState({
-    searchText: "",
-    tags: "",
-  });
+  const [errors, setErrors] = useState({ searchText: "" });
 
   let filteredTags = [];
   const { 
@@ -16,7 +13,7 @@ export default function SearchBar() {
     searchInputRef, 
     activeTags, 
     handleUserInput: baseHandleUserInput, 
-    handleTagsInput: baseHandleTagsInput 
+    handleTagsInput: baseHandleTagsInput,
   } = useContext(ResourcesContext);
 
   const handleUserInput = (e) => {
@@ -26,9 +23,7 @@ export default function SearchBar() {
   }
 
   const handleTagsInput = (e) => {
-    if (validateTags([...activeTags, { id: e.target.value }])) {
       baseHandleTagsInput(e);
-    }
   };
 
   if (tags !== null) {
@@ -42,6 +37,12 @@ export default function SearchBar() {
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map(tag => tag.id);
 
+    const isSearchTextValid = validateSearchText(currentSearchText);
+
+    if (!isSearchTextValid) {
+      return;
+    }
+
     const searchData = {
       keywords: currentSearchText,
       tags: tagIds,
@@ -53,6 +54,11 @@ export default function SearchBar() {
 
   const handleClear = () => {
     searchInputRef.current.value = "";
+    baseHandleUserInput({
+      target: {
+        value: "",
+      },
+    });
 
     activeTags.forEach(tag => {
       baseHandleTagsInput({
@@ -61,12 +67,6 @@ export default function SearchBar() {
           textContent: tag.name,
         },
       });
-    });
-
-    baseHandleUserInput({
-      target: {
-        value: "",
-      },
     });
   }
 
@@ -85,24 +85,6 @@ export default function SearchBar() {
       return false;
     }
     
-    return true;
-  };
-
-  const validateTags = (tags) => {
-    setErrors(prev => ({...prev, tags: ""}));
-
-    if (!tags || tags.length === 0) {
-      return true;
-    }
-
-    if (tags.length > 5) {
-      setErrors(prev => ({
-        ...prev,
-        tags: "Please select 5 or fewer tags."
-      }));
-      return false;
-    }
-
     return true;
   };
 
@@ -141,7 +123,7 @@ export default function SearchBar() {
       <div id="tagsDropdownContainer">
         <div className="dropdown">
           <button
-            className={`w-full h-[50px] outline-[1px] rounded-[20px] ${errors.tags ? "border-red-500" : "border-gray-400"} focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer`}
+            className="w-full h-[50px] outline-[1px] rounded-[20px] border-gray-400 focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
             type="button"
             onClick={() => setDropdownOpen((open) => !open)}
           >
@@ -182,11 +164,6 @@ export default function SearchBar() {
             </div>
           )}
         </div>
-        {errors.tags && (
-          <div className="text-red-500 text-sm mt-1">
-            {errors.tags}
-          </div>
-        )}
       </div>
 
       <div id="clearButton" className="w-[10%]">
