@@ -1,11 +1,9 @@
-import ResourceContextProvider from "../context/resources-context"
+import ResourceContextProvider from "../context/resources-context";
 
-export default function MainContainer({children}){
+export default function MainContainer({ children }) {
     return (
-    <ResourceContextProvider>
-        <main>{children}</main>
-
-    </ResourceContextProvider>    
-
-)
+        <ResourceContextProvider>
+            <main>{children}</main>
+        </ResourceContextProvider>    
+    );
 }
