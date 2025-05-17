@@ -2,18 +2,26 @@ import React, { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
 
 export default function SearchBar() {
-  const { tags, isFetching, activeTags, searchInputRef,handleUserInput, handleTagsInput} = useContext(ResourcesContext)
+  const {
+    tags,
+    isFetching,
+    activeTags,
+    searchInputRef,
+    handleUserInput,
+    handleTagsInput,
+  } = useContext(ResourcesContext);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
-  let filteredTags = []
-  console.log(tags)
+  let filteredTags = [];
+  console.log("tags: "+tags);
 
-  if(tags!==null){
-    filteredTags = tags.filter(({tag: originalTagName, id}) =>
-    ({tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id})
-  );
+  if (tags !== null) {
+    filteredTags = tags.filter(({ tag: originalTagName, id }) => ({
+      tag: originalTagName.toLowerCase().includes(filter.toLowerCase()),
+      id,
+    }));
   }
 
   return (
@@ -64,17 +72,22 @@ export default function SearchBar() {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               />
-              {filteredTags.length===0?null:filteredTags.map(({tag,id})=> {
-                console.log(tag)
-                return (<a
-                  id={id}
-                  href={`#${tag.toLowerCase()}`}
-                  key={tag}
-                  className="block w-full p-2 hover:bg-gray-200 rounded-md text-gray-700"
-                >
-                  {tag}
-                </a>)
-              })}
+              {filteredTags.length === 0
+                ? null
+                : filteredTags.map(({ tag, id }) => {
+                    console.log(tag);
+                    return (
+                      <a
+                        onClick={handleTagsInput}
+                        id={id}
+                        href={`#${tag.toLowerCase()}`}
+                        key={tag}
+                        className="block w-full p-2 hover:font-bold rounded-md text-gray-700"
+                      >
+                        {tag}
+                      </a>
+                    );
+                  })}
             </div>
           )}
         </div>

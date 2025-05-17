@@ -16,7 +16,7 @@ export default function useSearchResources({ resources, isFetching }) {
   };
 
   const handleTagsInput = (e) => {
-    const tagId = e.target.value;
+    const tagId = e.target.id;
     const tagName = e.target.textContent;
 
     if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
