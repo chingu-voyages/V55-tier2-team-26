@@ -68,6 +68,8 @@ export default function SearchBar() {
         },
       });
     });
+
+    setErrors({ searchText: "" });
   }
 
   const validateSearchText = (text) => {
