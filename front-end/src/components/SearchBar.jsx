@@ -63,7 +63,7 @@ export default function SearchBar() {
           {dropdownOpen && (
             <div
               id="myDropdown"
-              className="absolute w-full p-2 flex flex-col bg-[#f6f6f6]"
+              className="absolute w-[300px] p-2 flex flex-col bg-[#f6f6f6]"
             >
               <input
                 type="text"
@@ -82,7 +82,7 @@ export default function SearchBar() {
                         id={id}
                         href={`#${tag.toLowerCase()}`}
                         key={tag}
-                        className="block w-full p-2 hover:font-bold rounded-md text-gray-700"
+                        className="block w-[200px] p-2 hover:font-bold rounded-md text-gray-700"
                       >
                         {tag}
                       </a>
