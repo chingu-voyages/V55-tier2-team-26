@@ -121,7 +121,7 @@ export default function SearchBar() {
       <div id="tagsDropdownContainer">
         <div className="dropdown">
           <button
-            className="w-full h-[50px] outline-[1px] rounded-[20px] border-gray-400 focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
+            className="w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
             type="button"
             onClick={() => setDropdownOpen((open) => !open)}
           >
