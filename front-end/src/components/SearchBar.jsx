@@ -14,6 +14,7 @@ export default function SearchBar() {
     activeTags, 
     handleUserInput: baseHandleUserInput, 
     handleTagsInput: baseHandleTagsInput,
+    clearAllTags,
   } = useContext(ResourcesContext);
 
   if (tags !== null) {
@@ -56,15 +57,15 @@ export default function SearchBar() {
       },
     });
 
-    activeTags.forEach(tag => {
-      baseHandleTagsInput({
-        target: {
-          value: tag.id,
-          textContent: tag.name,
-        },
-      });
-    });
-
+    // activeTags.forEach(tag => {
+    //   baseHandleTagsInput({
+    //     target: {
+    //       value: tag.id,
+    //       textContent: tag.name,
+    //     },
+    //   });
+    // });
+    clearAllTags();
     setErrors({ searchText: "" });
   }
 

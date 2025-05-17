@@ -28,6 +28,11 @@ export default function useSearchResources({ resources, isFetching }) {
     setActiveTags((oldState) => [...oldState, { id: tagId, name: tagName }]);
   };
 
+  const clearAllTags = () => {
+    setActiveTags([]);
+    searchInputRef.current.focus();
+  };
+
   useEffect(() => {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
@@ -61,5 +66,6 @@ export default function useSearchResources({ resources, isFetching }) {
     searchInputRef,
     handleUserInput,
     handleTagsInput,
+    clearAllTags,
   };
 }
