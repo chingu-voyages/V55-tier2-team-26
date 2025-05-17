@@ -16,20 +16,16 @@ export default function SearchBar() {
     handleTagsInput: baseHandleTagsInput,
   } = useContext(ResourcesContext);
 
-  const handleUserInput = (e) => {
-    if (validateSearchText(e.target.value)) {
-      baseHandleUserInput(e);
-    }
-  }
-
-  const handleTagsInput = (e) => {
-      baseHandleTagsInput(e);
-  };
-
   if (tags !== null) {
       filteredTags = tags.filter(({tag: originalTagName, id}) =>
         ({tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id})
     );
+  }
+
+  const handleUserInput = (e) => {
+    if (validateSearchText(e.target.value)) {
+      baseHandleUserInput(e);
+    }
   }
 
   const handleSubmit = (e) => {
@@ -151,7 +147,7 @@ export default function SearchBar() {
                   onClick={(e) => {
                     e.preventDefault();
                     console.log("Selected tag ID:", id);
-                    handleTagsInput({
+                    baseHandleTagsInput({
                       target: {
                         value: id,
                         textContent: tag,
