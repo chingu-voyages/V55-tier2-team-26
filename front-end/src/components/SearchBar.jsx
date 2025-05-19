@@ -1,20 +1,83 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
 
 export default function SearchBar() {
-  const { tags, isFetching, activeTags, searchInputRef,handleUserInput, handleTagsInput} = useContext(ResourcesContext)
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
+  const [errors, setErrors] = useState({ searchText: "" });
 
-  let filteredTags = []
-  console.log(tags)
+  let filteredTags = [];
+  const { 
+    tags, 
+    results, 
+    searchInputRef, 
+    activeTags, 
+    handleUserInput: baseHandleUserInput, 
+    handleTagsInput: baseHandleTagsInput,
+    clearAllTags,
+  } = useContext(ResourcesContext);
 
-  if(tags!==null){
-    filteredTags = tags.filter(({tag: originalTagName, id}) =>
-    ({tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id})
-  );
+  if (tags !== null) {
+      filteredTags = tags.filter(({tag: originalTagName, id}) =>
+        ({tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id})
+    );
   }
+
+  const handleUserInput = (e) => {
+    if (validateSearchText(e.target.value)) {
+      baseHandleUserInput(e);
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const currentSearchText = searchInputRef.current.value;
+    const tagIds = activeTags.map(tag => tag.id);
+
+    const isSearchTextValid = validateSearchText(currentSearchText);
+
+    if (!isSearchTextValid) {
+      return;
+    }
+
+    const searchData = {
+      keywords: currentSearchText,
+      tags: tagIds,
+    };
+
+    console.log("Search data:", searchData);
+    console.log("Search results:", results);
+  };
+
+  const handleClear = () => {
+    searchInputRef.current.value = "";
+    baseHandleUserInput({
+      target: {
+        value: "",
+      },
+    });
+
+    clearAllTags();
+    setErrors({ searchText: "" });
+  }
+
+  const validateSearchText = (text) => {
+    setErrors(prev => ({...prev, searchText: ""}));
+
+    if (!text || text.trim() === "") {
+      return true;
+    }
+
+    if (text.trim().length > 100) {
+      setErrors(prev => ({
+        ...prev,
+        searchText: "Search text cannot exceed 100 characters.",
+      }));
+      return false;
+    }
+    
+    return true;
+  };
 
   return (
     <div
@@ -23,7 +86,7 @@ export default function SearchBar() {
     >
       <div id="searchBarContainer">
         <div className="flex items-center ">
-          <form className="w-full flex">
+          <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[50px] outline-[1px] flex">
               <button
                 type="submit"
@@ -36,9 +99,14 @@ export default function SearchBar() {
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
-                className="w-full p-2 pl-12 text-lg rounded-[20px] border border-gray-400 bg-green-500 text-white focus:outline-none"
+                className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-red-500" : "border-gray-400"} bg-green-500 text-white focus:outline-none`}
               />
             </div>
+            {errors.searchText && (
+              <div className="absolute mt-[52px] text-red-500 text-sm">
+                {errors.searchText}
+              </div>
+            )}
           </form>
         </div>
       </div>
@@ -64,12 +132,21 @@ export default function SearchBar() {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               />
-              {filteredTags.length===0?null:filteredTags.map(({tag,id})=> {
-                console.log(tag)
+              {filteredTags.length === 0 ? null : filteredTags.map(({ tag, id }) => {
                 return (<a
                   id={id}
                   href={`#${tag.toLowerCase()}`}
                   key={tag}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("Selected tag ID:", id);
+                    baseHandleTagsInput({
+                      target: {
+                        value: id,
+                        textContent: tag,
+                      }
+                    });
+                  }}
                   className="block w-full p-2 hover:bg-gray-200 rounded-md text-gray-700"
                 >
                   {tag}
@@ -81,7 +158,10 @@ export default function SearchBar() {
       </div>
 
       <div id="clearButton" className="w-[10%]">
-        <button className="h-[50px] w-full rounded-[20px] cursor-pointer focus:bg-amber-700 hover:bg-amber-700 bg-amber-900 text-yellow-400">
+        <button 
+          onClick={handleClear}
+          className="h-[50px] w-full rounded-[20px] cursor-pointer focus:bg-amber-700 hover:bg-amber-700 bg-amber-900 text-yellow-400"
+        >
           Clear
         </button>
       </div>

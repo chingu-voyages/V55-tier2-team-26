@@ -1,4 +1,4 @@
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { searchBy } from "../utils/resource-api-utils";
 
 export default function useSearchResources({ resources, isFetching }) {
@@ -26,6 +26,11 @@ export default function useSearchResources({ resources, isFetching }) {
     }
     searchInputRef.current.focus();
     setActiveTags((oldState) => [...oldState, { id: tagId, name: tagName }]);
+  };
+
+  const clearAllTags = () => {
+    setActiveTags([]);
+    searchInputRef.current.focus();
   };
 
   useEffect(() => {
@@ -61,5 +66,6 @@ export default function useSearchResources({ resources, isFetching }) {
     searchInputRef,
     handleUserInput,
     handleTagsInput,
+    clearAllTags,
   };
 }
