@@ -57,14 +57,6 @@ export default function SearchBar() {
       },
     });
 
-    // activeTags.forEach(tag => {
-    //   baseHandleTagsInput({
-    //     target: {
-    //       value: tag.id,
-    //       textContent: tag.name,
-    //     },
-    //   });
-    // });
     clearAllTags();
     setErrors({ searchText: "" });
   }
