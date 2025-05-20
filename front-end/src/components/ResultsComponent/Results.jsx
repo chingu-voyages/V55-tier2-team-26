@@ -27,7 +27,7 @@ function getCards(results, activePage) {
 }
 
 export default function Results({ results, activePage }) {
-  return <div className="grid grid-cols-1 border-4 w-svw gap-10 max-sm:p-2">
+  return <div className="grid grid-cols-1 border-4 gap-10 max-sm:p-2">
     {getCards(results, activePage)}
   </div>;
 }

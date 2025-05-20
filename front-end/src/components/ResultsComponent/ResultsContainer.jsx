@@ -26,7 +26,7 @@ export default function ResultsContainer() {
 
   return (
     <section>
-      <div>
+      <div className="w-svw">
         {!results ? <p>Loading resources...</p> : (
           <>
             <Results results={results} activePage={activePage} />
