@@ -3,7 +3,9 @@ async function fetchResources() {
     const data = await fetch("https://seshatbe.up.railway.app/resources", {
       method: "GET",
     });
-    return await data.json();
+    const dataJSON = await data.json();
+    cleanRepeatedResources(dataJSON);
+    return dataJSON;
   } catch (error) {
     throw new Error(error);
   }
@@ -91,12 +93,17 @@ function searchBy({ data, keywords, tags }) {
 
     const sortedByPriority = priorityArr.map(({ idx }) => data[idx]);
 
-    return sortedByPriority.length===0?{error: "No post was found with those keywords. Try with different keywords..."}:sortedByPriority;
+    return sortedByPriority.length === 0
+      ? {
+          error:
+            "No post was found with those keywords. Try with different keywords...",
+        }
+      : sortedByPriority;
   };
 
   const keywordsPriorityArray = [];
 
-  if (tags.length!==0) {
+  if (tags.length !== 0) {
     const tagPriorityArray = [];
 
     const filteredByTagPosts = data.filter(({ appliedTags }, idx) => {
@@ -118,9 +125,7 @@ function searchBy({ data, keywords, tags }) {
     });
 
     const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj, idx) => ({
-      priority:
-        tagPriorityObj.priority +
-        keywordsPriorityArray[idx].priority,
+      priority: tagPriorityObj.priority + keywordsPriorityArray[idx].priority,
       idx: tagPriorityObj.idx,
     }));
 
@@ -139,6 +144,20 @@ function searchBy({ data, keywords, tags }) {
   });
 
   return sortByPriority(keywordsPriorityArray);
+}
+
+function cleanRepeatedResources(data) {
+  const newArray = [];
+
+  data.forEach((result) => {
+    if (newArray.length === 0) return newArray.push(result);
+
+    newArray.find((savedResult) => savedResult.name === result.name)
+      ? null
+      : newArray.push(result);
+  });
+
+  console.log(newArray);
 }
 
 export { fetchResources, fetchTags, searchBy };

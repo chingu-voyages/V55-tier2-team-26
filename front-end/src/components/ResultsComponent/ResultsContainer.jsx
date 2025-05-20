@@ -10,7 +10,7 @@ export default function ResultsContainer() {
   let [searchParams] = useSearchParams();
   //searchParams.get("page") //This get the urlParam for the page
 
-  const { results, isFetching } = useContext(ResourcesContext);
+  const { results } = useContext(ResourcesContext);
 
   console.log(results)
 
