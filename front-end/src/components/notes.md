@@ -1,1 +1,0 @@
-For the sake of scalability we can group components in folders with their respective sub components. Open to sugestions too
