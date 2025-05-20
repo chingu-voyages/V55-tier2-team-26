@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
+// import highlightActiveTags from "../../src/hooks/useSearchResources.js";
 
 export default function SearchBar() {
   const {
@@ -14,8 +15,12 @@ export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
+  const highlightActiveTags = (id) => 
+    activeTags.includes(id) ? "bg-yellow-400" : "bg-grey-400";
+  
+
   let filteredTags = [];
-  console.log("tags: "+tags);
+  console.table(activeTags);
 
   if (tags !== null) {
     filteredTags = tags.filter(({ tag: originalTagName, id }) => ({
@@ -63,7 +68,7 @@ export default function SearchBar() {
           {dropdownOpen && (
             <div
               id="myDropdown"
-              className="absolute w-[300px] p-2 flex flex-col bg-[#f6f6f6]"
+              className="absolute w-[175px] p-2 mt-2 flex flex-col bg-[#f6f6f6]"
             >
               <input
                 type="text"
@@ -75,14 +80,16 @@ export default function SearchBar() {
               {filteredTags.length === 0
                 ? null
                 : filteredTags.map(({ tag, id }) => {
-                    console.log(tag);
+                    // console.log(tag);
                     return (
                       <a
                         onClick={handleTagsInput}
                         id={id}
                         href={`#${tag.toLowerCase()}`}
                         key={tag}
-                        className="block w-[200px] p-2 hover:font-bold rounded-md text-gray-700"
+                        className={`block w-[150px] p-1 m-[1.5px] hover:font-bold rounded-[20px] text-gray-700 outline-1 ${highlightActiveTags(
+                          id
+                        )}`}
                       >
                         {tag}
                       </a>

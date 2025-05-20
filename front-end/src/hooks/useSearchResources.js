@@ -15,18 +15,29 @@ export default function useSearchResources({ resources, isFetching }) {
     setUserInput({ keywords: e.target.value, tags: refactoredTags });
   };
 
+  // const highlightActiveTags = (id) => {
+  //   activeTags.includes(id) ? "bg-yellow-400" : "bg-grey-400";
+  // }
+
   const handleTagsInput = (e) => {
     const tagId = e.target.id;
     const tagName = e.target.textContent;
 
-    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
-      const filteredTags = activeTags.filter(({ id }) => id !== tagId);
-      searchInputRef.current.focus();
+    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) { //finding if the tag is already in the activeTag list
+      const filteredTags = activeTags.filter(({ id }) => id !== tagId); //if it is found in the active list, removes it
+      //add a line here to remove highlight effect from selected tag
+      searchInputRef.current.focus(); 
       return setActiveTags(filteredTags);
     }
-    searchInputRef.current.focus();
-    setActiveTags((oldState) => [...oldState, { id: tagId, name: tagName }]);
+    searchInputRef.current.focus(); 
+    setActiveTags((oldState) => [...oldState, { id: tagId, name: tagName }]); //if the tag is not found in the activetags list, add it
+    // console.table(activeTags);
+    // highlightActiveTags();
   };
+
+  // function highlightActiveTags() {
+  //   console.log("activeTags: "+activeTags);
+  // }
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -61,5 +72,6 @@ export default function useSearchResources({ resources, isFetching }) {
     searchInputRef,
     handleUserInput,
     handleTagsInput,
+    // highlightActiveTags
   };
 }
