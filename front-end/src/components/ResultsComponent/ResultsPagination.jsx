@@ -10,6 +10,22 @@ import {
 
 export default function ResultsPagination({ activePage, onClick }) {
   console.log(activePage);
+
+  const paginationItemOneValue =
+    (activePage <= 1 && 1) ||
+    (activePage >= 30 && activePage - 2) ||
+    activePage - 1;
+
+  const paginationItemTwoValue =
+    (activePage <= 1 && activePage + 1) ||
+    (activePage >= 30 && activePage - 1) ||
+    activePage;
+
+  const paginationItemThreeValue =
+    (activePage <= 1 && activePage + 2) ||
+    (activePage >= 30 && activePage) ||
+    activePage + 1;
+
   return (
     <Pagination>
       <PaginationContent>
@@ -22,24 +38,44 @@ export default function ResultsPagination({ activePage, onClick }) {
           />
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink isActive={activePage <= 1? true : false} href="#">
-            {(activePage <= 1 && 1) ||
-              (activePage >= 30 && activePage - 2) ||
-              activePage - 1}
+          <PaginationLink
+            onClick={(e) => {
+              const pageNumber = parseInt(e.target.innerText);
+              console.log(pageNumber);
+              activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
+            }}
+            isActive={activePage <= 1 ? true : false}
+            to={`/search?page=${paginationItemOneValue}`}
+          >
+            {paginationItemOneValue}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink isActive={(activePage <= 1 || activePage >= 30) ? false : true} href="#">
-            {(activePage <= 1 && activePage + 1) ||
-              (activePage >= 30 && activePage - 1) ||
-              activePage}
+          <PaginationLink
+            onClick={(e) => {
+              const pageNumber = parseInt(e.target.innerText);
+              console.log(pageNumber);
+              pageNumber === activePage
+                ? e.preventDefault()
+                : onClick(pageNumber);
+            }}
+            isActive={activePage <= 1 || activePage >= 30 ? false : true}
+            to={`/search?page=${paginationItemTwoValue}`}
+          >
+            {paginationItemTwoValue}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink isActive={activePage >= 30? true : false} href="#">
-            {(activePage <= 1 && activePage + 2) ||
-              (activePage >= 30 && activePage) ||
-              activePage + 1}
+          <PaginationLink
+            onClick={(e) => {
+              const pageNumber = parseInt(e.target.innerText);
+              console.log(pageNumber);
+              activePage >= 30 ? e.preventDefault() : onClick(pageNumber);
+            }}
+            isActive={activePage >= 30 ? true : false}
+            to={`/search?page=${paginationItemThreeValue}`}
+          >
+            {paginationItemThreeValue}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>

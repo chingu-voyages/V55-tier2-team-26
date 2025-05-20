@@ -9,7 +9,8 @@ import { ResourcesContext } from "../../context/resources-context";
 export default function ResultsContainer() {
   let [searchParams] = useSearchParams();
   //searchParams.get("page") //This get the urlParam for the page
-  const { results } = useContext(ResourcesContext);
+
+  const { results, isFetching } = useContext(ResourcesContext);
 
   const [activePage, setActivePage] = useState(1);
 
@@ -20,8 +21,15 @@ export default function ResultsContainer() {
   return (
     <section>
       <div>
-        <Results results={results} />
-        <ResultsPagination activePage={activePage} onClick={handlePagination} />
+        {isFetching.resources ? <p>Loading resources...</p> : (
+          <>
+            <Results results={results} activePage={activePage} />
+            <ResultsPagination
+              activePage={activePage}
+              onClick={handlePagination}
+            />
+          </>
+        )}
       </div>
     </section>
   );
