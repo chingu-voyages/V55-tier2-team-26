@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
-// import highlightActiveTags from "../../src/hooks/useSearchResources.js";
 
 export default function SearchBar() {
   const {
@@ -16,16 +15,14 @@ export default function SearchBar() {
   const [filter, setFilter] = useState("");
 
   const highlightActiveTags = (id) => 
-    activeTags.includes(id) ? "bg-yellow-400" : "bg-grey-400";
+    activeTags.some(tag => tag.id === id) ? "bg-yellow-400" : "bg-[#f6f6f6]";
   
-
   let filteredTags = [];
   console.table(activeTags);
 
   if (tags !== null) {
-    filteredTags = tags.filter(({ tag: originalTagName, id }) => ({
-      tag: originalTagName.toLowerCase().includes(filter.toLowerCase()),
-      id,
+    filteredTags = tags.filter(({ tag: originalTagName}) => ({
+      tag: originalTagName.toLowerCase().includes(filter.toLowerCase())
     }));
   }
 

@@ -71,7 +71,7 @@ export default function useSearchResources({ resources, isFetching }) {
     activeTags,
     searchInputRef,
     handleUserInput,
-    handleTagsInput,
+    handleTagsInput
     // highlightActiveTags
   };
 }
