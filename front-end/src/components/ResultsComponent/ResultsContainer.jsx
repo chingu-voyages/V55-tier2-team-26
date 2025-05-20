@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import ResultsPagination from "./ResultsPagination";
@@ -12,16 +12,22 @@ export default function ResultsContainer() {
 
   const { results, isFetching } = useContext(ResourcesContext);
 
+  console.log(results)
+
   const [activePage, setActivePage] = useState(1);
 
   const handlePagination = (newCurrentPage) => {
     setActivePage(newCurrentPage);
   };
 
+  useEffect(()=>{
+    setActivePage(1)
+  },[results])
+
   return (
     <section>
       <div>
-        {isFetching.resources ? <p>Loading resources...</p> : (
+        {!results ? <p>Loading resources...</p> : (
           <>
             <Results results={results} activePage={activePage} />
             <ResultsPagination
