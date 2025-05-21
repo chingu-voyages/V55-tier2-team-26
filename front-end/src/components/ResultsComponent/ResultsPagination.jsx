@@ -8,25 +8,35 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export default function ResultsPagination({ activePage, onClick }) {
-  console.log(activePage);
+export default function ResultsPagination({
+  activePage,
+  onClick,
+  totalResults,
+}) {
+  const maxPages = Math.ceil(totalResults / 10);
 
   const paginationItemOneValue =
     (activePage <= 1 && 1) ||
-    (activePage >= 30 && activePage - 2) ||
+    (activePage >= maxPages && activePage - 2) ||
     activePage - 1;
 
   const paginationItemTwoValue =
     (activePage <= 1 && activePage + 1) ||
-    (activePage >= 30 && activePage - 1) ||
+    ((activePage >= maxPages && maxPages>=3) && activePage - 1) ||
     activePage;
 
   const paginationItemThreeValue =
     (activePage <= 1 && activePage + 2) ||
-    (activePage >= 30 && activePage) ||
+    (activePage >= maxPages && activePage) ||
     activePage + 1;
 
-  return (
+  console.log("maxpage " + maxPages);
+  console.log("activePages " + activePage);
+  console.log("first page " + paginationItemOneValue);
+  console.log("second page " + paginationItemTwoValue);
+  console.log("third page " + paginationItemThreeValue);
+
+  return totalResults <= 10 ? null : (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
@@ -44,47 +54,55 @@ export default function ResultsPagination({ activePage, onClick }) {
               console.log(pageNumber);
               activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
             }}
-            isActive={activePage <= 1 ? true : false}
+            isActive={activePage === paginationItemOneValue ? true : false}
             to={`/search?page=${paginationItemOneValue}`}
           >
             {paginationItemOneValue}
           </PaginationLink>
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink
-            onClick={(e) => {
-              const pageNumber = parseInt(e.target.innerText);
-              console.log(pageNumber);
-              pageNumber === activePage
-                ? e.preventDefault()
-                : onClick(pageNumber);
-            }}
-            isActive={activePage <= 1 || activePage >= 30 ? false : true}
-            to={`/search?page=${paginationItemTwoValue}`}
-          >
-            {paginationItemTwoValue}
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink
-            onClick={(e) => {
-              const pageNumber = parseInt(e.target.innerText);
-              console.log(pageNumber);
-              activePage >= 30 ? e.preventDefault() : onClick(pageNumber);
-            }}
-            isActive={activePage >= 30 ? true : false}
-            to={`/search?page=${paginationItemThreeValue}`}
-          >
-            {paginationItemThreeValue}
-          </PaginationLink>
-        </PaginationItem>
+
+        {totalResults >= 11 ? (
+          <PaginationItem>
+            <PaginationLink
+              onClick={(e) => {
+                const pageNumber = parseInt(e.target.innerText);
+                pageNumber === activePage
+                  ? e.preventDefault()
+                  : onClick(pageNumber);
+              }}
+              isActive={activePage === paginationItemTwoValue ? true : false}
+              to={`/search?page=${paginationItemTwoValue}`}
+            >
+              {paginationItemTwoValue}
+            </PaginationLink>
+          </PaginationItem>
+        ) : null}
+
+        {totalResults >= 21 ? (
+          <PaginationItem>
+            <PaginationLink
+              onClick={(e) => {
+                const pageNumber = parseInt(e.target.innerText);
+                activePage >= maxPages
+                  ? e.preventDefault()
+                  : onClick(pageNumber);
+              }}
+              isActive={activePage === paginationItemThreeValue ? true : false}
+              to={`/search?page=${paginationItemThreeValue}`}
+            >
+              {paginationItemThreeValue}
+            </PaginationLink>
+          </PaginationItem>
+        ) : null}
         <PaginationItem>
           <PaginationEllipsis />
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
             onClick={(e) =>
-              activePage >= 30 ? e.preventDefault() : onClick(activePage + 1)
+              activePage >= maxPages
+                ? e.preventDefault()
+                : onClick(activePage + 1)
             }
             to={`/search?page=${activePage + 1}`}
           />

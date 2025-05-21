@@ -10,9 +10,9 @@ export default function ResultsContainer() {
   let [searchParams] = useSearchParams();
   //searchParams.get("page") //This get the urlParam for the page
 
-  const { results } = useContext(ResourcesContext);
+  const { results, tags } = useContext(ResourcesContext);
 
-  console.log(results)
+  console.log(results, tags)
 
   const [activePage, setActivePage] = useState(1);
 
@@ -31,6 +31,7 @@ export default function ResultsContainer() {
           <>
             <Results results={results} activePage={activePage} />
             <ResultsPagination
+              totalResults={results.length}
               activePage={activePage}
               onClick={handlePagination}
             />

@@ -4,8 +4,7 @@ async function fetchResources() {
       method: "GET",
     });
     const dataJSON = await data.json();
-    cleanRepeatedResources(dataJSON);
-    return dataJSON;
+    return cleanRepeatedResources(dataJSON);
   } catch (error) {
     throw new Error(error);
   }
@@ -152,12 +151,14 @@ function cleanRepeatedResources(data) {
   data.forEach((result) => {
     if (newArray.length === 0) return newArray.push(result);
 
-    newArray.find((savedResult) => savedResult.name === result.name)
-      ? null
-      : newArray.push(result);
+    const foundResult = newArray.find(
+      (savedResult) => savedResult.name === result.name
+    );
+
+    foundResult ? null : newArray.push(result);
   });
 
-  console.log(newArray);
+  return newArray
 }
 
 export { fetchResources, fetchTags, searchBy };
