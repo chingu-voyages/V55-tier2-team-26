@@ -12,7 +12,6 @@ function getCards(results, activePage) {
   const sliceFrom = activePage === 1 ? activePage - 1 : activePage * 10 - 10;
   const sliceTo = activePage * 10;
 
-  console.log(results)
   const paginatedResulsts = results.slice(sliceFrom, sliceTo);
 
   return paginatedResulsts.map((result,idx) => (

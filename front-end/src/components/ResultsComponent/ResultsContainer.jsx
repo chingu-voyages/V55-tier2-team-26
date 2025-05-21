@@ -12,8 +12,6 @@ export default function ResultsContainer() {
 
   const { results, tags } = useContext(ResourcesContext);
 
-  console.log(results, tags)
-
   const [activePage, setActivePage] = useState(1);
 
   const handlePagination = (newCurrentPage) => {

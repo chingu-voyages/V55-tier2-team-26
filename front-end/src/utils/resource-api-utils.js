@@ -65,10 +65,10 @@ function searchBy({ data, keywords, tags }) {
       "gm"
     );
 
-    const matches = [...name.toLowerCase().matchAll(keywordsRegEx, "gm")];
+    const matches = [...name.toLowerCase().matchAll(keywordsRegEx)];
 
     if (matches.length !== 0) {
-      if (name === sanitizedKeywords) return { isMatch: true, priority: 3 };
+      if (name === sanitizedKeywords || (matches.length===1 && matches[0][0].length >= 4)) return { isMatch: true, priority: 3 };
 
       if (Number(matches.length / nameKeywordsArr.length).toFixed(2) >= 0.5)
         return { isMatch: true, priority: 2 };
@@ -158,7 +158,7 @@ function cleanRepeatedResources(data) {
     foundResult ? null : newArray.push(result);
   });
 
-  return newArray
+  return newArray;
 }
 
 export { fetchResources, fetchTags, searchBy };
