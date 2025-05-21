@@ -1,9 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-import {
-  fetchResources,
-  fetchTags,
-} from "../utils/resource-api-utils";
+import { fetchResources, fetchTags } from "../utils/resource-api-utils";
 import useSearchResources from "../hooks/useSearchResources";
 
 export const ResourcesContext = createContext({
@@ -26,8 +23,14 @@ export default function ResourceContextProvider({ children }) {
     tags: true,
   });
 
-  const { results, activeTags, searchInputRef, handleUserInput, handleTagsInput, clearAllTags } =
-    useSearchResources({ resources, tags, isFetching });
+  const {
+    results,
+    activeTags,
+    searchInputRef,
+    handleUserInput,
+    handleTagsInput,
+    clearAllTags,
+  } = useSearchResources({ resources, tags, isFetching });
 
   const ctxValue = {
     tags,
