@@ -1,4 +1,4 @@
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { searchBy } from "../utils/resource-api-utils";
 
 export default function useSearchResources({ resources, isFetching }) {
@@ -35,9 +35,10 @@ export default function useSearchResources({ resources, isFetching }) {
     // highlightActiveTags();
   };
 
-  // function highlightActiveTags() {
-  //   console.log("activeTags: "+activeTags);
-  // }
+  const clearAllTags = () => {
+    setActiveTags([]);
+    searchInputRef.current.focus();
+  };
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -71,7 +72,7 @@ export default function useSearchResources({ resources, isFetching }) {
     activeTags,
     searchInputRef,
     handleUserInput,
-    handleTagsInput
-    // highlightActiveTags
+    handleTagsInput,
+    clearAllTags,
   };
 }
