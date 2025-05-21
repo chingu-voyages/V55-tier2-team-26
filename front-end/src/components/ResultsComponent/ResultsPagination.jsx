@@ -30,12 +30,6 @@ export default function ResultsPagination({
     (activePage >= maxPages && activePage) ||
     activePage + 1;
 
-  console.log("maxpage " + maxPages);
-  console.log("activePages " + activePage);
-  console.log("first page " + paginationItemOneValue);
-  console.log("second page " + paginationItemTwoValue);
-  console.log("third page " + paginationItemThreeValue);
-
   return totalResults <= 10 ? null : (
     <Pagination>
       <PaginationContent>
