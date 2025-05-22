@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
+import { FaExclamationCircle } from "react-icons/fa";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -85,9 +86,14 @@ export default function SearchBar() {
       className="w-[80%] m-auto mt-20 mb-20 flex gap-[10px] items-center justify-center"
     >
       <div id="searchBarContainer">
-        <div className="flex items-center ">
+        <div className="flex items-center">
           <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[50px] outline-[1px] flex">
+              {errors.searchText && (
+                <div className="absolute top-[-30px] left-0 text-red-500 text-sm flex items-baseline gap-1 whitespace-nowrap">
+                  <FaExclamationCircle className="translate-y-[2.5px]"/> {errors.searchText}
+                </div>
+              )}
               <button
                 type="submit"
                 className="absolute left-0 top-0 h-full w-10 rounded-tl-[20px] rounded-bl-[20px] flex items-center justify-center cursor-pointer focus:bg-orange-500 bg-blue-500 text-pink-500 text-lg border border-gray-400 border-l-0 hover:bg-orange-500"
@@ -102,11 +108,6 @@ export default function SearchBar() {
                 className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-red-500" : "border-gray-400"} bg-green-500 text-white focus:outline-none`}
               />
             </div>
-            {errors.searchText && (
-              <div className="absolute mt-[52px] text-red-500 text-sm">
-                {errors.searchText}
-              </div>
-            )}
           </form>
         </div>
       </div>
