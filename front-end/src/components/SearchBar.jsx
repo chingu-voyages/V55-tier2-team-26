@@ -5,7 +5,7 @@ import { FaExclamationCircle } from "react-icons/fa";
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const [errors, setErrors] = useState({ searchText: "" });
+  const [errors, setErrors] = useState({ searchText: "", tags: "" });
 
   let filteredTags = [];
   const { 
@@ -29,6 +29,19 @@ export default function SearchBar() {
       baseHandleUserInput(e);
     }
   }
+
+  const handleTagsInput = (e) => {
+    const tagId = e.target.value;
+
+    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
+      baseHandleTagsInput(e);
+      return;
+    }
+
+    if (validateTags(activeTags)) {
+      baseHandleTagsInput(e);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,7 +72,7 @@ export default function SearchBar() {
     });
 
     clearAllTags();
-    setErrors({ searchText: "" });
+    setErrors({ searchText: "", tags: "" });
   }
 
   const validateSearchText = (text) => {
@@ -77,6 +90,20 @@ export default function SearchBar() {
       return false;
     }
     
+    return true;
+  };
+
+  const validateTags = (currentTags) => {
+    setErrors(prev => ({...prev, tags: ""}));
+
+    if (currentTags.length >= 8) {
+      setErrors(prev => ({
+        ...prev,
+        tags: "Please select 8 or fewer tags to narrow your search.",
+      }));
+      return false;
+    }
+
     return true;
   };
 
@@ -122,6 +149,16 @@ export default function SearchBar() {
 
       <div id="tagsDropdownContainer">
         <div className="dropdown">
+          {errors.tags && (
+            <div 
+              id="tags-error-message" 
+              role="alert" 
+              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap z-10"
+            >
+              <FaExclamationCircle aria-hidden="true" /> 
+              {errors.tags}
+            </div>
+          )}
           <button
             className="w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
             type="button"
@@ -149,7 +186,7 @@ export default function SearchBar() {
                   onClick={(e) => {
                     e.preventDefault();
                     console.log("Selected tag ID:", id);
-                    baseHandleTagsInput({
+                    handleTagsInput({
                       target: {
                         value: id,
                         textContent: tag,
