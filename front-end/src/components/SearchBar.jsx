@@ -160,9 +160,12 @@ export default function SearchBar() {
             </div>
           )}
           <button
-            className="w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer"
+            className={`w-full h-[50px] outline-[1px] rounded-[20px] focus:bg-amber-800 hover:bg-amber-800 bg-amber-400 text-[purple] p-[16px] text-[16px] cursor-pointer ${errors.tags ? "border-2 border-red-500" : ""}`}
             type="button"
             onClick={() => setDropdownOpen((open) => !open)}
+            aria-invalid={!!errors.tags}
+            aria-describedby={errors.tags ? "tags-error-message" : undefined}
+            aria-label="Select tags to filter results"
           >
             Dropdown
           </button>
@@ -177,6 +180,7 @@ export default function SearchBar() {
                 id="myInput"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
+                aria-label="Filter available tags"
               />
               {filteredTags.length === 0 ? null : filteredTags.map(({ tag, id }) => {
                 return (<a
