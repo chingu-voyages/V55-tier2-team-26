@@ -69,10 +69,10 @@ export default function SearchBar() {
       return true;
     }
 
-    if (text.trim().length > 100) {
+    if (text.trim().length > 250) {
       setErrors(prev => ({
         ...prev,
-        searchText: "Search text cannot exceed 100 characters.",
+        searchText: "Please shorten your search terms to 250 characters or less.",
       }));
       return false;
     }
@@ -90,8 +90,13 @@ export default function SearchBar() {
           <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[50px] outline-[1px] flex">
               {errors.searchText && (
-                <div className="absolute top-[-30px] left-0 text-red-500 text-sm flex items-baseline gap-1 whitespace-nowrap">
-                  <FaExclamationCircle className="translate-y-[2.5px]"/> {errors.searchText}
+                <div 
+                  id="search-error-message" 
+                  role="alert" 
+                  className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+                >
+                  <FaExclamationCircle aria-hidden="true" /> 
+                  {errors.searchText}
                 </div>
               )}
               <button
@@ -105,6 +110,9 @@ export default function SearchBar() {
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
+                aria-label="Search resources"
+                aria-invalid={!!errors.searchText}
+                aria-describedby={errors.searchText ? "search-error-message" : undefined}
                 className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-red-500" : "border-gray-400"} bg-green-500 text-white focus:outline-none`}
               />
             </div>
