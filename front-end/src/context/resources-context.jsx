@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-
 import { fetchResources, fetchTags } from "../utils/resource-api-utils";
 import useSearchResources from "../hooks/useSearchResources";
 
@@ -9,6 +8,7 @@ export const ResourcesContext = createContext({
   activeTags: [],
   results: [],
   isFetching: {},
+  error: null,
   searchInputRef: {},
   handleUserInput: () => {},
   handleTagsInput: () => {},
@@ -18,6 +18,7 @@ export const ResourcesContext = createContext({
 export default function ResourceContextProvider({ children }) {
   const [tags, setTags] = useState(null);
   const [resources, setResources] = useState(null);
+  const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState({
     resources: true,
     tags: true,
@@ -36,6 +37,7 @@ export default function ResourceContextProvider({ children }) {
     tags,
     resources,
     isFetching,
+    error,
     activeTags,
     results,
     searchInputRef,
@@ -47,6 +49,8 @@ export default function ResourceContextProvider({ children }) {
   useEffect(() => {
     async function fetchAPI() {
       setIsFetching({ resources: true, tags: true });
+      setError(null);
+
       try {
         const fetchedTags = await fetchTags();
         setTags(fetchedTags);
@@ -56,9 +60,13 @@ export default function ResourceContextProvider({ children }) {
         setResources(fetchedResources);
         setIsFetching(() => ({ resources: false, tags: false }));
       } catch (error) {
-        throw new Error(error);
+        setError({
+          type: "API_UNAVAILABLE",
+          message: "Unable to connect to the server. Please check your connection and try again.",
+          originalError: error,
+        });
+        setIsFetching(() => ({ resources: false, tags: false }));
       }
-      setIsFetching(() => ({ resources: false, tags: false }));
     }
 
     fetchAPI();
