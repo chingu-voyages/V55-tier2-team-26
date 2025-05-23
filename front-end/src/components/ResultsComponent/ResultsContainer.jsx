@@ -26,12 +26,27 @@ export default function ResultsContainer() {
     return (
       <section>
         <div className="w-svw p-4">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-y py-3 rounded">
-            <h3 className="font-bold mb-2 ml-2">Connection Error</h3>
-            <p className="ml-2">{error.message}</p>
+          <div 
+          className="bg-red-100 border border-red-400 text-red-700 px-y py-3 rounded"
+          role="alert"
+          >
+            <h3 
+              className="font-bold mb-2 ml-2"
+              id="error-title"
+            >
+              Connection Error
+            </h3>
+            <p 
+              className="ml-2"
+              id="error-message"
+            >
+              {error.message}
+            </p>
             <button
               className="mt-3 ml-2 bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded"
               onClick={() => window.location.reload()}
+              aria-describedby="error-title error-message"
+              aria-label="Retry loading the page to resolve connection error"
             >
               Try Again
             </button>
