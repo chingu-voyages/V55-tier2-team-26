@@ -95,16 +95,18 @@ export default function SearchBar() {
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
                 type="submit"
-                className="absolute left-0 top-0 h-full w-10 rounded-tl-[20px] rounded-bl-[20px] flex items-center justify-center cursor-pointer focus:text-lg bg-[#F9F5FF] text-[#22222] text-md border-gray-400 border-l-0 hover:text-lg"
+                className="absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md border-gray-400 border-l-0 hover:font-bold"
               >
-                <i className="fa fa-search"></i>
+                Submit
+                {/* <i className="fa fa-search"></i> */}
               </button>
+              <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
-                className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${
+                className={`w-full p-2 pl-10 text-lg rounded-[20px] border ${
                   errors.searchText ? "border-red-500" : "border-[#F9F5FF]"
                 } bg-[#F9F5FF] text-black focus:outline-none`}
               />
@@ -118,30 +120,47 @@ export default function SearchBar() {
         </div>
       </div>
 
-      <div id="tagsDropdownContainer" className="w-md">
-        <div className="dropdown max-w-md">
-          <button
-            className="w-full max-w-md h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
-            type="button"
-            onClick={() => setDropdownOpen((open) => !open)}
-          >
-            Tags
-          </button>
-          {dropdownOpen && (
-            <div
-              id="myDropdown"
-              className="absolute w-[175px] p-2 mt-[10px] flex flex-col bg-[#f6f6f6]"
-            >
-              <input
-                type="text"
-                placeholder="Search tags..."
-                id="myInput"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              />
-              {filteredTags.length === 0
-                ? null
-                : filteredTags.map(({ tag, id }) => {
+      <div
+        id="tagsResetButtonsContainer"
+        className="flex w-full max-w-md justify-between"
+      >
+        <div id="tagsDropdownContainer" className="relative w-[75%]">
+          <div className="dropdown w-full">
+            {!dropdownOpen && (
+              <button
+                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
+                type="button"
+                onClick={() => setDropdownOpen((open) => !open)}
+              >
+                Tags
+              </button>
+
+            )}
+            {dropdownOpen && (
+              <div
+                id="myDropdown"
+                className="absolute left-0 w-full p-2 flex flex-col bg-[#f6f6f6] rounded-t-[20px] border-t-[1px] border-r-[1px] border-l-[1px]"
+              >
+                <div id="tagsSearchBarContainer" className="flex ">
+                  <input
+                    type="text"
+                    placeholder="Search tags..."
+                    id="myInput"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                  />
+                  <button
+                    id="closeTagsDropdown"
+                    className="absolute w-[40px] right-[0px] w-[14px] top-[0px] h-[40px] hover:scale-120 focus:scale-120"
+                    onClick={() => setDropdownOpen((open) => !open)}
+                  >
+                    <i className="fa-solid fa-xmark top-1/2 absolute transform -translate-y-1/2 -translate-x-1/2" />
+                  </button>
+                </div>
+                {filteredTags.length === 0 ? (
+                  <div className="border-t-[1px]" />
+                ) : (
+                  filteredTags.map(({ tag, id }) => {
                     return (
                       <a
                         id={id}
@@ -164,20 +183,22 @@ export default function SearchBar() {
                         {tag}
                       </a>
                     );
-                  })}
-            </div>
-          )}
+                  })
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-        <div id="clearButton" className="w-md flex justify-end">
+        <div id="clearButton" className="w-[20%] flex justify-end">
           <button
             onClick={handleClear}
-            className="h-[40px] w-[20%] rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black"
+            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black"
           >
-            Clear
+            Reset
           </button>
         </div>
+      </div>
     </div>
   );
 }
