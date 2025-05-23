@@ -49,8 +49,9 @@ export default function SearchBar() {
     const tagIds = activeTags.map(tag => tag.id);
 
     const isSearchTextValid = validateSearchText(currentSearchText);
+    const isTagsValid = validateTags(activeTags);
 
-    if (!isSearchTextValid) {
+    if (!isSearchTextValid || !isTagsValid) {
       return;
     }
 
@@ -140,7 +141,7 @@ export default function SearchBar() {
                 aria-label="Search resources"
                 aria-invalid={!!errors.searchText}
                 aria-describedby={errors.searchText ? "search-error-message" : undefined}
-                className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-red-500" : "border-gray-400"} bg-green-500 text-white focus:outline-none`}
+                className={`w-full p-2 pl-12 text-lg rounded-[20px] border ${errors.searchText ? "border-2 border-red-500" : ""} bg-green-500 text-white focus:outline-none`}
               />
             </div>
           </form>
@@ -148,7 +149,7 @@ export default function SearchBar() {
       </div>
 
       <div id="tagsDropdownContainer">
-        <div className="dropdown">
+        <div className="dropdown relative">
           {errors.tags && (
             <div 
               id="tags-error-message" 
