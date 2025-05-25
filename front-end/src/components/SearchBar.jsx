@@ -130,6 +130,16 @@ export default function SearchBar() {
               {errors.searchText}
             </div>
           )}
+          {errors.tags && (
+            <div 
+              id="tags-error-message" 
+              role="alert" 
+              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+            >
+              <FaExclamationCircle aria-hidden="true" /> 
+              {errors.tags}
+            </div>
+          )}
           <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
@@ -163,9 +173,12 @@ export default function SearchBar() {
           <div className="dropdown w-full">
             {!dropdownOpen && (
               <button
-                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
+                className={`w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold ${errors.tags ? "border-2 border-red-500" : ""}`}
                 type="button"
                 onClick={() => setDropdownOpen((open) => !open)}
+                aria-invalid={!!errors.tags}
+                aria-describedby={errors.tags ? "tags-error-message" : undefined}
+                aria-label="Select tags to filter results"
               >
                 Tags
               </button>
@@ -204,7 +217,7 @@ export default function SearchBar() {
                         onClick={(e) => {
                           e.preventDefault();
                           console.log("Selected tag ID:", id);
-                          baseHandleTagsInput({
+                          handleTagsInput({
                             target: {
                               value: id,
                               textContent: tag,
