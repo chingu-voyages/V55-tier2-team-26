@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { ResourcesContext } from "../context/resources-context";
+import { FaExclamationCircle } from "react-icons/fa";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const [errors, setErrors] = useState({ searchText: "" });
+  const [errors, setErrors] = useState({ searchText: "", tags: "" });
 
   const highlightActiveTags = (id) =>
     activeTags.some((tag) => tag.id === id)
@@ -23,8 +24,8 @@ export default function SearchBar() {
   } = useContext(ResourcesContext);
 
   if (tags !== null) {
-    filteredTags = tags.filter(({ tag: originalTagName }) =>
-      originalTagName.toLowerCase().includes(filter.toLowerCase())
+      filteredTags = tags.filter(({ tag: originalTagName, id }) =>
+        ({ tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id })
     );
   }
 
@@ -34,14 +35,28 @@ export default function SearchBar() {
     }
   };
 
+  const handleTagsInput = (e) => {
+    const tagId = e.target.value;
+
+    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
+      baseHandleTagsInput(e);
+      return;
+    }
+
+    if (validateTags(activeTags)) {
+      baseHandleTagsInput(e);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
     const isSearchTextValid = validateSearchText(currentSearchText);
+    const isTagsValid = validateTags(activeTags);
 
-    if (!isSearchTextValid) {
+    if (!isSearchTextValid || !isTagsValid) {
       return;
     }
 
@@ -63,7 +78,7 @@ export default function SearchBar() {
     });
 
     clearAllTags();
-    setErrors({ searchText: "" });
+    setErrors({ searchText: "", tags: "" });
   };
 
   const validateSearchText = (text) => {
@@ -73,10 +88,24 @@ export default function SearchBar() {
       return true;
     }
 
-    if (text.trim().length > 100) {
+    if (text.trim().length > 250) {
       setErrors((prev) => ({
         ...prev,
-        searchText: "Search text cannot exceed 100 characters.",
+        searchText: "Please shorten your search terms to 250 characters or less.",
+      }));
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateTags = (currentTags) => {
+    setErrors((prev) => ({ ...prev, tags: "" }));
+
+    if (currentTags.length >= 8) {
+      setErrors((prev) => ({
+        ...prev,
+        tags: "Please select 8 or fewer tags to narrow your search.",
       }));
       return false;
     }
@@ -90,12 +119,22 @@ export default function SearchBar() {
       className="w-[80%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
     >
       <div id="searchBarContainer" className="w-md">
-        <div className="flex items-center ">
+        <div className="flex items-center relative">
+          {errors.searchText && (
+            <div 
+              id="search-error-message" 
+              role="alert" 
+              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+            >
+              <FaExclamationCircle aria-hidden="true" /> 
+              {errors.searchText}
+            </div>
+          )}
           <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
                 type="submit"
-                className="absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md border-gray-400 border-l-0 hover:font-bold"
+                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${errors.searchText ? "border-2 border-red-500 border-l-0" : "border-gray-400 border-l-0"}`}
               >
                 Submit
                 {/* <i className="fa fa-search"></i> */}
@@ -106,16 +145,12 @@ export default function SearchBar() {
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] border ${
-                  errors.searchText ? "border-red-500" : "border-[#F9F5FF]"
-                } bg-[#F9F5FF] text-black focus:outline-none`}
+                aria-label="Search resources"
+                aria-invalid={!!errors.searchText}
+                aria-describedby={errors.searchText ? "search-error-message" : undefined}
+                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${errors.searchText ? "border-2 border-red-500 border-r-0" : "border border-[#F9F5FF] border-l-0"}`}
               />
             </div>
-            {errors.searchText && (
-              <div className="absolute mt-[52px] text-red-500 text-sm">
-                {errors.searchText}
-              </div>
-            )}
           </form>
         </div>
       </div>
