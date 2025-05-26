@@ -56,7 +56,6 @@ export default function SearchBar() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -145,7 +144,7 @@ export default function SearchBar() {
               {info.tags}
             </div>
           )}
-          <form className="w-full flex" onSubmit={handleSubmit}>
+          <form action={"/search"} className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
                 type="submit"
