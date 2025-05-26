@@ -3,10 +3,18 @@ async function fetchResources() {
     const data = await fetch("https://seshatbe.up.railway.app/resources", {
       method: "GET",
     });
+
+    if (!data.ok) {
+      throw new Error(`HTTP ${data.status}: ${data.statusText}`);
+    }
+
     const dataJSON = await data.json();
     return cleanRepeatedResources(dataJSON);
   } catch (error) {
-    throw new Error(error);
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      throw new Error("Server unavailable. Please check your connection.");
+    }
+    throw error;
   }
 }
 
@@ -16,9 +24,16 @@ async function fetchTags() {
       method: "GET",
     });
 
+    if (!data.ok) {
+      throw new Error(`HTTP ${data.status}: ${data.statusText}`);
+    }
+
     return await data.json();
   } catch (error) {
-    throw new Error(error);
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      throw new Error("Server unavailable. Please check your connection.");
+    }
+    throw error;
   }
 }
 
@@ -95,7 +110,7 @@ function searchBy({ data, keywords, tags }) {
     return sortedByPriority.length === 0
       ? {
           error:
-            "No post was found with those keywords. Try with different keywords...",
+            "No resources found matching your search criteria. Please try different keywords or tags.",
         }
       : sortedByPriority;
   };

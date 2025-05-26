@@ -1,17 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
+import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
+  const [info, setInfo] = useState({ tags: "" });
 
-  const highlightActiveTags = (id) =>
-    activeTags.some((tag) => tag.id === id)
-      ? "bg-[#6D597A] text-white"
-      : "bg-[#f6f6f6] text-black";
-
-  let filteredTags = [];
   const {
     tags,
     results,
@@ -22,16 +18,41 @@ export default function SearchBar() {
     clearAllTags,
   } = useContext(ResourcesContext);
 
+  useEffect(() => {
+    validateTags(activeTags);
+  }, [activeTags]);
+
+  let filteredTags = [];
   if (tags !== null) {
-    filteredTags = tags.filter(({ tag: originalTagName }) =>
-      originalTagName.toLowerCase().includes(filter.toLowerCase())
+      filteredTags = tags.filter(({ tag }) =>
+        tag.toLowerCase().includes(filter.toLowerCase())
     );
   }
+
+  const highlightActiveTags = (id) =>
+    activeTags.some((tag) => tag.id === id)
+      ? "bg-[#6D597A] text-white"
+      : "bg-[#f6f6f6] text-black";
 
   const handleUserInput = (e) => {
     if (validateSearchText(e.target.value)) {
       baseHandleUserInput(e);
     }
+  };
+
+  const handleTagsInput = (e) => {
+    const tagId = e.target.value;
+
+    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
+      baseHandleTagsInput(e);
+      return;
+    }
+
+    if (activeTags.length >= 8) {
+      return;
+    }
+
+    baseHandleTagsInput(e);
   };
 
   const handleSubmit = (e) => {
@@ -40,8 +61,9 @@ export default function SearchBar() {
     const tagIds = activeTags.map((tag) => tag.id);
 
     const isSearchTextValid = validateSearchText(currentSearchText);
+    const isTagsValid = activeTags.length <= 8;
 
-    if (!isSearchTextValid) {
+    if (!isSearchTextValid || !isTagsValid) {
       return;
     }
 
@@ -63,7 +85,7 @@ export default function SearchBar() {
     });
 
     clearAllTags();
-    setErrors({ searchText: "" });
+    setErrors({ searchText: "", tags: "" });
   };
 
   const validateSearchText = (text) => {
@@ -73,14 +95,27 @@ export default function SearchBar() {
       return true;
     }
 
-    if (text.trim().length > 100) {
+    if (text.trim().length > 250) {
       setErrors((prev) => ({
         ...prev,
-        searchText: "Search text cannot exceed 100 characters.",
+        searchText: "Please shorten your search terms to 250 characters or less.",
       }));
       return false;
     }
 
+    return true;
+  };
+
+  const validateTags = (currentTags) => {
+    if (currentTags.length === 8) {
+      setInfo((prev) => ({
+        ...prev,
+        tags: "8 tags selected. Remove a tag to select others.",
+      }));
+      return true;
+    }
+
+    setInfo((prev) => ({ ...prev, tags: "" }));
     return true;
   };
 
@@ -90,12 +125,31 @@ export default function SearchBar() {
       className="w-[80%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
     >
       <div id="searchBarContainer" className="w-md">
-        <div className="flex items-center ">
+        <div className="flex items-center relative">
+          {errors.searchText && (
+            <div 
+              id="search-error-message" 
+              role="alert" 
+              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+            >
+              <FaExclamationCircle aria-hidden="true" /> 
+              {errors.searchText}
+            </div>
+          )}
+          {info.tags && (
+            <div 
+              id="tags-info-message"
+              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${activeTags.length === 8 && "text-[#2E4057]"}`}
+            >
+              <FaInfoCircle aria-hidden="true" /> 
+              {info.tags}
+            </div>
+          )}
           <form className="w-full flex" onSubmit={handleSubmit}>
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
                 type="submit"
-                className="absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md border-gray-400 border-l-0 hover:font-bold"
+                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${errors.searchText ? "border-2 border-red-500 border-l-0" : "border-gray-400 border-l-0"}`}
               >
                 Submit
                 {/* <i className="fa fa-search"></i> */}
@@ -106,16 +160,12 @@ export default function SearchBar() {
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] border ${
-                  errors.searchText ? "border-red-500" : "border-[#F9F5FF]"
-                } bg-[#F9F5FF] text-black focus:outline-none`}
+                aria-label="Search resources"
+                aria-invalid={!!errors.searchText}
+                aria-describedby={errors.searchText ? "search-error-message" : undefined}
+                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${errors.searchText ? "border-2 border-red-500 border-r-0" : "border border-[#F9F5FF] border-l-0"}`}
               />
             </div>
-            {errors.searchText && (
-              <div className="absolute mt-[52px] text-red-500 text-sm">
-                {errors.searchText}
-              </div>
-            )}
           </form>
         </div>
       </div>
@@ -131,6 +181,8 @@ export default function SearchBar() {
                 className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
                 type="button"
                 onClick={() => setDropdownOpen((open) => !open)}
+                aria-describedby={info.tags ? "tags-info-message" : undefined}
+                aria-label="Select tags to filter results"
               >
                 Tags
               </button>
@@ -161,6 +213,9 @@ export default function SearchBar() {
                   <div className="border-t-[1px]" />
                 ) : (
                   filteredTags.map(({ tag, id }) => {
+                    const isActive = activeTags.some((tag) => tag.id === id);
+                    const isDisabled = !isActive && activeTags.length >= 8;
+
                     return (
                       <a
                         id={id}
@@ -168,17 +223,20 @@ export default function SearchBar() {
                         key={tag}
                         onClick={(e) => {
                           e.preventDefault();
+                          if (isDisabled) return;
                           console.log("Selected tag ID:", id);
-                          baseHandleTagsInput({
+                          handleTagsInput({
                             target: {
                               value: id,
                               textContent: tag,
                             },
                           });
                         }}
-                        className={`block w-full p-1 m-[.5px] hover:font-bold rounded-md text-gray-700 ${highlightActiveTags(
-                          id
-                        )}`}
+                        className={`block w-full p-1 m-[.5px] rounded-md ${
+                          isDisabled 
+                            ? "text-gray-400 cursor-not-allowed opacity-50" 
+                            : `hover:font-bold text-gray-700 ${highlightActiveTags(id)}`
+                        }`}
                       >
                         {tag}
                       </a>
