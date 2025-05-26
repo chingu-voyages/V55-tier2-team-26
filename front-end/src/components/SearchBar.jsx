@@ -5,7 +5,8 @@ import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const [errors, setErrors] = useState({ searchText: "", tags: "" });
+  const [errors, setErrors] = useState({ searchText: "" });
+  const [info, setInfo] = useState({ tags: "" });
 
   const {
     tags,
@@ -107,14 +108,14 @@ export default function SearchBar() {
 
   const validateTags = (currentTags) => {
     if (currentTags.length === 8) {
-      setErrors((prev) => ({
+      setInfo((prev) => ({
         ...prev,
         tags: "8 tags selected. Remove a tag to select others.",
       }));
       return true;
     }
 
-    setErrors((prev) => ({ ...prev, tags: "" }));
+    setInfo((prev) => ({ ...prev, tags: "" }));
     return true;
   };
 
@@ -135,13 +136,13 @@ export default function SearchBar() {
               {errors.searchText}
             </div>
           )}
-          {errors.tags && (
+          {info.tags && (
             <div 
               id="tags-info-message"
               className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${activeTags.length === 8 && "text-[#2E4057]"}`}
             >
               <FaInfoCircle aria-hidden="true" /> 
-              {errors.tags}
+              {info.tags}
             </div>
           )}
           <form className="w-full flex" onSubmit={handleSubmit}>
@@ -180,7 +181,7 @@ export default function SearchBar() {
                 className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
                 type="button"
                 onClick={() => setDropdownOpen((open) => !open)}
-                aria-describedby={errors.tags ? "tags-info-message" : undefined}
+                aria-describedby={info.tags ? "tags-info-message" : undefined}
                 aria-label="Select tags to filter results"
               >
                 Tags
