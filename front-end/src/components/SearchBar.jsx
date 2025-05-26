@@ -1,18 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
-import { FaExclamationCircle } from "react-icons/fa";
+import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "", tags: "" });
 
-  const highlightActiveTags = (id) =>
-    activeTags.some((tag) => tag.id === id)
-      ? "bg-[#6D597A] text-white"
-      : "bg-[#f6f6f6] text-black";
-
-  let filteredTags = [];
   const {
     tags,
     results,
@@ -23,11 +17,21 @@ export default function SearchBar() {
     clearAllTags,
   } = useContext(ResourcesContext);
 
+  useEffect(() => {
+    validateTags(activeTags);
+  }, [activeTags]);
+
+  let filteredTags = [];
   if (tags !== null) {
-      filteredTags = tags.filter(({ tag: originalTagName, id }) =>
-        ({ tag: originalTagName.toLowerCase().includes(filter.toLowerCase()), id })
+      filteredTags = tags.filter(({ tag }) =>
+        tag.toLowerCase().includes(filter.toLowerCase())
     );
   }
+
+  const highlightActiveTags = (id) =>
+    activeTags.some((tag) => tag.id === id)
+      ? "bg-[#6D597A] text-white"
+      : "bg-[#f6f6f6] text-black";
 
   const handleUserInput = (e) => {
     if (validateSearchText(e.target.value)) {
@@ -43,9 +47,11 @@ export default function SearchBar() {
       return;
     }
 
-    if (validateTags(activeTags)) {
-      baseHandleTagsInput(e);
+    if (activeTags.length >= 8) {
+      return;
     }
+
+    baseHandleTagsInput(e);
   };
 
   const handleSubmit = (e) => {
@@ -54,7 +60,7 @@ export default function SearchBar() {
     const tagIds = activeTags.map((tag) => tag.id);
 
     const isSearchTextValid = validateSearchText(currentSearchText);
-    const isTagsValid = validateTags(activeTags);
+    const isTagsValid = activeTags.length <= 8;
 
     if (!isSearchTextValid || !isTagsValid) {
       return;
@@ -100,16 +106,15 @@ export default function SearchBar() {
   };
 
   const validateTags = (currentTags) => {
-    setErrors((prev) => ({ ...prev, tags: "" }));
-
-    if (currentTags.length >= 8) {
+    if (currentTags.length === 8) {
       setErrors((prev) => ({
         ...prev,
-        tags: "Please select 8 or fewer tags to narrow your search.",
+        tags: "8 tags selected. Remove a tag to select others.",
       }));
-      return false;
+      return true;
     }
 
+    setErrors((prev) => ({ ...prev, tags: "" }));
     return true;
   };
 
@@ -132,11 +137,10 @@ export default function SearchBar() {
           )}
           {errors.tags && (
             <div 
-              id="tags-error-message" 
-              role="alert" 
-              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+              id="tags-info-message"
+              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${activeTags.length === 8 && "text-[#2E4057]"}`}
             >
-              <FaExclamationCircle aria-hidden="true" /> 
+              <FaInfoCircle aria-hidden="true" /> 
               {errors.tags}
             </div>
           )}
@@ -173,11 +177,10 @@ export default function SearchBar() {
           <div className="dropdown w-full">
             {!dropdownOpen && (
               <button
-                className={`w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold ${errors.tags ? "border-2 border-red-500" : ""}`}
+                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
                 type="button"
                 onClick={() => setDropdownOpen((open) => !open)}
-                aria-invalid={!!errors.tags}
-                aria-describedby={errors.tags ? "tags-error-message" : undefined}
+                aria-describedby={errors.tags ? "tags-info-message" : undefined}
                 aria-label="Select tags to filter results"
               >
                 Tags
@@ -209,6 +212,9 @@ export default function SearchBar() {
                   <div className="border-t-[1px]" />
                 ) : (
                   filteredTags.map(({ tag, id }) => {
+                    const isActive = activeTags.some((tag) => tag.id === id);
+                    const isDisabled = !isActive && activeTags.length >= 8;
+
                     return (
                       <a
                         id={id}
@@ -216,6 +222,7 @@ export default function SearchBar() {
                         key={tag}
                         onClick={(e) => {
                           e.preventDefault();
+                          if (isDisabled) return;
                           console.log("Selected tag ID:", id);
                           handleTagsInput({
                             target: {
@@ -224,9 +231,11 @@ export default function SearchBar() {
                             },
                           });
                         }}
-                        className={`block w-full p-1 m-[.5px] hover:font-bold rounded-md text-gray-700 ${highlightActiveTags(
-                          id
-                        )}`}
+                        className={`block w-full p-1 m-[.5px] rounded-md ${
+                          isDisabled 
+                            ? "text-gray-400 cursor-not-allowed opacity-50" 
+                            : `hover:font-bold text-gray-700 ${highlightActiveTags(id)}`
+                        }`}
                       >
                         {tag}
                       </a>
