@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router";
 
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
-
+import ResourceItem from "./ResourceItem";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import { ResourcesContext } from "../../context/resources-context";
 
 export default function ResultsContainer() {
@@ -18,15 +19,18 @@ export default function ResultsContainer() {
     setActivePage(newCurrentPage);
   };
 
-  useEffect(()=>{
-    setActivePage(1)
-  },[results])
+  useEffect(() => {
+    setActivePage(1);
+  }, [results]);
 
   return (
     <section>
       <div className="w-svw">
-        {!results ? <p>Loading resources...</p> : (
+        {!results ? (
+          <LoadingIndicator />
+        ) : (
           <>
+            <ResourceItem />
             <Results results={results} activePage={activePage} />
             <ResultsPagination
               totalResults={results.length}
