@@ -1,18 +1,24 @@
+import { Form, useSearchParams } from "react-router";
 import { useContext, useState, useEffect } from "react";
+
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
+  const [searchParams] = useSearchParams();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
+  const queryParams = searchParams.get("keywords");
 
   const {
     tags,
     results,
     searchInputRef,
     activeTags,
+    searchOnPageload,
     handleUserInput: baseHandleUserInput,
     handleTagsInput: baseHandleTagsInput,
     clearAllTags,
@@ -24,8 +30,8 @@ export default function SearchBar() {
 
   let filteredTags = [];
   if (tags !== null) {
-      filteredTags = tags.filter(({ tag }) =>
-        tag.toLowerCase().includes(filter.toLowerCase())
+    filteredTags = tags.filter(({ tag }) =>
+      tag.toLowerCase().includes(filter.toLowerCase())
     );
   }
 
@@ -56,7 +62,6 @@ export default function SearchBar() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -98,7 +103,8 @@ export default function SearchBar() {
     if (text.trim().length > 250) {
       setErrors((prev) => ({
         ...prev,
-        searchText: "Please shorten your search terms to 250 characters or less.",
+        searchText:
+          "Please shorten your search terms to 250 characters or less.",
       }));
       return false;
     }
@@ -119,6 +125,13 @@ export default function SearchBar() {
     return true;
   };
 
+  useEffect(() => {
+    if (queryParams !== searchInputRef.current.value) {
+      searchInputRef.current.value = queryParams;
+      searchOnPageload(queryParams);
+    }
+  }, []);
+
   return (
     <div
       id="searchFormContainer"
@@ -127,46 +140,64 @@ export default function SearchBar() {
       <div id="searchBarContainer" className="w-md">
         <div className="flex items-center relative">
           {errors.searchText && (
-            <div 
-              id="search-error-message" 
-              role="alert" 
+            <div
+              id="search-error-message"
+              role="alert"
               className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
             >
-              <FaExclamationCircle aria-hidden="true" /> 
+              <FaExclamationCircle aria-hidden="true" />
               {errors.searchText}
             </div>
           )}
           {info.tags && (
-            <div 
+            <div
               id="tags-info-message"
-              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${activeTags.length === 8 && "text-[#2E4057]"}`}
+              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${
+                activeTags.length === 8 && "text-[#2E4057]"
+              }`}
             >
-              <FaInfoCircle aria-hidden="true" /> 
+              <FaInfoCircle aria-hidden="true" />
               {info.tags}
             </div>
           )}
-          <form className="w-full flex" onSubmit={handleSubmit}>
+          <Form
+            action={"/search"}
+            className="w-full flex"
+            onSubmit={handleSubmit}
+            method="get"
+          >
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
                 type="submit"
-                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${errors.searchText ? "border-2 border-red-500 border-l-0" : "border-gray-400 border-l-0"}`}
+                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${
+                  errors.searchText
+                    ? "border-2 border-red-500 border-l-0"
+                    : "border-gray-400 border-l-0"
+                }`}
               >
                 Submit
                 {/* <i className="fa fa-search"></i> */}
               </button>
               <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
               <input
+                name="keywords"
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search..."
                 onChange={handleUserInput}
                 aria-label="Search resources"
                 aria-invalid={!!errors.searchText}
-                aria-describedby={errors.searchText ? "search-error-message" : undefined}
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${errors.searchText ? "border-2 border-red-500 border-r-0" : "border border-[#F9F5FF] border-l-0"}`}
+                aria-describedby={
+                  errors.searchText ? "search-error-message" : undefined
+                }
+                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${
+                  errors.searchText
+                    ? "border-2 border-red-500 border-r-0"
+                    : "border border-[#F9F5FF] border-l-0"
+                }`}
               />
             </div>
-          </form>
+          </Form>
         </div>
       </div>
 
@@ -186,7 +217,6 @@ export default function SearchBar() {
               >
                 Tags
               </button>
-
             )}
             {dropdownOpen && (
               <div
@@ -233,9 +263,11 @@ export default function SearchBar() {
                           });
                         }}
                         className={`block w-full p-1 m-[.5px] rounded-md ${
-                          isDisabled 
-                            ? "text-gray-400 cursor-not-allowed opacity-50" 
-                            : `hover:font-bold text-gray-700 ${highlightActiveTags(id)}`
+                          isDisabled
+                            ? "text-gray-400 cursor-not-allowed opacity-50"
+                            : `hover:font-bold text-gray-700 ${highlightActiveTags(
+                                id
+                              )}`
                         }`}
                       >
                         {tag}
