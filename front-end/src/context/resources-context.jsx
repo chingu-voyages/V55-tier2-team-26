@@ -10,6 +10,7 @@ export const ResourcesContext = createContext({
   isFetching: {},
   error: null,
   searchInputRef: {},
+  searchOnPageload: () => {},
   handleUserInput: () => {},
   handleTagsInput: () => {},
   clearAllTags: () => {},
@@ -28,6 +29,7 @@ export default function ResourceContextProvider({ children }) {
     results,
     activeTags,
     searchInputRef,
+    searchOnPageload,
     handleUserInput,
     handleTagsInput,
     clearAllTags,
@@ -41,6 +43,7 @@ export default function ResourceContextProvider({ children }) {
     activeTags,
     results,
     searchInputRef,
+    searchOnPageload,
     handleUserInput,
     handleTagsInput,
     clearAllTags,
@@ -62,7 +65,8 @@ export default function ResourceContextProvider({ children }) {
       } catch (error) {
         setError({
           type: "API_UNAVAILABLE",
-          message: "Unable to connect to the server. Please check your connection and try again.",
+          message:
+            "Unable to connect to the server. Please check your connection and try again.",
           originalError: error,
         });
         setIsFetching(() => ({ resources: false, tags: false }));

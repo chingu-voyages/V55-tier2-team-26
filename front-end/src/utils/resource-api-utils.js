@@ -38,6 +38,9 @@ async function fetchTags() {
 }
 
 function searchBy({ data, keywords, tags }) {
+  if(!data)
+    return null
+
   if (keywords === null)
     return console.log(
       new Error(`"keywords" property missing when parsing object...`)
