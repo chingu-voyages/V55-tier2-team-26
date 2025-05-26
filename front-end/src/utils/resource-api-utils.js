@@ -110,7 +110,7 @@ function searchBy({ data, keywords, tags }) {
     return sortedByPriority.length === 0
       ? {
           error:
-            "No post was found with those keywords. Try with different keywords...",
+            "No resources found matching your search criteria. Please try different keywords or tags.",
         }
       : sortedByPriority;
   };
