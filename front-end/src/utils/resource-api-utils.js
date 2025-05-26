@@ -3,9 +3,18 @@ async function fetchResources() {
     const data = await fetch("https://seshatbe.up.railway.app/resources", {
       method: "GET",
     });
-    return await data.json();
+
+    if (!data.ok) {
+      throw new Error(`HTTP ${data.status}: ${data.statusText}`);
+    }
+
+    const dataJSON = await data.json();
+    return cleanRepeatedResources(dataJSON);
   } catch (error) {
-    throw new Error(error);
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      throw new Error("Server unavailable. Please check your connection.");
+    }
+    throw error;
   }
 }
 
@@ -15,9 +24,16 @@ async function fetchTags() {
       method: "GET",
     });
 
+    if (!data.ok) {
+      throw new Error(`HTTP ${data.status}: ${data.statusText}`);
+    }
+
     return await data.json();
   } catch (error) {
-    throw new Error(error);
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      throw new Error("Server unavailable. Please check your connection.");
+    }
+    throw error;
   }
 }
 
@@ -64,10 +80,10 @@ function searchBy({ data, keywords, tags }) {
       "gm"
     );
 
-    const matches = [...name.toLowerCase().matchAll(keywordsRegEx, "gm")];
+    const matches = [...name.toLowerCase().matchAll(keywordsRegEx)];
 
     if (matches.length !== 0) {
-      if (name === sanitizedKeywords) return { isMatch: true, priority: 3 };
+      if (name === sanitizedKeywords || (matches.length===1 && matches[0][0].length >= 4)) return { isMatch: true, priority: 3 };
 
       if (Number(matches.length / nameKeywordsArr.length).toFixed(2) >= 0.5)
         return { isMatch: true, priority: 2 };
@@ -91,12 +107,17 @@ function searchBy({ data, keywords, tags }) {
 
     const sortedByPriority = priorityArr.map(({ idx }) => data[idx]);
 
-    return sortedByPriority.length===0?{error: "No post was found with those keywords. Try with different keywords..."}:sortedByPriority;
+    return sortedByPriority.length === 0
+      ? {
+          error:
+            "No resources found matching your search criteria. Please try different keywords or tags.",
+        }
+      : sortedByPriority;
   };
 
   const keywordsPriorityArray = [];
 
-  if (tags.length!==0) {
+  if (tags.length !== 0) {
     const tagPriorityArray = [];
 
     const filteredByTagPosts = data.filter(({ appliedTags }, idx) => {
@@ -118,9 +139,7 @@ function searchBy({ data, keywords, tags }) {
     });
 
     const bothPrioritiesArr = tagPriorityArray.map((tagPriorityObj, idx) => ({
-      priority:
-        tagPriorityObj.priority +
-        keywordsPriorityArray[idx].priority,
+      priority: tagPriorityObj.priority + keywordsPriorityArray[idx].priority,
       idx: tagPriorityObj.idx,
     }));
 
@@ -139,6 +158,22 @@ function searchBy({ data, keywords, tags }) {
   });
 
   return sortByPriority(keywordsPriorityArray);
+}
+
+function cleanRepeatedResources(data) {
+  const newArray = [];
+
+  data.forEach((result) => {
+    if (newArray.length === 0) return newArray.push(result);
+
+    const foundResult = newArray.find(
+      (savedResult) => savedResult.name === result.name
+    );
+
+    foundResult ? null : newArray.push(result);
+  });
+
+  return newArray;
 }
 
 export { fetchResources, fetchTags, searchBy };
