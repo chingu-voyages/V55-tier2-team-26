@@ -62,7 +62,6 @@ export default function ResultsContainer() {
       <div className="w-svw">
         {!results ? (
           <LoadingIndicator />
-          <p>Loading resources...</p> 
         ) : results.error ? (
           <div className="w-full p-4 text-center">
             <div
