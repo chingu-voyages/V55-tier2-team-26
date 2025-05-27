@@ -1,4 +1,14 @@
-function DemoCardComponent({ name, author, url, createdAt, appliedTags, id, className }) {
+import ResourceItem from "./ResourceItem";
+
+function DemoCardComponent({
+  name,
+  author,
+  url,
+  createdAt,
+  appliedTags,
+  id,
+  className,
+}) {
   return (
     <div className={className}>
       <h1>{name}</h1>
@@ -14,19 +24,23 @@ function getCards(results, activePage) {
 
   const paginatedResulsts = results.slice(sliceFrom, sliceTo);
 
-  return paginatedResulsts.map((result,idx) => (
-    <DemoCardComponent
+  return paginatedResulsts.map((result, idx) => (
+    <ResourceItem
       className={"bg-amber-500 p-2 rounded-lg"}
-      key={result.id+idx}
+      key={result.id + idx}
       name={result.name}
       author={result.author}
       url={result.url}
+      appliedTags={result.appliedTags}
+      createdAt={result.createdAt}
     />
   ));
 }
 
 export default function Results({ results, activePage }) {
-  return <div className="grid grid-cols-1 border-6 rounded-sm gap-y-10 max-sm:p-2 md:p-5 lg:p-">
-    {getCards(results, activePage)}
-  </div>;
+  return (
+    <div className="grid grid-cols-1 border-6 rounded-sm gap-y-10 max-sm:p-2 md:p-5 lg:p-">
+      {getCards(results, activePage)}
+    </div>
+  );
 }

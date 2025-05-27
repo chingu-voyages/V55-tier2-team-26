@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router";
 
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
-
+import ResourceItem from "./ResourceItem";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import { ResourcesContext } from "../../context/resources-context";
 
 export default function ResultsContainer() {
@@ -60,7 +61,7 @@ export default function ResultsContainer() {
     <section>
       <div className="w-svw">
         {!results ? (
-          <p>Loading resources...</p> 
+          <LoadingIndicator />
         ) : results.error ? (
           <div className="w-full p-4 text-center">
             <div
