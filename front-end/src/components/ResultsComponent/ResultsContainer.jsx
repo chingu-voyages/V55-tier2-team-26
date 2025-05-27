@@ -30,7 +30,6 @@ export default function ResultsContainer() {
           <LoadingIndicator />
         ) : (
           <>
-            <ResourceItem />
             <Results results={results} activePage={activePage} />
             <ResultsPagination
               totalResults={results.length}
