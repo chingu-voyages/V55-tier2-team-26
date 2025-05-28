@@ -15,16 +15,17 @@ const htmlSend = (botResponse) => `
 const router = new express.Router();
 
 router.post("/chatbotai", async (req, res) => {
+  res.set({ "Content-Type": "application/json" });
   console.log(req.body.userResponse);
 
   const botResponse = await sendUserMessage(req.body.userResponse);
-  res.status(200).send(htmlSend(botResponse));
+  res.status(200).json({ botResponse });
 });
 
-router.patch("/chatbotai", async (req, res) => {
-    clearHistoryFile()
-    console.log('Chat history cleared successfuly')
-    res.status(200).send()
+router.put("/chatbotai", async (req, res) => {
+  clearHistoryFile();
+  console.log("Chat history cleared successfuly");
+  res.status(200).send();
 });
 
 module.exports = router;
