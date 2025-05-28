@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { fetchResources, fetchTags } from "../utils/resource-api-utils";
-import useSearchResources from "../hooks/useSearchResources";
+import {
+  fetchResources,
+  fetchTags,
+} from "../../../front-end/src/utils/resource-api-utils";
+import useSearchResources from "../../../front-end/src/hooks/useSearchResources";
 
 export const ResourcesContext = createContext({
   tags: [],

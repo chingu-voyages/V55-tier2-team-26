@@ -1,9 +1,8 @@
-const express = require('express')
-const aiRouter = require('./routers/aichat.js')
+const express = require("express");
+const aiRouter = require("./routers/aichat.js");
 
-const app = express()
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(aiRouter);
 
-app.use(express.urlencoded({extended: true}))
-app.use(aiRouter)
-
-module.exports = app
+module.exports = app;
