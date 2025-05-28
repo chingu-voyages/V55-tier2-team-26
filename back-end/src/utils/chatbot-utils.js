@@ -1,33 +1,52 @@
 const { GoogleGenAI } = require("@google/genai");
+const { resolve } = require("node:path");
+const fs = require("node:fs/promises");
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-async function main() {
+const readHistoryFile = async () => {
+  try {
+    const filePath = resolve("./src/dummyDB/history.json");
+    const content = await fs.readFile(filePath, { encoding: "utf8" });
+
+    return JSON.parse(content);
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const writeHistoryFile = async (newHistory) => {
+  try {
+    const filePath = resolve("./src/dummyDB/history.json");
+    const historyJson = JSON.stringify(newHistory, null, "\t");
+
+    await fs.writeFile(filePath, historyJson, { encoding: "utf8" });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const clearHistoryFile = async () => {
+  try {
+    const filePath = resolve("./src/dummyDB/history.json");
+
+    await fs.writeFile(filePath, JSON.stringify([]), { encoding: "utf8" });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+async function sendUserMessage(message) {
   const chat = await ai.chats.create({
     model: "gemini-1.5-flash",
-    history: [
-      {
-        role: "user",
-        parts: [{ text: "Hello" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Great to meet you. What would you like to know?" }],
-      },
-    ],
+    history: await readHistoryFile(),
   });
 
-  const response1 = await chat.sendMessage({
-    message: "I have 2 dogs in my house.",
-  });
-  console.log("Chat response 1:", response1.text);
+  const botResponse = await chat.sendMessage({message});
 
-  const response2 = await chat.sendMessage({
-    message: "How many paws are in my house?",
-  });
-  console.log("Chat response 2:", response2.text);
+  writeHistoryFile(chat.getHistory());
 
-  chat.getHistory().forEach(savedHistoryObj=>console.log(savedHistoryObj.parts[0]))
+  return botResponse.text
 }
 
-module.exports = main;
+module.exports = { sendUserMessage, clearHistoryFile };
