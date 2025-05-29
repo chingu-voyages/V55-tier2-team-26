@@ -9,7 +9,6 @@ export default function SearchBar() {
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
-  const queryParams = searchParams.get("keywords");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -135,11 +134,31 @@ export default function SearchBar() {
   };
 
   useEffect(() => {
-    if (queryParams !== searchInputRef.current.value) {
-      searchInputRef.current.value = queryParams;
-      searchOnPageload(queryParams);
+    const urlKeywords = searchParams.get("keywords") || "";
+    const urlTags = searchParams.get("tags");
+
+    if (searchInputRef.current && urlKeywords) {
+      searchInputRef.current.value = urlKeywords;
     }
-  }, []);
+
+    if (urlTags && tags) {
+      const urlTagsArray = urlTags.split(",");
+      const matchedTags = tags.filter((tag) => urlTagsArray.includes(tag.id));
+      
+      matchedTags.forEach((tag) => {
+        handleTagsInput({
+          target: {
+            value: tag.id,
+            textContent: tag.tag
+          },
+        });
+      });
+    }
+
+    if (urlKeywords || urlTags) {
+      searchOnPageload(urlKeywords);
+    }
+  }, [searchParams, tags]);
 
   return (
     <div
