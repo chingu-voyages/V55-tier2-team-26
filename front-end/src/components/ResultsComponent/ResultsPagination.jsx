@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router";
 import {
   Pagination,
   PaginationContent,
@@ -13,6 +14,14 @@ export default function ResultsPagination({
   onClick,
   totalResults,
 }) {
+  const [searchParams] = useSearchParams();
+
+  const buildPageUrl = (pageNumber) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", pageNumber);
+    return `/search?${newParams.toString()}`;
+  };
+
   const maxPages = Math.ceil(totalResults / 10);
 
   const paginationItemOneValue =
@@ -38,7 +47,7 @@ export default function ResultsPagination({
             onClick={(e) =>
               activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
             }
-            to={`/search?page=${activePage - 1}`}
+            to={buildPageUrl(activePage - 1)}
           />
         </PaginationItem>
         <PaginationItem>
@@ -49,7 +58,7 @@ export default function ResultsPagination({
               activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
             }}
             isActive={activePage === paginationItemOneValue ? true : false}
-            to={`/search?page=${paginationItemOneValue}`}
+            to={buildPageUrl(paginationItemOneValue)}
           >
             {paginationItemOneValue}
           </PaginationLink>
@@ -65,7 +74,7 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemTwoValue ? true : false}
-              to={`/search?page=${paginationItemTwoValue}`}
+              to={buildPageUrl(paginationItemTwoValue)}
             >
               {paginationItemTwoValue}
             </PaginationLink>
@@ -82,7 +91,7 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemThreeValue ? true : false}
-              to={`/search?page=${paginationItemThreeValue}`}
+              to={buildPageUrl(paginationItemThreeValue)}
             >
               {paginationItemThreeValue}
             </PaginationLink>
@@ -98,7 +107,7 @@ export default function ResultsPagination({
                 ? e.preventDefault()
                 : onClick(activePage + 1)
             }
-            to={`/search?page=${activePage + 1}`}
+            to={buildPageUrl(activePage + 1)}
           />
         </PaginationItem>
       </PaginationContent>
