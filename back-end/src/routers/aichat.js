@@ -10,7 +10,8 @@ const corsOptions = {
 
 const router = new express.Router();
 
-
+router.use(cors(corsOptions))
+router.options("/chatbotai", cors(corsOptions))
 router.post("/chatbotai", cors(corsOptions), async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
