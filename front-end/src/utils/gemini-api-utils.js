@@ -10,6 +10,7 @@ const sendChatResponse = async (e, userResponse) => {
     {
       method: "POST",
       headers: {
+        Origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/",
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta?.env.VITE_TOKEN || null}`,
