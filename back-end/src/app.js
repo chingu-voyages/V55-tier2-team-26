@@ -2,10 +2,9 @@ const express = require("express");
 const aiRouter = require("./routers/aichat.js"); 
 const cors = require('cors')
 const corsOptions = {
-  origin: process.env.TEST_IP,
+  origin: "https://app.netlify.com/projects/celebrated-bienenstitch-a518bd",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   methods: ["POST", "PUT"],
-  credentials: true
 };
 const app = express();
 
