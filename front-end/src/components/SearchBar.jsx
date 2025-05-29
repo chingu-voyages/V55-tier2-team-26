@@ -99,6 +99,10 @@ export default function SearchBar() {
 
     clearAllTags();
     setErrors({ searchText: "", tags: "" });
+
+    if (location.pathname === "/search") {
+      setSearchParams({});
+    }
   };
 
   const validateSearchText = (text) => {
@@ -281,7 +285,6 @@ export default function SearchBar() {
                         onClick={(e) => {
                           e.preventDefault();
                           if (isDisabled) return;
-                          console.log("Selected tag ID:", id);
                           handleTagsInput({
                             target: {
                               value: id,
