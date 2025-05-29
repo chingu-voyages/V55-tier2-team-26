@@ -1,23 +1,5 @@
 import ResourceItem from "./ResourceItem";
 
-function DemoCardComponent({
-  name,
-  author,
-  url,
-  createdAt,
-  appliedTags,
-  id,
-  className,
-}) {
-  return (
-    <div className={className}>
-      <h1>{name}</h1>
-      <p>{url}</p>
-      <p>{author}</p>
-    </div>
-  );
-}
-
 function getCards(results, activePage) {
   const sliceFrom = activePage === 1 ? activePage - 1 : activePage * 10 - 10;
   const sliceTo = activePage * 10;
