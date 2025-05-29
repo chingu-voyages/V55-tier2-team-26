@@ -2,6 +2,7 @@ import process from "process";
 
 const sendChatResponse = async (e, userResponse) => {
   console.log(e, userResponse);
+  console.log(import.meta.env)
 
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
