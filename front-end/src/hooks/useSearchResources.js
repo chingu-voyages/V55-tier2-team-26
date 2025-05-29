@@ -40,6 +40,26 @@ export default function useSearchResources({ resources, isFetching }) {
     setUserInput({ keywords, tags: refactoredTags })
   };
 
+  const syncWithURLParams = () => {
+    const urlKeywords = searchParams.get("keywords") || "";
+    const urlTags = searchParams.get("tags");
+    
+    const urlTagsArray = urlTags ? urlTags.split(",") : [];
+
+    setQueryValue({
+      keywords: urlKeywords,
+      tags: urlTagsArray
+    });
+
+    if (searchInputRef.current) {
+      searchInputRef.current.value = urlKeywords;
+    }
+  };
+
+  useEffect(() => {
+    syncWithURLParams();
+  }, [searchParams]);
+
   useEffect(() => {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
