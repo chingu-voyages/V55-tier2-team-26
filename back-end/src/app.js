@@ -4,7 +4,8 @@ const cors = require('cors')
 const corsOptions = {
   origin: process.env.TEST_IP,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  methods: ["POST", "PUT"]
+  methods: ["POST", "PUT"],
+  credentials: true
 };
 const app = express();
 
