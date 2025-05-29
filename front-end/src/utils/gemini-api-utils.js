@@ -11,10 +11,13 @@ const sendChatResponse = async (e, userResponse) => {
     {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        "Accept": "application/x-www-form-urlencoded",
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": `Bearer ${VITE_TOKEN || null}`,
       },
+      body: JSON.stringify({
+        userResponse: userResponse,
+      }),
       payload: JSON.stringify({
         userResponse: userResponse,
       }),
@@ -32,7 +35,6 @@ const clearChatHistory = async (e=null) => {
     {
       method: "PUT",
       headers: {
-        "Accept": "application/x-www-form-urlencoded",
         "Authorization": `Bearer ${VITE_TOKEN || null}`,
       },
     }
