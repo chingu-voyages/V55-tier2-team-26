@@ -1,1 +1,18 @@
-[]
+[
+	{
+		"role": "user",
+		"parts": [
+			{
+				"text": "Hey chatbot, can you help understand this website ?\n"
+			}
+		]
+	},
+	{
+		"parts": [
+			{
+				"text": "Certainly!  I'd be happy to help you navigate the Resourcery website. To best assist you, could you tell me what you're looking for or what you'd like to accomplish on the site?  For example, are you searching for specific resources, trying to understand how to use a particular feature, or having trouble with the search functionality?\n"
+			}
+		],
+		"role": "model"
+	}
+]
