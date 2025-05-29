@@ -145,18 +145,24 @@ export default function SearchBar() {
       searchInputRef.current.value = urlKeywords;
     }
 
-    if (urlTags && tags && !searchParams.get("page")) {
+    if (urlTags && tags) {
       const urlTagsArray = urlTags.split(",");
-      const matchedTags = tags.filter((tag) => urlTagsArray.includes(tag.id));
-      
-      matchedTags.forEach((tag) => {
-        handleTagsInput({
-          target: {
-            value: tag.id,
-            textContent: tag.tag
-          },
+      const currentTagIds = activeTags.map((tag) => tag.id).sort();
+      const urlTagIds = urlTagsArray.sort();
+
+      if (currentTagIds.join(",") !== urlTagIds.join(",")) {
+        clearAllTags();
+
+        const matchedTags = tags.filter((tag) => urlTagsArray.includes(tag.id));
+        matchedTags.forEach((tag) => {
+          handleTagsInput({
+            target: {
+              value: tag.id,
+              textContent: tag.tag
+            },
+          });
         });
-      });
+      }
     }
 
     if ((urlKeywords || urlTags) && !searchParams.get("page")) {
