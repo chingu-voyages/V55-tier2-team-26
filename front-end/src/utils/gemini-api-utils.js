@@ -1,4 +1,9 @@
-import process from "process";
+const waitForToken = async () =>{
+  await import.meta.env
+  return import.meta.env.VITE_TOKEN
+}
+
+const VITE_TOKEN = waitForToken()
 
 const sendChatResponse = async (e, userResponse) => {
   console.log(e, userResponse);
@@ -11,7 +16,7 @@ const sendChatResponse = async (e, userResponse) => {
         Origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/",
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta?.env.VITE_TOKEN || null}`,
+        Authorization: `Bearer ${VITE_TOKEN || null}`,
       },
       payload: JSON.stringify({
         userResponse: userResponse,
@@ -33,7 +38,7 @@ const clearChatHistory = async (e=null) => {
         Origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/",
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta?.env.VITE_TOKEN || null}`,
+        Authorization: `Bearer ${VITE_TOKEN || null}`,
       },
     }
   );
