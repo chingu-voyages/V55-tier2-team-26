@@ -5,6 +5,11 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/chatbotai': 'https://v55-tier2-team-26.onrender.com'
+    }
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
