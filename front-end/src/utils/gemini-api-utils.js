@@ -3,7 +3,7 @@ const waitForToken = async () => {
   return import.meta.env.VITE_TOKEN;
 };
 
-const sendChatResponse = async (e, userResponse) => {
+const sendChatResponse = async (userResponse) => {
   const VITE_TOKEN = await waitForToken();
 
   const response = await fetch(
@@ -21,7 +21,7 @@ const sendChatResponse = async (e, userResponse) => {
     }
   );
 
-  console.log(await response.json(), 'chat request');
+  return await response.json();
 };
 
 const clearChatHistory = async (e = null) => {
@@ -37,7 +37,7 @@ const clearChatHistory = async (e = null) => {
     }
   );
 
-  console.log(await response.json());
+  return await response.json()
 };
 
 export { sendChatResponse, clearChatHistory };
