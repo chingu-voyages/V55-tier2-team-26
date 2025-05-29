@@ -35,10 +35,7 @@ const clearChatHistory = async (e=null) => {
     {
       method: "PUT",
       headers: {
-        Origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/",
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${VITE_TOKEN || null}`,
+        "Authorization": `Bearer ${VITE_TOKEN || null}`,
       },
     }
   );
