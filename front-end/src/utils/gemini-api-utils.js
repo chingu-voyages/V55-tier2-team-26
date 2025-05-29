@@ -5,17 +5,15 @@ const waitForToken = async () =>{
 
 const sendChatResponse = async (e, userResponse) => {
   const VITE_TOKEN = await waitForToken()
-  console.log(VITE_TOKEN);
 
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
     {
       method: "POST",
       headers: {
-        Origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/",
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${VITE_TOKEN || null}`,
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": `Bearer ${VITE_TOKEN || null}`,
       },
       payload: JSON.stringify({
         userResponse: userResponse,
@@ -28,13 +26,13 @@ const sendChatResponse = async (e, userResponse) => {
 
 const clearChatHistory = async (e=null) => {
   const VITE_TOKEN = await waitForToken()
-  console.log(VITE_TOKEN);
-  
+
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
     {
       method: "PUT",
       headers: {
+        "Accept": "application/x-www-form-urlencoded",
         "Authorization": `Bearer ${VITE_TOKEN || null}`,
       },
     }
