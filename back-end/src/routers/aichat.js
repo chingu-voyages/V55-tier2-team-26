@@ -1,9 +1,17 @@
 const express = require("express");
 const { sendUserMessage, clearHistoryFile } = require("../utils/chatbot-utils");
+const cors = require('cors')
+
+const corsOptions = {
+  origin: "https://celebrated-bienenstitch-a518bd.netlify.app",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  methods: ["POST", "PUT"],
+};
 
 const router = new express.Router();
 
-router.post("/chatbotai", async (req, res) => {
+
+router.post("/chatbotai", cors(corsOptions), async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
     console.log(req.body.userResponse);
@@ -15,7 +23,7 @@ router.post("/chatbotai", async (req, res) => {
   }
 });
 
-router.put("/chatbotai", async (req, res) => {
+router.put("/chatbotai", cors(corsOptions), async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
     clearHistoryFile();

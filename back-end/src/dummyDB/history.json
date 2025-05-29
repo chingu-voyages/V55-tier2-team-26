@@ -1,18 +1,1 @@
-[
-	{
-		"role": "user",
-		"parts": [
-			{
-				"text": "I want to know how to find resources on this website "
-			}
-		]
-	},
-	{
-		"parts": [
-			{
-				"text": "Okay, I can help with that!  To find resources on Resourcery, you can use the search bar at the top.  Just type in keywords related to what you're looking for (e.g., \"JavaScript tutorial,\" \"React project,\" \"Git commands\").\n\nYou can also refine your search using the tags on the left-hand side.  These tags categorize the resources by topic, so browsing them can help you find what you need.  \n\nWhat specifically are you looking for today? Knowing that will help me guide you to the best resources.\n"
-			}
-		],
-		"role": "model"
-	}
-]
+[]
