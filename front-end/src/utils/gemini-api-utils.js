@@ -3,10 +3,9 @@ const waitForToken = async () =>{
   return import.meta.env.VITE_TOKEN
 }
 
-const VITE_TOKEN = waitForToken()
-
 const sendChatResponse = async (e, userResponse) => {
-  console.log(e, userResponse);
+  const VITE_TOKEN = await waitForToken()
+  console.log(VITE_TOKEN);
 
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
@@ -28,8 +27,9 @@ const sendChatResponse = async (e, userResponse) => {
 };
 
 const clearChatHistory = async (e=null) => {
-  console.log(e);
-
+  const VITE_TOKEN = await waitForToken()
+  console.log(VITE_TOKEN);
+  
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
     {
