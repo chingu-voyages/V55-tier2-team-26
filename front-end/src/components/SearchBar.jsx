@@ -1,21 +1,20 @@
-import { Form, useSearchParams } from "react-router";
+import { Form, useSearchParams, useNavigate, useLocation } from "react-router";
 import { useContext, useState, useEffect } from "react";
-
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
-  const [searchParams] = useSearchParams();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
   const queryParams = searchParams.get("keywords");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     tags,
-    results,
     searchInputRef,
     activeTags,
     searchOnPageload,
@@ -62,6 +61,8 @@ export default function SearchBar() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -72,13 +73,21 @@ export default function SearchBar() {
       return;
     }
 
-    const searchData = {
-      keywords: currentSearchText,
-      tags: tagIds,
-    };
+    const newSearchParams = new URLSearchParams();
 
-    console.log("Search data:", searchData);
-    console.log("Search results:", results);
+    if (currentSearchText.trim()) {
+      newSearchParams.set("keywords", currentSearchText.trim());
+    }
+
+    if (tagIds.length > 0) {
+      newSearchParams.set("tags", tagIds.join(","));
+    }
+
+    if (location.pathname === "/") {
+      navigate(`/search?${newSearchParams.toString()}`);
+    } else if (location.pathname === "/search") {
+      setSearchParams(newSearchParams); 
+    }
   };
 
   const handleClear = () => {
@@ -161,7 +170,6 @@ export default function SearchBar() {
             </div>
           )}
           <Form
-            action={"/search"}
             className="w-full flex"
             onSubmit={handleSubmit}
             method="get"

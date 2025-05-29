@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router";
 import { searchBy } from "../utils/resource-api-utils";
 
 export default function useSearchResources({ resources, isFetching }) {
   const timerRef = useRef();
   const searchInputRef = useRef();
+  const [searchParams] = useSearchParams();
 
   const [queryValue, setQueryValue] = useState({ keywords: "", tags: [] });
   const [activeTags, setActiveTags] = useState([]);
@@ -33,10 +35,10 @@ export default function useSearchResources({ resources, isFetching }) {
     searchInputRef.current.focus();
   };
 
-  const searchOnPageload = (keywords)=>{
+  const searchOnPageload = (keywords) => {
     const refactoredTags = activeTags.map(({ id }) => id);
-    setUserInput({keywords, tags: refactoredTags})
-  }
+    setUserInput({ keywords, tags: refactoredTags })
+  };
 
   useEffect(() => {
     clearTimeout(timerRef.current);
