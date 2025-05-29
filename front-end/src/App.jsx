@@ -4,7 +4,6 @@ import MainContainer from "./components/MainContainer";
 import Footer from "./components/Footer";
 
 export default function App() {
-
   return (
     <>
       <Header />

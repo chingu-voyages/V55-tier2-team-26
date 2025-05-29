@@ -5,7 +5,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (
       origin?.endsWith(".netlify.app") ||
-      origin === "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app"
+      origin === "http://localhost:5173"
     ) {
       callback(null, true);
     } else {
