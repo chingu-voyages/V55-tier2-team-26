@@ -21,7 +21,7 @@ const sendChatResponse = async (e, userResponse) => {
     }
   );
 
-  console.log(response.json(), 'chat request');
+  console.log(await response.json(), 'chat request');
 };
 
 const clearChatHistory = async (e = null) => {
@@ -37,7 +37,7 @@ const clearChatHistory = async (e = null) => {
     }
   );
 
-  console.log(response.json());
+  console.log(await response.json());
 };
 
 export { sendChatResponse, clearChatHistory };
