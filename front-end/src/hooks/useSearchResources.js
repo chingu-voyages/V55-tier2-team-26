@@ -5,6 +5,7 @@ import { searchBy } from "../utils/resource-api-utils";
 export default function useSearchResources({ resources, isFetching }) {
   const timerRef = useRef();
   const searchInputRef = useRef();
+  const isUrlSyncing = useRef(false);
   const [searchParams] = useSearchParams();
 
   const [queryValue, setQueryValue] = useState({ keywords: "", tags: [] });
@@ -41,6 +42,8 @@ export default function useSearchResources({ resources, isFetching }) {
   };
 
   const syncWithURLParams = () => {
+    isUrlSyncing.current = true;
+
     const urlKeywords = searchParams.get("keywords") || "";
     const urlTags = searchParams.get("tags");
     
@@ -54,11 +57,20 @@ export default function useSearchResources({ resources, isFetching }) {
     if (searchInputRef.current) {
       searchInputRef.current.value = urlKeywords;
     }
+
+    setTimeout(() => {
+      isUrlSyncing.current = false;
+    }, 0);
   };
 
   useEffect(() => {
-    syncWithURLParams();
-  }, [searchParams]);
+    const currentKeywords = searchParams.get("keywords") || "";
+    const currentTags = searchParams.get("tags") || "";
+
+    if (currentKeywords !== (queryValue?.keywords || "") || currentTags !== (queryValue?.tags?.join(",") || "")) {
+      syncWithURLParams();
+    }
+  }, [searchParams, queryValue]);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -76,7 +88,7 @@ export default function useSearchResources({ resources, isFetching }) {
   }, [activeTags]);
 
   useEffect(() => {
-    if (!isFetching.resources && !isFetching.tags) {
+    if (!isFetching.resources && !isFetching.tags && !isUrlSyncing.current) {
       if (queryValue === null)
         return setResults(() =>
           searchBy({ data: resources, keywords: "", tags: [] })

@@ -1,27 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
-import ResourceItem from "./ResourceItem";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import { ResourcesContext } from "../../context/resources-context";
 
 export default function ResultsContainer() {
   let [searchParams] = useSearchParams();
-  //searchParams.get("page") //This get the urlParam for the page
+  const { results, error } = useContext(ResourcesContext);
 
-  const { results, tags, error } = useContext(ResourcesContext);
-
-  const [activePage, setActivePage] = useState(1);
+  const [activePage, setActivePage] = useState(() => {
+    const pageFromUrl = parseInt(searchParams.get("page")) || 1;
+    return pageFromUrl;
+  });
 
   const handlePagination = (newCurrentPage) => {
     setActivePage(newCurrentPage);
   };
 
   useEffect(() => {
-    setActivePage(1)
-  }, [results])
+    const pageFromUrl = parseInt(searchParams.get("page")) || 1;
+    setActivePage(pageFromUrl);
+  }, [searchParams]);
 
   if (error) {
     return (

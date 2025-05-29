@@ -11,7 +11,6 @@ import {
 
 export default function ResultsPagination({
   activePage,
-  onClick,
   totalResults,
 }) {
   const [searchParams] = useSearchParams();
@@ -44,19 +43,11 @@ export default function ResultsPagination({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={(e) =>
-              activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
-            }
             to={buildPageUrl(activePage - 1)}
           />
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            onClick={(e) => {
-              const pageNumber = parseInt(e.target.innerText);
-              console.log(pageNumber);
-              activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
-            }}
             isActive={activePage === paginationItemOneValue ? true : false}
             to={buildPageUrl(paginationItemOneValue)}
           >
@@ -67,12 +58,6 @@ export default function ResultsPagination({
         {totalResults >= 11 ? (
           <PaginationItem>
             <PaginationLink
-              onClick={(e) => {
-                const pageNumber = parseInt(e.target.innerText);
-                pageNumber === activePage
-                  ? e.preventDefault()
-                  : onClick(pageNumber);
-              }}
               isActive={activePage === paginationItemTwoValue ? true : false}
               to={buildPageUrl(paginationItemTwoValue)}
             >
@@ -84,12 +69,6 @@ export default function ResultsPagination({
         {totalResults >= 21 ? (
           <PaginationItem>
             <PaginationLink
-              onClick={(e) => {
-                const pageNumber = parseInt(e.target.innerText);
-                activePage >= maxPages
-                  ? e.preventDefault()
-                  : onClick(pageNumber);
-              }}
               isActive={activePage === paginationItemThreeValue ? true : false}
               to={buildPageUrl(paginationItemThreeValue)}
             >
@@ -102,11 +81,6 @@ export default function ResultsPagination({
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
-            onClick={(e) =>
-              activePage >= maxPages
-                ? e.preventDefault()
-                : onClick(activePage + 1)
-            }
             to={buildPageUrl(activePage + 1)}
           />
         </PaginationItem>

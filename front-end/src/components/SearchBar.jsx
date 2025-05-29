@@ -145,7 +145,7 @@ export default function SearchBar() {
       searchInputRef.current.value = urlKeywords;
     }
 
-    if (urlTags && tags) {
+    if (urlTags && tags && !searchParams.get("page")) {
       const urlTagsArray = urlTags.split(",");
       const matchedTags = tags.filter((tag) => urlTagsArray.includes(tag.id));
       
@@ -159,7 +159,7 @@ export default function SearchBar() {
       });
     }
 
-    if (urlKeywords || urlTags) {
+    if ((urlKeywords || urlTags) && !searchParams.get("page")) {
       searchOnPageload(urlKeywords);
     }
   }, [searchParams, tags]);
