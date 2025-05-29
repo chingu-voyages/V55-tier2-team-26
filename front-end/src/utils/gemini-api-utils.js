@@ -10,7 +10,7 @@ const sendChatResponse = async (e, userResponse) => {
       headers: {    
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process?.env.VITE_TOKEN || null}`,
+        Authorization: `Bearer ${import.meta.env.VITE_TOKEN || null}`,
       },
       payload: JSON.stringify({
         userResponse: userResponse,
