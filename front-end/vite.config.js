@@ -7,8 +7,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   server: {
     proxy: {
-      '/chatbotai': 'https://v55-tier2-team-26.onrender.com'
-    }
+      "/chatbotai": { target: "https://v55-tier2-team-26.onrender.com" },
+    },
   },
   plugins: [react(), tailwindcss()],
   resolve: {
