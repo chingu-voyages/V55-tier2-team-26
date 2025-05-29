@@ -1,3 +1,5 @@
+import process from "process";
+
 const sendChatResponse = async (e, userResponse) => {
   console.log(e, userResponse);
 
