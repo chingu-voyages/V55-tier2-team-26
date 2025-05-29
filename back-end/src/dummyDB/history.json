@@ -1,18 +1,1 @@
-[
-	{
-		"role": "user",
-		"parts": [
-			{
-				"text": "how do I navigate this page ?"
-			}
-		]
-	},
-	{
-		"parts": [
-			{
-				"text": "Welcome to Resourcery!  To help you navigate, tell me what you're looking for.  Are you searching for specific resources on a particular topic in software development or web development?  Perhaps you'd like to use the search bar or filter by tags? Let me know how I can assist you.\n"
-			}
-		],
-		"role": "model"
-	}
-]
+[]

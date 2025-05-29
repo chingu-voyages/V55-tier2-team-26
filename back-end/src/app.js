@@ -1,5 +1,6 @@
 const express = require("express");
 const aiRouter = require("./routers/aichat.js"); 
+const {generateAuthToken} = require("./middleware/tokenVerification.js")
 
 const app = express();
 

@@ -1,9 +1,10 @@
 const express = require("express");
 const { sendUserMessage, clearHistoryFile } = require("../utils/chatbot-utils");
+const { verification } = require('../middleware/tokenVerification')
 
 const router = new express.Router();
 
-router.post("/chatbotai", async (req, res) => {
+router.post("/chatbotai", verification, async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
     console.log(req.body.userResponse);
@@ -15,7 +16,7 @@ router.post("/chatbotai", async (req, res) => {
   }
 });
 
-router.put("/chatbotai", async (req, res) => {
+router.put("/chatbotai", verification, async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
     clearHistoryFile();
