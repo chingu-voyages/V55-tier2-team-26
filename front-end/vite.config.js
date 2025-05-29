@@ -5,14 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  server: {
-    proxy: {
-      "/chatbotai": { target: "https://v55-tier2-team-26.onrender.com" },
-    },
-    cors: {
-      origin: "https://deploy-preview-27--celebrated-bienenstitch-a518bd.netlify.app/"
-    }
-  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
