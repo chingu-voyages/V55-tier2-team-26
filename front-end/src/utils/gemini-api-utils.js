@@ -1,47 +1,43 @@
-const waitForToken = async () =>{
-  await import.meta.env
-  return import.meta.env.VITE_TOKEN
-}
+const waitForToken = async () => {
+  await import.meta.env;
+  return import.meta.env.VITE_TOKEN;
+};
 
 const sendChatResponse = async (e, userResponse) => {
-  const VITE_TOKEN = await waitForToken()
+  const VITE_TOKEN = await waitForToken();
 
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
     {
       method: "POST",
       headers: {
-        "Accept": "application/x-www-form-urlencoded",
+        Accept: "application/x-www-form-urlencoded",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": `Bearer ${VITE_TOKEN || null}`,
+        Authorization: `Bearer ${VITE_TOKEN || null}`,
       },
-      body: JSON.stringify({
-        userResponse: userResponse,
-      }),
-      payload: JSON.stringify({
-        userResponse: userResponse,
+      body: new URLSearchParams({
+        "userResponse": userResponse
       }),
     }
   );
 
-  console.log(response);
+  console.log(response, 'chat request');
 };
 
-const clearChatHistory = async (e=null) => {
-  const VITE_TOKEN = await waitForToken()
+const clearChatHistory = async (e = null) => {
+  const VITE_TOKEN = await waitForToken();
 
   const response = await fetch(
     "https://v55-tier2-team-26.onrender.com/chatbotai",
     {
       method: "PUT",
       headers: {
-        "Authorization": `Bearer ${VITE_TOKEN || null}`,
+        Authorization: `Bearer ${VITE_TOKEN || null}`,
       },
     }
   );
 
   console.log(response);
 };
-
 
 export { sendChatResponse, clearChatHistory };
