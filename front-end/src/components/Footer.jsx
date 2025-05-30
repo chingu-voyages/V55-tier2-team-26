@@ -1,12 +1,10 @@
 import React from "react";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
-import AIChatBot from "./AIChatBot/AIChatBot";
 
 const Footer = () => {
   return (
     <>
-      <AIChatBot />
       <div className="h-120 w-full flex flex-col items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-green-900 text-white text-[14px] sm:h-70 sm:text-[14px] md:flex-row md:text-[12px] md:h-80 lg:text-[16px] xl:text-[18px]">
         <div className="flex items-center text-center ml-0 sm:ml-10 md:ml-2 md:w-40 lg:w-60 xl:ml-5 2xl:ml-10">
           <a
