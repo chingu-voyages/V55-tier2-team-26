@@ -93,6 +93,11 @@ export default function SearchBar() {
     setErrors({ searchText: "", tags: "" });
   };
 
+  const handleClearTags = () => {
+    clearAllTags();
+    setErrors({ tags: "" });
+  }
+
   const validateSearchText = (text) => {
     setErrors((prev) => ({ ...prev, searchText: "" }));
 
@@ -135,9 +140,9 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[80%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
+      className="w-[90%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
     >
-      <div id="searchBarContainer" className="w-md">
+      <div id="searchBarContainer" className="w-full">
         <div className="flex items-center relative">
           {errors.searchText && (
             <div
@@ -161,13 +166,14 @@ export default function SearchBar() {
             </div>
           )}
           <Form
+            id="searchTermForm"
             action={"/search"}
             className="w-full flex"
             onSubmit={handleSubmit}
             method="get"
           >
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
-              <button
+              {/* <button
                 type="submit"
                 className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${
                   errors.searchText
@@ -176,25 +182,26 @@ export default function SearchBar() {
                 }`}
               >
                 Submit
-                {/* <i className="fa fa-search"></i> */}
-              </button>
+              </button> */}
               <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
               <input
                 name="keywords"
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search..."
+                placeholder="What are you looking for?"
                 onChange={handleUserInput}
                 aria-label="Search resources"
                 aria-invalid={!!errors.searchText}
                 aria-describedby={
                   errors.searchText ? "search-error-message" : undefined
                 }
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${
+                className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
                   errors.searchText
                     ? "border-2 border-red-500 border-r-0"
                     : "border border-[#F9F5FF] border-l-0"
                 }`}
+                onFocus={() => setDropdownOpen((open) => true)}
+                onBlur={() => setDropdownOpen((open) => false)}
               />
             </div>
           </Form>
@@ -280,14 +287,31 @@ export default function SearchBar() {
           </div>
         </div>
 
-        <div id="clearButton" className="w-[20%] flex justify-end">
+        <div id="clearButton" className="w-[30%] flex justify-end relative">
+          <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3" />
           <button
-            onClick={handleClear}
-            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black"
+            onClick={handleClearTags}
+            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black pl-8"
           >
-            Reset
+            Clear Tags
           </button>
         </div>
+      </div>
+
+      <div id="submitButton" className="w-[30%] flex justify-center">
+        <button
+          form="searchTermForm"
+          type="submit"
+          onClick={handleSubmit}
+          className={`h-[30px] w-full rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+          ${
+            errors.searchText
+              ? "border-2 border-red-500 border-l-0"
+              : "border-gray-400 border-l-0"
+          }`}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );

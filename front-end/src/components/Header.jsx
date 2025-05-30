@@ -37,16 +37,16 @@ const Header = () => {
   };
 
   return (
-    <div className="h-30 flex items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-blue-900 text-white text-[14px]">
-      <div className="w-40">
-        <h1>[App Name]</h1>
-      </div>
-      <div className="w-full text-[20px] sm:text-[24px]">
+    <div className="h-16 flex items-end text-center justify-between pb-2 bg-[#6D597A] text-[#F9F5FF] text-[14px]">
+      {/* <div className="w-40"> */}
+        {/* <h1>[App Name]</h1> */}
+      {/* </div> */}
+      <div className="w-full text-[16px] sm:text-[24px]">
         <h1>{getCurrentDateUTC()}</h1>
       </div>
-      <div className="w-40">
-        <h1>[Logo]</h1>
-      </div>
+      {/* <div className="w-40"> */}
+        {/* <h1>[Logo]</h1> */}
+      {/* </div> */}
     </div>
   );
 };
