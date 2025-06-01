@@ -96,7 +96,7 @@ export default function SearchBar() {
   const handleClearTags = () => {
     clearAllTags();
     setErrors({ tags: "" });
-  }
+  };
 
   const validateSearchText = (text) => {
     setErrors((prev) => ({ ...prev, searchText: "" }));
@@ -165,15 +165,20 @@ export default function SearchBar() {
               {info.tags}
             </div>
           )}
+
           <Form
             id="searchTermForm"
             action={"/search"}
-            className="w-full flex"
+            className="w-full flex dropdown"
             onSubmit={handleSubmit}
             method="get"
           >
-            <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
-              {/* <button
+            {!dropdownOpen && (
+              <div
+                id="theActualSearchBar"
+                className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex"
+              >
+                {/* <button
                 type="submit"
                 className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${
                   errors.searchText
@@ -183,27 +188,107 @@ export default function SearchBar() {
               >
                 Submit
               </button> */}
-              <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
-              <input
-                name="keywords"
-                ref={searchInputRef}
-                type="text"
-                placeholder="What are you looking for?"
-                onChange={handleUserInput}
-                aria-label="Search resources"
-                aria-invalid={!!errors.searchText}
-                aria-describedby={
-                  errors.searchText ? "search-error-message" : undefined
-                }
-                className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
-                  errors.searchText
-                    ? "border-2 border-red-500 border-r-0"
-                    : "border border-[#F9F5FF] border-l-0"
-                }`}
-                onFocus={() => setDropdownOpen((open) => true)}
-                onBlur={() => setDropdownOpen((open) => false)}
-              />
-            </div>
+
+                <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                <input
+                  name="keywords"
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="What are you looking for?"
+                  onChange={handleUserInput}
+                  aria-label="Search resources"
+                  aria-invalid={!!errors.searchText}
+                  aria-describedby={
+                    errors.searchText ? "search-error-message" : undefined
+                  }
+                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
+                    errors.searchText
+                      ? "border-2 border-red-500 border-r-0"
+                      : "border border-[#F9F5FF] border-l-0"
+                  }`}
+                  onFocus={() => setDropdownOpen((open) => true)}
+                  // aria-describedby={info.tags ? "tags-info-message" : undefined}
+                  // aria-label="Select tags to filter results"
+
+                  // onBlur={() => setDropdownOpen((open) => false)}
+                />
+                <div
+                  id="clearButton"
+                  className="w-[30%] flex justify-end relative"
+                >
+                  <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3" />
+                  <button
+                    onClick={handleClearTags}
+                    className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black pl-8"
+                  >
+                    Clear Tags
+                  </button>
+                </div>
+              </div>
+            )}
+            {dropdownOpen && (
+              <div
+                id="theActualSearchBarWithDropdownOpen"
+                className="relative w-full max-w-md rounded-t-[20px] h-[40px] outline-[1px] flex flex-col bg-blue-950 outline-fuchsia-800"
+              >
+                <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                <input
+                  name="keywords"
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="What are you looking for?"
+                  onChange={handleUserInput}
+                  aria-label="Search resources"
+                  aria-invalid={!!errors.searchText}
+                  aria-describedby={
+                    errors.searchText ? "search-error-message" : undefined
+                  }
+                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] text-black bg-green-600 focus:outline-none ${
+                    errors.searchText
+                      ? "border-2 border-red-500 border-r-0"
+                      : "border border-[#F9F5FF] border-l-0"
+                  }`}
+                  // onFocus={() => setDropdownOpen((open) => true)}
+                  onBlur={() => setDropdownOpen((open) => false)}
+                />
+                {filteredTags.length === 0 ? (
+                  <div className="border-t-[1px]" />
+                ) : (
+                  filteredTags.map(({ tag, id }) => {
+                    const isActive = activeTags.some((tag) => tag.id === id);
+                    const isDisabled = !isActive && activeTags.length >= 8;
+
+                    return (
+                      <a
+                        id={id}
+                        href={`#${tag.toLowerCase()}`}
+                        key={tag}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (isDisabled) return;
+                          console.log("Selected tag ID:", id);
+                          handleTagsInput({
+                            target: {
+                              value: id,
+                              textContent: tag,
+                            },
+                          });
+                        }}
+                        className={`block w-full p-1 m-[.5px] rounded-md bg-yellow-500 ${
+                          isDisabled
+                            ? "text-gray-400 cursor-not-allowed opacity-50"
+                            : `hover:font-bold text-gray-700 ${highlightActiveTags(
+                                id
+                              )}`
+                        }`}
+                      >
+                        {tag}
+                      </a>
+                    );
+                  })
+                )}
+              </div>
+            )}
           </Form>
         </div>
       </div>
@@ -212,7 +297,9 @@ export default function SearchBar() {
         id="tagsResetButtonsContainer"
         className="flex w-full max-w-md justify-between"
       >
-        <div id="tagsDropdownContainer" className="relative w-[75%]">
+        {/*
+
+        <div id="tagsDropdownContainer" className="relative w-[60%]">
           <div className="dropdown w-full">
             {!dropdownOpen && (
               <button
@@ -224,7 +311,7 @@ export default function SearchBar() {
               >
                 Tags
               </button>
-            )}
+            )} 
             {dropdownOpen && (
               <div
                 id="myDropdown"
@@ -245,8 +332,8 @@ export default function SearchBar() {
                   >
                     <i className="fa-solid fa-xmark top-1/2 absolute transform -translate-y-1/2 -translate-x-1/2" />
                   </button>
-                </div>
-                {filteredTags.length === 0 ? (
+                </div> 
+                 {filteredTags.length === 0 ? (
                   <div className="border-t-[1px]" />
                 ) : (
                   filteredTags.map(({ tag, id }) => {
@@ -281,13 +368,15 @@ export default function SearchBar() {
                       </a>
                     );
                   })
-                )}
+                )} 
               </div>
             )}
           </div>
         </div>
 
-        <div id="clearButton" className="w-[30%] flex justify-end relative">
+*/}
+
+        {/* <div id="clearButton" className="w-[30%] flex justify-end relative">
           <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3" />
           <button
             onClick={handleClearTags}
@@ -295,7 +384,7 @@ export default function SearchBar() {
           >
             Clear Tags
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div id="submitButton" className="w-[30%] flex justify-center">
