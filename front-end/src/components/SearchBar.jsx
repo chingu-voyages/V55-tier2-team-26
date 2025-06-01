@@ -140,7 +140,7 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
+      className="w-[90%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between border-l-2 border-black rounded-[20px]"
     >
       <div id="searchBarContainer" className="w-full">
         <div className="flex items-center relative">
@@ -176,7 +176,7 @@ export default function SearchBar() {
             {!dropdownOpen && (
               <div
                 id="theActualSearchBar"
-                className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex"
+                className="relative w-full max-w-md rounded-[20px] h-[40px] border-2 border-[#6D597A] flex bg-amber-900"
               >
                 {/* <button
                 type="submit"
@@ -229,7 +229,7 @@ export default function SearchBar() {
             {dropdownOpen && (
               <div
                 id="theActualSearchBarWithDropdownOpen"
-                className="relative w-full max-w-md rounded-t-[20px] h-[40px] outline-[1px] flex flex-col bg-blue-950 outline-fuchsia-800"
+                className="relative w-full max-w-md rounded-t-[20px] h-[40px] border-t-2 border-l-2 border-r-2 border-[#6D597A] flex flex-col bg-white"
               >
                 <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
                 <input
@@ -243,7 +243,7 @@ export default function SearchBar() {
                   aria-describedby={
                     errors.searchText ? "search-error-message" : undefined
                   }
-                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] text-black bg-green-600 focus:outline-none ${
+                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] text-black bg-white focus:outline-none ${
                     errors.searchText
                       ? "border-2 border-red-500 border-r-0"
                       : "border border-[#F9F5FF] border-l-0"
@@ -251,42 +251,44 @@ export default function SearchBar() {
                   // onFocus={() => setDropdownOpen((open) => true)}
                   onBlur={() => setDropdownOpen((open) => false)}
                 />
-                {filteredTags.length === 0 ? (
-                  <div className="border-t-[1px]" />
-                ) : (
-                  filteredTags.map(({ tag, id }) => {
-                    const isActive = activeTags.some((tag) => tag.id === id);
-                    const isDisabled = !isActive && activeTags.length >= 8;
+                <div id="dropdownTagsContainer" className="bg-white border-l-2 border-r-2 border-b-2 border-[#6D597A] rounded-b-[10px]">
+                  {filteredTags.length === 0 ? (
+                    <div className="border-t-[1px]" />
+                  ) : (
+                    filteredTags.map(({ tag, id }) => {
+                      const isActive = activeTags.some((tag) => tag.id === id);
+                      const isDisabled = !isActive && activeTags.length >= 8;
 
-                    return (
-                      <a
-                        id={id}
-                        href={`#${tag.toLowerCase()}`}
-                        key={tag}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (isDisabled) return;
-                          console.log("Selected tag ID:", id);
-                          handleTagsInput({
-                            target: {
-                              value: id,
-                              textContent: tag,
-                            },
-                          });
-                        }}
-                        className={`block w-full p-1 m-[.5px] rounded-md bg-yellow-500 ${
-                          isDisabled
-                            ? "text-gray-400 cursor-not-allowed opacity-50"
-                            : `hover:font-bold text-gray-700 ${highlightActiveTags(
-                                id
-                              )}`
-                        }`}
-                      >
-                        {tag}
-                      </a>
-                    );
-                  })
-                )}
+                      return (
+                        <a
+                          id={id}
+                          href={`#${tag.toLowerCase()}`}
+                          key={tag}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (isDisabled) return;
+                            console.log("Selected tag ID:", id);
+                            handleTagsInput({
+                              target: {
+                                value: id,
+                                textContent: tag,
+                              },
+                            });
+                          }}
+                          className={`block w-full m-[.5px] rounded-md bg-white ${
+                            isDisabled
+                              ? "text-gray-400 cursor-not-allowed opacity-50"
+                              : `hover:font-bold text-gray-950 ${highlightActiveTags(
+                                  id
+                                )}`
+                          }`}
+                        >
+                          {tag}
+                        </a>
+                      );
+                    })
+                  )}
+                </div>
               </div>
             )}
           </Form>
