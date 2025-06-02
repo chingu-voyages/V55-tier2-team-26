@@ -1,16 +1,17 @@
-import { Form, useSearchParams, useNavigate } from "react-router";
+import { Form, useSearchParams, useNavigate, useLocation } from "react-router";
 import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
   const queryParams = searchParams.get("keywords");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     tags,
@@ -91,6 +92,11 @@ export default function SearchBar() {
 
     clearAllTags();
     setErrors({ searchText: "", tags: "" });
+
+    // Clears URL params if on the search page
+    if (location.pathname === "/search") {
+      setSearchParams({});
+    }
   };
 
   const validateSearchText = (text) => {
