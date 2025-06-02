@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { searchBy } from "../utils/resource-api-utils";
-import { useSearchParams } from "react-router";
+import { useSearchParams, useLocation } from "react-router";
 
 export default function useSearchResources({ resources, tags, isFetching }) {
   const timerRef = useRef();
   const searchInputRef = useRef();
-  const [searchParams] = useSearchParams();
+  const urlUpdateTimer = useRef();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [queryValue, setQueryValue] = useState({ 
     keywords: searchParams.get("keywords") || "", 
     tags: searchParams.get("tags") ? searchParams.get("tags").split(",") : []
@@ -64,8 +66,8 @@ export default function useSearchResources({ resources, tags, isFetching }) {
     // Set search input value to match URL
     searchInputRef.current.value = queryValue.keywords;
 
-    // If there are tags in the URL, find their full info from the tags list
-    if (queryValue.tags.length > 0 && tags) {
+    // Only set activeTags from URL on initial load or direct URL navigation
+    if (queryValue.tags.length > 0 && tags && !activeTags.length) {
       const initialActiveTags = queryValue.tags
         .map((tagId) => {
           const foundTag = tags.find((t) => t.id === tagId);
@@ -82,6 +84,26 @@ export default function useSearchResources({ resources, tags, isFetching }) {
       tags: queryValue.tags
     });
   }, [searchParams, tags, queryValue]); // Run this effect with URL params, tags, or queryValue changes
+
+  useEffect(() => {
+    // Only update URL on search page
+    if (location.pathname === "/search") {
+      // Clear pending URL updates
+      clearTimeout(urlUpdateTimer.current);
+
+      // Debounce the URL update
+      urlUpdateTimer.current = setTimeout(() => {
+        const params = new URLSearchParams();
+
+        // Only add keywords/tags to URL if they exist
+        if (queryValue.keywords) params.set("keywords", queryValue.keywords);
+        if (queryValue.tags.length > 0) params.set("tags", queryValue.tags.join(","));
+
+        // Update URL
+        setSearchParams(params);
+      }, 1000); // Same debounce as search
+    }
+  }, [queryValue, location.pathname]); // Run when queryValue or location changes
 
   useEffect(() => {
     if (!isFetching.resources && !isFetching.tags) {
