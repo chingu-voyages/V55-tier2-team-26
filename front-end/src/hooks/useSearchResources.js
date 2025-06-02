@@ -37,11 +37,6 @@ export default function useSearchResources({ resources, tags, isFetching }) {
     searchInputRef.current.focus();
   };
 
-  const searchOnPageload = (keywords) => {
-    const refactoredTags = activeTags.map(({ id }) => id);
-    setUserInput({ keywords, tags: refactoredTags })
-  };
-
   useEffect(() => {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
@@ -96,7 +91,6 @@ export default function useSearchResources({ resources, tags, isFetching }) {
     results,
     activeTags,
     searchInputRef,
-    searchOnPageload,
     handleUserInput,
     handleTagsInput,
     clearAllTags,

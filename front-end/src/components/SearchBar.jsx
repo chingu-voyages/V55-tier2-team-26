@@ -4,12 +4,11 @@ import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
-  const queryParams = searchParams.get("keywords");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,7 +16,6 @@ export default function SearchBar() {
     tags,
     searchInputRef,
     activeTags,
-    searchOnPageload,
     handleUserInput: baseHandleUserInput,
     handleTagsInput: baseHandleTagsInput,
     clearAllTags,
@@ -130,13 +128,6 @@ export default function SearchBar() {
     setInfo((prev) => ({ ...prev, tags: "" }));
     return true;
   };
-
-  useEffect(() => {
-    if (queryParams !== searchInputRef.current.value) {
-      searchInputRef.current.value = queryParams;
-      searchOnPageload(queryParams);
-    }
-  }, []);
 
   return (
     <div
