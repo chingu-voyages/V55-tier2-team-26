@@ -1,12 +1,11 @@
-import { Form, useSearchParams } from "react-router";
+import { Form, useSearchParams, useNavigate } from "react-router";
 import { useContext, useState, useEffect } from "react";
-
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 export default function SearchBar() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
@@ -15,7 +14,6 @@ export default function SearchBar() {
 
   const {
     tags,
-    results,
     searchInputRef,
     activeTags,
     searchOnPageload,
@@ -62,6 +60,8 @@ export default function SearchBar() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -72,13 +72,13 @@ export default function SearchBar() {
       return;
     }
 
-    const searchData = {
-      keywords: currentSearchText,
-      tags: tagIds,
-    };
+    // Update URL with both keywords and tags
+    const searchParams = new URLSearchParams();
+    if (currentSearchText) searchParams.set("keywords", currentSearchText);
+    if (tagIds.length > 0) searchParams.set("tags", tagIds.join(","));
 
-    console.log("Search data:", searchData);
-    console.log("Search results:", results);
+    // Navigate to search page with params
+    navigate(`/search?${searchParams.toString()}`);
   };
 
   const handleClear = () => {
@@ -161,10 +161,8 @@ export default function SearchBar() {
             </div>
           )}
           <Form
-            action={"/search"}
             className="w-full flex"
             onSubmit={handleSubmit}
-            method="get"
           >
             <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
               <button
