@@ -25,7 +25,7 @@ export default function SearchBar() {
   } = useContext(ResourcesContext);
 
   const tagStyles = {
-    activeTag: "bg-[#A9DEF9] text-black",
+    activeTag: "bg-[#998675] text-black",
     inactiveTag: "bg-[#f6f6f6] text-black",
   };
 
@@ -334,7 +334,7 @@ export default function SearchBar() {
               : "border-gray-400 border-l-0"
           }`}
         >
-          Submit
+          Search
         </button>
       </div>
     </div>

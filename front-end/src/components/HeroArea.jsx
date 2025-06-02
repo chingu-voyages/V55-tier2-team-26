@@ -1,6 +1,6 @@
 export default function HeroArea() {
   return (
-    <div className="flex flex-col items-center text-center bg-[#F9F5FF] text-black">
+    <div className="flex flex-col items-center text-center bg-[#EDE0D4] text-black">
       <div className="flex justify-center max-w-[200px] pt-14 pb-8">
         <img src="./images/placeholder-img.jpg" className="h-auto w-full max-w-[200px] rounded-full"/>
       </div>

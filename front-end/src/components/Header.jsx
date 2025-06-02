@@ -37,7 +37,7 @@ const Header = () => {
   };
 
   return (
-    <div className="h-16 flex items-end text-center justify-between pb-2 bg-[#6D597A] text-[#F9F5FF] text-[14px]">
+    <div className="h-16 flex items-end text-center justify-between pb-2 bg-[#998675] t-[#F9F5FF] text-[14px]">
       {/* <div className="w-40"> */}
         {/* <h1>[App Name]</h1> */}
       {/* </div> */}
