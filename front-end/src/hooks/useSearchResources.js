@@ -53,6 +53,14 @@ export default function useSearchResources({ resources, tags, isFetching }) {
   }, [activeTags]);
 
   useEffect(() => {
+    // When URL params change, update queryValue to match new URL pararms
+    setQueryValue({
+      keywords: searchParams.get("keywords") || "",
+      tags: searchParams.get("tags") ? searchParams.get("tags").split(",") : []
+    });
+  }, [searchParams]); // Only run this effect when searchParams changes
+
+  useEffect(() => {
     // Set search input value to match URL
     searchInputRef.current.value = queryValue.keywords;
 
