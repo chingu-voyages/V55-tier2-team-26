@@ -24,6 +24,11 @@ export default function SearchBar() {
     clearAllTags,
   } = useContext(ResourcesContext);
 
+  const tagStyles = {
+    activeTag: "bg-[#A9DEF9] text-black",
+    inactiveTag: "bg-[#f6f6f6] text-black",
+  };
+
   useEffect(() => {
     validateTags(activeTags);
   }, [activeTags]);
@@ -37,8 +42,8 @@ export default function SearchBar() {
 
   const highlightActiveTags = (id) =>
     activeTags.some((tag) => tag.id === id)
-      ? "bg-[#6D597A] text-white"
-      : "bg-[#f6f6f6] text-black";
+      ? tagStyles.activeTag
+      : tagStyles.inactiveTag;
 
   const handleUserInput = (e) => {
     if (validateSearchText(e.target.value)) {
@@ -140,10 +145,10 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between border-l-2 border-black rounded-[20px]"
+      className="w-[90%] m-auto mt-4 mb-20 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
-      <div id="searchBarContainer" className="w-full">
-        <div className="flex items-center relative">
+      <div id="searchBarContainer" className="w-full flex justify-center">
+        <div className="flex items-center relative min-w-[350px]">
           {errors.searchText && (
             <div
               id="search-error-message"
@@ -176,19 +181,8 @@ export default function SearchBar() {
             {!dropdownOpen && (
               <div
                 id="theActualSearchBar"
-                className="relative w-full max-w-md rounded-[20px] h-[40px] border-2 border-[#6D597A] flex bg-amber-900"
+                className={`relative w-full max-w-md rounded-[20px] h-[40px] border-1 border-[#939AAA] flex`}
               >
-                {/* <button
-                type="submit"
-                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${
-                  errors.searchText
-                    ? "border-2 border-red-500 border-l-0"
-                    : "border-gray-400 border-l-0"
-                }`}
-              >
-                Submit
-              </button> */}
-
                 <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
                 <input
                   name="keywords"
@@ -201,7 +195,7 @@ export default function SearchBar() {
                   aria-describedby={
                     errors.searchText ? "search-error-message" : undefined
                   }
-                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
+                  className={`placeholder:italic w-full p-2 pl-10 pr-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
                     errors.searchText
                       ? "border-2 border-red-500 border-r-0"
                       : "border border-[#F9F5FF] border-l-0"
@@ -209,49 +203,63 @@ export default function SearchBar() {
                   onFocus={() => setDropdownOpen((open) => true)}
                   // aria-describedby={info.tags ? "tags-info-message" : undefined}
                   // aria-label="Select tags to filter results"
-
-                  // onBlur={() => setDropdownOpen((open) => false)}
                 />
-                <div
-                  id="clearButton"
-                  className="w-[30%] flex justify-end relative"
+                <button
+                  type="button"
+                  onClick={() => {
+                    searchInputRef.current.value = "";
+                    handleUserInput({ target: { value: "" } });
+                  }}
+                  className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
                 >
-                  <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3" />
-                  <button
-                    onClick={handleClearTags}
-                    className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black pl-8"
-                  >
-                    Clear Tags
-                  </button>
-                </div>
+                  <i className="fa-solid fa-xmark" />
+                </button>
               </div>
             )}
             {dropdownOpen && (
               <div
                 id="theActualSearchBarWithDropdownOpen"
-                className="relative w-full max-w-md rounded-t-[20px] h-[40px] border-t-2 border-l-2 border-r-2 border-[#6D597A] flex flex-col bg-white"
+                className="relative w-full max-w-md rounded-t-[20px] flex flex-col bg-white border-1 border-[#939AAA]"
               >
-                <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
-                <input
-                  name="keywords"
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="What are you looking for?"
-                  onChange={handleUserInput}
-                  aria-label="Search resources"
-                  aria-invalid={!!errors.searchText}
-                  aria-describedby={
-                    errors.searchText ? "search-error-message" : undefined
-                  }
-                  className={`placeholder:italic w-full p-2 pl-10 text-md rounded-[20px] text-black bg-white focus:outline-none ${
-                    errors.searchText
-                      ? "border-2 border-red-500 border-r-0"
-                      : "border border-[#F9F5FF] border-l-0"
-                  }`}
-                  // onFocus={() => setDropdownOpen((open) => true)}
-                  onBlur={() => setDropdownOpen((open) => false)}
-                />
-                <div id="dropdownTagsContainer" className="bg-white border-l-2 border-r-2 border-b-2 border-[#6D597A] rounded-b-[10px]">
+                <div
+                  id="searchAndClearIconsContainer"
+                  className="relative w-full flex items-center"
+                >
+                  <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                  <input
+                    name="keywords"
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="What are you looking for?"
+                    onChange={handleUserInput}
+                    aria-label="Search resources"
+                    aria-invalid={!!errors.searchText}
+                    aria-describedby={
+                      errors.searchText ? "search-error-message" : undefined
+                    }
+                    className={`placeholder:italic w-full pr-10 pt-2 pb-1 pl-10 text-md rounded-[20px] text-black bg-white focus:outline-none ${
+                      errors.searchText
+                        ? "border-2 border-red-500 border-r-0"
+                        : ""
+                    }`}
+                    // onFocus={() => setDropdownOpen((open) => true)}
+                    onBlur={() => setDropdownOpen((open) => false)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      searchInputRef.current.value = "";
+                      handleUserInput({ target: { value: "" } });
+                    }}
+                    className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                  >
+                    <i className="fa-solid fa-xmark" />
+                  </button>
+                </div>
+                <div
+                  id="dropdownTagsContainer"
+                  className="w-full p-1 bg-white rounded-b-[10px] border-t-2 border-[#939AAA] border-collapse"
+                >
                   {filteredTags.length === 0 ? (
                     <div className="border-t-[1px]" />
                   ) : (
@@ -275,7 +283,7 @@ export default function SearchBar() {
                               },
                             });
                           }}
-                          className={`block w-full m-[.5px] rounded-md bg-white ${
+                          className={`block w-full mb-[.5px] rounded-md ${
                             isDisabled
                               ? "text-gray-400 cursor-not-allowed opacity-50"
                               : `hover:font-bold text-gray-950 ${highlightActiveTags(
@@ -295,98 +303,23 @@ export default function SearchBar() {
         </div>
       </div>
 
-      <div
-        id="tagsResetButtonsContainer"
-        className="flex w-full max-w-md justify-between"
-      >
-        {/*
+      <div id="containerForSelectedTagsAndClearButton">
+        <div id="selectedTagsContainer"></div>
 
-        <div id="tagsDropdownContainer" className="relative w-[60%]">
-          <div className="dropdown w-full">
-            {!dropdownOpen && (
-              <button
-                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
-                type="button"
-                onClick={() => setDropdownOpen((open) => !open)}
-                aria-describedby={info.tags ? "tags-info-message" : undefined}
-                aria-label="Select tags to filter results"
-              >
-                Tags
-              </button>
-            )} 
-            {dropdownOpen && (
-              <div
-                id="myDropdown"
-                className="absolute left-0 w-full p-2 flex flex-col bg-[#f6f6f6] rounded-t-[20px] border-t-[1px] border-r-[1px] border-l-[1px]"
-              >
-                <div id="tagsSearchBarContainer" className="flex ">
-                  <input
-                    type="text"
-                    placeholder="Search tags..."
-                    id="myInput"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                  />
-                  <button
-                    id="closeTagsDropdown"
-                    className="absolute w-[40px] right-[0px] w-[14px] top-[0px] h-[40px] hover:scale-120 focus:scale-120"
-                    onClick={() => setDropdownOpen((open) => !open)}
-                  >
-                    <i className="fa-solid fa-xmark top-1/2 absolute transform -translate-y-1/2 -translate-x-1/2" />
-                  </button>
-                </div> 
-                 {filteredTags.length === 0 ? (
-                  <div className="border-t-[1px]" />
-                ) : (
-                  filteredTags.map(({ tag, id }) => {
-                    const isActive = activeTags.some((tag) => tag.id === id);
-                    const isDisabled = !isActive && activeTags.length >= 8;
-
-                    return (
-                      <a
-                        id={id}
-                        href={`#${tag.toLowerCase()}`}
-                        key={tag}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (isDisabled) return;
-                          console.log("Selected tag ID:", id);
-                          handleTagsInput({
-                            target: {
-                              value: id,
-                              textContent: tag,
-                            },
-                          });
-                        }}
-                        className={`block w-full p-1 m-[.5px] rounded-md ${
-                          isDisabled
-                            ? "text-gray-400 cursor-not-allowed opacity-50"
-                            : `hover:font-bold text-gray-700 ${highlightActiveTags(
-                                id
-                              )}`
-                        }`}
-                      >
-                        {tag}
-                      </a>
-                    );
-                  })
-                )} 
-              </div>
-            )}
+        <div
+          id="tagsResetButtonsContainer"
+          className="flex w-full max-w-md justify-between w-[30%]"
+        >
+          <div id="clearButton" className="w-full flex justify-end relative">
+            <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
+            <button
+              onClick={handleClearTags}
+              className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+            >
+              Clear Tags
+            </button>
           </div>
         </div>
-
-*/}
-
-        {/* <div id="clearButton" className="w-[30%] flex justify-end relative">
-          <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3" />
-          <button
-            onClick={handleClearTags}
-            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black pl-8"
-          >
-            Clear Tags
-          </button>
-        </div> */}
       </div>
 
       <div id="submitButton" className="w-[30%] flex justify-center">
@@ -394,7 +327,7 @@ export default function SearchBar() {
           form="searchTermForm"
           type="submit"
           onClick={handleSubmit}
-          className={`h-[30px] w-full rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+          className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
           ${
             errors.searchText
               ? "border-2 border-red-500 border-l-0"
