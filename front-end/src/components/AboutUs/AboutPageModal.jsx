@@ -45,28 +45,43 @@ export default function AboutPageModal({ handleOnCloseModal, ...props }) {
         <p className="mt-5 ml-5 mr-5 text-center font-semibold">All curated. All searchable. All in one place. Let Resourcery help you find your next great learning moment.</p>
       </section>
 
-      <section id="modal-footer">
-        <h3 className="text-center font-semibold mt-10">Credits</h3>
-        <h4>Developers</h4>
-        <ul>
-          <li>Bryan Hoyem</li>
-          <li>Kristin Dailey</li>
-          <li>Matthew Neie</li>
-          <li>Steven Rubio Perez</li>
-        </ul>
-        <h4>Product Owner</h4>
-        <ul>
-          <li>Xochitl Farias</li>
-        </ul>
-        <h4>Designer</h4>
-        <ul>
-          <li>Jessica Hackett</li>
-        </ul>
-        <h4>Scrum Masters</h4>
-        <ul>
-          <li>Mikala Franks</li>
-          <li>Oghenerukevwe Egbaivwie</li>
-        </ul>
+      <section id="modal-footer" className="bg-[#EDE1D4]">
+        <h3 className="text-center font-semibold pt-5 mt-10">Credits</h3>
+        <hr className="ml-4 mr-4 border-t-4 border-[#998675] my-4 mt-1 rounded"/>
+        
+        <div className="credits-grid grid grid-cols-2 gap-4 px-6 pb-5">
+          <div className="credits-column">
+            <h4 className="font-semibold mb-2">Developers</h4>
+            <ul>
+              <li>- Bryan Hoyem</li>
+              <li>- Kristin Dailey</li>
+              <li>- Matthew Neie</li>
+              <li>- Steven Rubio Perez</li>
+            </ul>
+          </div>
+
+          <div className="credits-column ml-4">
+            <h4 className="font-semibold mb-2">Designer</h4>
+            <ul>
+              <li>- Jessica Hackett</li>
+            </ul>
+          </div>
+
+          <div className="credits-column">
+            <h4 className="font-semibold mb-2">Product Owner</h4>
+            <ul>
+              <li>- Xochitl Farias</li>
+            </ul>
+          </div>
+
+          <div className="credits-column ml-4">
+            <h4 className="font-semibold mb-2">Scrum Masters</h4>
+            <ul>
+              <li>- Mikala Franks</li>
+              <li>- Oghenerukevwe Egbaivwie</li>
+            </ul>
+          </div>
+        </div>
       </section>
     </dialog>
   );
