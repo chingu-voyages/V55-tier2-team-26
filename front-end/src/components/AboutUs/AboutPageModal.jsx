@@ -3,7 +3,7 @@ import CloseModalIcon from "./CloseModalIcon";
 
 export default function AboutPageModal({ handleOnCloseModal, ...props }) {
   return (
-    <dialog className="max-w-svw w-svw max-h-svh h-svh" {...props}>
+    <dialog className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50" {...props}>
       <section className="relative">
         <img 
           src="../images/about-modal.jpg" 
@@ -38,10 +38,7 @@ export default function AboutPageModal({ handleOnCloseModal, ...props }) {
           <li className="flex items-start gap-3">
             <FaWandMagicSparkles className="mt-1 flex-shrink-0"/> 
             <div>
-              Ask our magical built-in AI assistant questions like: 
-              <span className="font-bold">"What topics can I explore here?"</span> 
-              or 
-              <span className="font-bold">"How do I search by author?"</span>
+              Ask our magical built-in AI assistant questions like: <span className="font-bold">"What topics can I explore here?"</span> or <span className="font-bold">"How do I search by author?"</span>
             </div>
           </li>
         </ul>
