@@ -44,7 +44,6 @@ export default function ResultsPagination({
           <PaginationLink
             onClick={(e) => {
               const pageNumber = parseInt(e.target.innerText);
-              console.log(pageNumber);
               activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
             }}
             isActive={activePage === paginationItemOneValue ? true : false}
