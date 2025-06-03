@@ -2,8 +2,19 @@ import { FaWandMagicSparkles } from "react-icons/fa6";
 import CloseModalIcon from "./CloseModalIcon";
 
 export default function AboutPageModal({ handleOnCloseModal, ...props }) {
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleOnCloseModal();
+    }
+  };
+
   return (
-    <dialog className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50" {...props}>
+    <dialog 
+      className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50"
+      onClick={handleBackdropClick} 
+      onClose={handleOnCloseModal}
+      {...props}
+    >
       <section className="relative">
         <img 
           src="../images/about-modal.jpg" 
