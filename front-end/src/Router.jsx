@@ -26,13 +26,6 @@ const router = createBrowserRouter([
         path: "about",
         children: [
           { index: true, element: <AboutUs /> },
-          {
-            path: "search",
-            children: [
-              { index: true, element: <ResultsPageLayout /> },
-              { path: ":page", element: <ResultsPagination /> },
-            ],
-          },
         ],
       },
     ],

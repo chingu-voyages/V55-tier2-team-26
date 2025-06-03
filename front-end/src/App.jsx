@@ -12,22 +12,18 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const showAboutModal =
-    location.pathname === "/about" || location.pathname === "/about/search";
+  const showAboutModal = location.pathname === "/about";
 
   const handleOnCloseModal = () => {
-    location.pathname === "/about" ? navigate("/") : navigate("/search");
+    navigate("/");
     modalRef.current.close()
   };
 
-  const handleOnOpenModal = () => { //you can add this function to any button to open the about us page
-    location.pathname === "/" ? navigate("/about") : navigate("/about/search");
-    modalRef.current.showModal();
-  };
-
   useEffect(() => {
-    showAboutModal ? modalRef.current.showModal() : null;
-  }, []);
+    if (showAboutModal) {
+      modalRef.current.showModal();
+    }
+  }, [showAboutModal]);
 
   return (
     <>

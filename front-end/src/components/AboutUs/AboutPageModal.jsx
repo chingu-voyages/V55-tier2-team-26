@@ -38,7 +38,10 @@ export default function AboutPageModal({ handleOnCloseModal, ...props }) {
           <li className="flex items-start gap-3">
             <FaWandMagicSparkles className="mt-1 flex-shrink-0"/> 
             <div>
-              Ask our magical built-in AI assistant questions like: <span className="font-bold">"What topics can I explore here?"</span> or <span className="font-bold">"How do I search by author?"</span>
+              Ask our magical built-in AI assistant questions like: 
+              <span className="font-bold">"What topics can I explore here?"</span> 
+              or 
+              <span className="font-bold">"How do I search by author?"</span>
             </div>
           </li>
         </ul>
