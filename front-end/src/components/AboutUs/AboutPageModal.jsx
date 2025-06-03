@@ -7,7 +7,7 @@ export default function AboutPageModal({ handleOnCloseModal, ...props  }) {
         <img id="background-img">
         </img>
         <span className="absolute right-8 top-4 size-10">
-          <CloseModalIcon onClose={handleOnCloseModal}/>
+          <CloseModalIcon onClose={handleOnCloseModal} tailwindFillColor="fill-black"/>
         </span>
       </section>
       <section id="modal-body">
