@@ -17,6 +17,7 @@ export default function App() {
 
   const handleOnCloseModal = () => {
     location.pathname === "/about" ? navigate("/") : navigate("/search");
+    modalRef.current.close()
   };
 
   const handleOnOpenModal = () => { //you can add this function to any button to open the about us page
