@@ -24,6 +24,11 @@ export default function SearchBar() {
     clearAllTags,
   } = useContext(ResourcesContext);
 
+  const tagStyles = {
+    activeTag: "bg-[#998675] text-black",
+    inactiveTag: "bg-[#f6f6f6] text-black",
+  };
+
   useEffect(() => {
     validateTags(activeTags);
   }, [activeTags]);
@@ -37,8 +42,8 @@ export default function SearchBar() {
 
   const highlightActiveTags = (id) =>
     activeTags.some((tag) => tag.id === id)
-      ? "bg-[#6D597A] text-white"
-      : "bg-[#f6f6f6] text-black";
+      ? tagStyles.activeTag
+      : tagStyles.inactiveTag;
 
   const handleUserInput = (e) => {
     if (validateSearchText(e.target.value)) {
@@ -93,6 +98,11 @@ export default function SearchBar() {
     setErrors({ searchText: "", tags: "" });
   };
 
+  const handleClearTags = () => {
+    clearAllTags();
+    setErrors({ tags: "" });
+  };
+
   const validateSearchText = (text) => {
     setErrors((prev) => ({ ...prev, searchText: "" }));
 
@@ -135,10 +145,10 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[80%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
+      className="w-[90%] m-auto mt-4 mb-20 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
-      <div id="searchBarContainer" className="w-md">
-        <div className="flex items-center relative">
+      <div id="searchBarContainer" className="w-full flex justify-center">
+        <div className="flex items-center relative min-w-[350px]">
           {errors.searchText && (
             <div
               id="search-error-message"
@@ -160,134 +170,172 @@ export default function SearchBar() {
               {info.tags}
             </div>
           )}
+
           <Form
+            id="searchTermForm"
             action={"/search"}
-            className="w-full flex"
+            className="w-full flex dropdown"
             onSubmit={handleSubmit}
             method="get"
           >
-            <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
-              <button
-                type="submit"
-                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${
-                  errors.searchText
-                    ? "border-2 border-red-500 border-l-0"
-                    : "border-gray-400 border-l-0"
-                }`}
+            {!dropdownOpen && (
+              <div
+                id="theActualSearchBar"
+                className={`relative w-full max-w-md rounded-[20px] h-[40px] border-1 border-[#939AAA] flex`}
               >
-                Submit
-                {/* <i className="fa fa-search"></i> */}
-              </button>
-              <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
-              <input
-                name="keywords"
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search..."
-                onChange={handleUserInput}
-                aria-label="Search resources"
-                aria-invalid={!!errors.searchText}
-                aria-describedby={
-                  errors.searchText ? "search-error-message" : undefined
-                }
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${
-                  errors.searchText
-                    ? "border-2 border-red-500 border-r-0"
-                    : "border border-[#F9F5FF] border-l-0"
-                }`}
-              />
-            </div>
+                <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                <input
+                  name="keywords"
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="What are you looking for?"
+                  onChange={handleUserInput}
+                  aria-label="Search resources"
+                  aria-invalid={!!errors.searchText}
+                  aria-describedby={
+                    errors.searchText ? "search-error-message" : undefined
+                  }
+                  className={`placeholder:italic w-full p-2 pl-10 pr-10 text-md rounded-[20px] bg-white text-black focus:outline-none ${
+                    errors.searchText
+                      ? "border-2 border-red-500 border-r-0"
+                      : "border border-[#F9F5FF] border-l-0"
+                  }`}
+                  onFocus={() => setDropdownOpen((open) => true)}
+                  // aria-describedby={info.tags ? "tags-info-message" : undefined}
+                  // aria-label="Select tags to filter results"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    searchInputRef.current.value = "";
+                    handleUserInput({ target: { value: "" } });
+                  }}
+                  className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                >
+                  <i className="fa-solid fa-xmark" />
+                </button>
+              </div>
+            )}
+            {dropdownOpen && (
+              <div
+                id="theActualSearchBarWithDropdownOpen"
+                className="relative w-full max-w-md rounded-t-[20px] flex flex-col bg-white border-1 border-[#939AAA]"
+              >
+                <div
+                  id="searchAndClearIconsContainer"
+                  className="relative w-full flex items-center"
+                >
+                  <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                  <input
+                    name="keywords"
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="What are you looking for?"
+                    onChange={handleUserInput}
+                    aria-label="Search resources"
+                    aria-invalid={!!errors.searchText}
+                    aria-describedby={
+                      errors.searchText ? "search-error-message" : undefined
+                    }
+                    className={`placeholder:italic w-full pr-10 pt-2 pb-1 pl-10 text-md rounded-[20px] text-black bg-white focus:outline-none ${
+                      errors.searchText
+                        ? "border-2 border-red-500 border-r-0"
+                        : ""
+                    }`}
+                    // onFocus={() => setDropdownOpen((open) => true)}
+                    onBlur={() => setDropdownOpen((open) => false)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      searchInputRef.current.value = "";
+                      handleUserInput({ target: { value: "" } });
+                    }}
+                    className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                  >
+                    <i className="fa-solid fa-xmark" />
+                  </button>
+                </div>
+                <div
+                  id="dropdownTagsContainer"
+                  className="w-full p-1 bg-white rounded-b-[10px] border-t-2 border-[#939AAA] border-collapse"
+                >
+                  {filteredTags.length === 0 ? (
+                    <div className="border-t-[1px]" />
+                  ) : (
+                    filteredTags.map(({ tag, id }) => {
+                      const isActive = activeTags.some((tag) => tag.id === id);
+                      const isDisabled = !isActive && activeTags.length >= 8;
+
+                      return (
+                        <a
+                          id={id}
+                          href={`#${tag.toLowerCase()}`}
+                          key={tag}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (isDisabled) return;
+                            console.log("Selected tag ID:", id);
+                            handleTagsInput({
+                              target: {
+                                value: id,
+                                textContent: tag,
+                              },
+                            });
+                          }}
+                          className={`block w-full mb-[.5px] rounded-md ${
+                            isDisabled
+                              ? "text-gray-400 cursor-not-allowed opacity-50"
+                              : `hover:font-bold text-gray-950 ${highlightActiveTags(
+                                  id
+                                )}`
+                          }`}
+                        >
+                          {tag}
+                        </a>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
           </Form>
         </div>
       </div>
 
-      <div
-        id="tagsResetButtonsContainer"
-        className="flex w-full max-w-md justify-between"
-      >
-        <div id="tagsDropdownContainer" className="relative w-[75%]">
-          <div className="dropdown w-full">
-            {!dropdownOpen && (
-              <button
-                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
-                type="button"
-                onClick={() => setDropdownOpen((open) => !open)}
-                aria-describedby={info.tags ? "tags-info-message" : undefined}
-                aria-label="Select tags to filter results"
-              >
-                Tags
-              </button>
-            )}
-            {dropdownOpen && (
-              <div
-                id="myDropdown"
-                className="absolute left-0 w-full p-2 flex flex-col bg-[#f6f6f6] rounded-t-[20px] border-t-[1px] border-r-[1px] border-l-[1px]"
-              >
-                <div id="tagsSearchBarContainer" className="flex ">
-                  <input
-                    type="text"
-                    placeholder="Search tags..."
-                    id="myInput"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                  />
-                  <button
-                    id="closeTagsDropdown"
-                    className="absolute w-[40px] right-[0px] w-[14px] top-[0px] h-[40px] hover:scale-120 focus:scale-120"
-                    onClick={() => setDropdownOpen((open) => !open)}
-                  >
-                    <i className="fa-solid fa-xmark top-1/2 absolute transform -translate-y-1/2 -translate-x-1/2" />
-                  </button>
-                </div>
-                {filteredTags.length === 0 ? (
-                  <div className="border-t-[1px]" />
-                ) : (
-                  filteredTags.map(({ tag, id }) => {
-                    const isActive = activeTags.some((tag) => tag.id === id);
-                    const isDisabled = !isActive && activeTags.length >= 8;
+      <div id="containerForSelectedTagsAndClearButton">
+        <div id="selectedTagsContainer"></div>
 
-                    return (
-                      <a
-                        id={id}
-                        href={`#${tag.toLowerCase()}`}
-                        key={tag}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (isDisabled) return;
-                          console.log("Selected tag ID:", id);
-                          handleTagsInput({
-                            target: {
-                              value: id,
-                              textContent: tag,
-                            },
-                          });
-                        }}
-                        className={`block w-full p-1 m-[.5px] rounded-md ${
-                          isDisabled
-                            ? "text-gray-400 cursor-not-allowed opacity-50"
-                            : `hover:font-bold text-gray-700 ${highlightActiveTags(
-                                id
-                              )}`
-                        }`}
-                      >
-                        {tag}
-                      </a>
-                    );
-                  })
-                )}
-              </div>
-            )}
+        <div
+          id="tagsResetButtonsContainer"
+          className="flex w-full max-w-md justify-between w-[30%]"
+        >
+          <div id="clearButton" className="w-full flex justify-end relative">
+            <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
+            <button
+              onClick={handleClearTags}
+              className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+            >
+              Clear Tags
+            </button>
           </div>
         </div>
+      </div>
 
-        <div id="clearButton" className="w-[20%] flex justify-end">
-          <button
-            onClick={handleClear}
-            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black"
-          >
-            Reset
-          </button>
-        </div>
+      <div id="submitButton" className="w-[30%] flex justify-center">
+        <button
+          form="searchTermForm"
+          type="submit"
+          onClick={handleSubmit}
+          className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+          ${
+            errors.searchText
+              ? "border-2 border-red-500 border-l-0"
+              : "border-gray-400 border-l-0"
+          }`}
+        >
+          Search
+        </button>
       </div>
     </div>
   );
