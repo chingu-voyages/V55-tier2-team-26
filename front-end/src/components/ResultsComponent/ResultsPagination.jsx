@@ -94,6 +94,8 @@ export default function ResultsPagination({
                 ? e.preventDefault()
                 : onClick(activePage + 1)
             }
+            className={activePage >= maxPages ? "opacity-50 cursor-not-allowed" : ""}
+            disabled={activePage >= maxPages}
           />
         </PaginationItem>
       </PaginationContent>
