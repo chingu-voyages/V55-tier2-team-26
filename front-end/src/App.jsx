@@ -1,6 +1,5 @@
-import { Outlet, useLocation, useNavigate } from "react-router";
-import { useEffect, useRef } from "react";
-
+import { useRef } from "react";
+import { Outlet } from "react-router";
 import AboutPageModal from "./components/AboutUs/AboutPageModal";
 import Header from "./components/Header";
 import MainContainer from "./components/MainContainer";
@@ -9,31 +8,27 @@ import AIChatBot from "./components/AIChatBot/AIChatBot";
 
 export default function App() {
   const modalRef = useRef();
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const showAboutModal = location.pathname === "/about";
-
-  const handleOnCloseModal = () => {
-    navigate("/");
-    modalRef.current.close()
+  const handleOpenModal = () => {
+    modalRef.current.showModal();
   };
 
-  useEffect(() => {
-    if (showAboutModal) {
-      modalRef.current.showModal();
-    }
-  }, [showAboutModal]);
+  const handleCloseModal = () => {
+    modalRef.current.close();
+  };
 
   return (
     <>
-      <AboutPageModal ref={modalRef} handleOnCloseModal={handleOnCloseModal} />
+      <AboutPageModal 
+        ref={modalRef} 
+        handleCloseModal={handleCloseModal}
+      />
       <Header />
       <MainContainer>
         <Outlet />
         <AIChatBot />
       </MainContainer>
-      <Footer />
+      <Footer handleOpenModal={handleOpenModal} />
     </>
   );
 }

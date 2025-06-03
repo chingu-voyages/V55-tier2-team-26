@@ -1,7 +1,6 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { Link } from "react-router";
 
-const Footer = () => {
+const Footer = ({ handleOpenModal }) => {
   return (
     <>
       <div className="h-120 w-full flex flex-col items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:h-70 sm:text-[14px] md:flex-row md:text-[12px] md:h-80 lg:text-[16px] xl:text-[18px]">
@@ -180,9 +179,12 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex flex-col items-center text-center">
-          <Link to="/about" className="hover:cursor-pointer whitespace-pre-line">
+          <button 
+            onClick={handleOpenModal}
+            className="hover:cursor-pointer whitespace-pre-line"
+          >
             About{"\n"}Resourcery
-          </Link>
+          </button>
         </div>
       </div>
     </>

@@ -1,18 +1,18 @@
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import CloseModalIcon from "./CloseModalIcon";
 
-export default function AboutPageModal({ handleOnCloseModal, ...props }) {
+export default function AboutPageModal({ handleCloseModal, ...props }) {
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
-      handleOnCloseModal();
+      handleCloseModal();
     }
   };
 
   return (
     <dialog 
-      className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50"
+      className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50 transition-all duration-200 ease-out"
       onClick={handleBackdropClick} 
-      onClose={handleOnCloseModal}
+      onClose={handleCloseModal}
       {...props}
     >
       <section className="relative">
@@ -22,7 +22,7 @@ export default function AboutPageModal({ handleOnCloseModal, ...props }) {
           className="h-auto w-full"
         />
         <span className="absolute right-0 top-0 size-10">
-          <CloseModalIcon onClose={handleOnCloseModal} tailwindFillColor="fill-[#1F1F1FD9]"/>
+          <CloseModalIcon onClose={handleCloseModal} tailwindFillColor="fill-[#1F1F1FD9]"/>
         </span>
       </section>
 
