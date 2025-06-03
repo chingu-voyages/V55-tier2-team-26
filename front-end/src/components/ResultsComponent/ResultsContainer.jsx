@@ -1,27 +1,51 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
-import ResourceItem from "./ResourceItem";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import { ResourcesContext } from "../../context/resources-context";
 
 export default function ResultsContainer() {
-  let [searchParams] = useSearchParams();
-  //searchParams.get("page") //This get the urlParam for the page
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { results, error } = useContext(ResourcesContext);
 
-  const { results, tags, error } = useContext(ResourcesContext);
+  // Get starting page from URL or use page 1
+  const [activePage, setActivePage] = useState(() => {
+    const page = searchParams.get("page");
+    return page ? parseInt(page) : 1;
+  });
 
-  const [activePage, setActivePage] = useState(1);
+  // Update activePage when URL changes (back/forward)
+  useEffect(() => {
+    const page = searchParams.get("page");
+    if (page) {
+      setActivePage(parseInt(page));
+    }
+  }, [searchParams]);
 
   const handlePagination = (newCurrentPage) => {
     setActivePage(newCurrentPage);
+
+    // Keep URL in sync with user interactions while preserving search params
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newCurrentPage);
+    setSearchParams(params);
   };
 
   useEffect(() => {
-    setActivePage(1)
-  }, [results])
+    // Get current params
+    const currentParams = new URLSearchParams(searchParams);
+    const keywords = currentParams.get("keywords");
+    const tags = currentParams.get("tags");
+
+    // Only reset pagination when search params change
+    if (keywords || tags) {
+      setActivePage(1);
+      currentParams.delete("page");
+      setSearchParams(currentParams);
+    }
+
+  }, [searchParams.get("keywords"), searchParams.get("tags")]);
 
   if (error) {
     return (

@@ -38,7 +38,6 @@ export default function ResultsPagination({
             onClick={(e) =>
               activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
             }
-            to={`/search?page=${activePage - 1}`}
           />
         </PaginationItem>
         <PaginationItem>
@@ -49,7 +48,6 @@ export default function ResultsPagination({
               activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
             }}
             isActive={activePage === paginationItemOneValue ? true : false}
-            to={`/search?page=${paginationItemOneValue}`}
           >
             {paginationItemOneValue}
           </PaginationLink>
@@ -65,7 +63,6 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemTwoValue ? true : false}
-              to={`/search?page=${paginationItemTwoValue}`}
             >
               {paginationItemTwoValue}
             </PaginationLink>
@@ -82,7 +79,6 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemThreeValue ? true : false}
-              to={`/search?page=${paginationItemThreeValue}`}
             >
               {paginationItemThreeValue}
             </PaginationLink>
@@ -98,7 +94,6 @@ export default function ResultsPagination({
                 ? e.preventDefault()
                 : onClick(activePage + 1)
             }
-            to={`/search?page=${activePage + 1}`}
           />
         </PaginationItem>
       </PaginationContent>
