@@ -1,24 +1,18 @@
-import React from "react";
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
-
     <>
-      <div className="h-120 w-full flex flex-col items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-green-900 text-white text-[14px] sm:h-70 sm:text-[14px] md:flex-row md:text-[12px] md:h-80 lg:text-[16px] xl:text-[18px]">
+      <div className="h-120 w-full flex flex-col items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:h-70 sm:text-[14px] md:flex-row md:text-[12px] md:h-80 lg:text-[16px] xl:text-[18px]">
         <div className="flex items-center text-center ml-0 sm:ml-10 md:ml-2 md:w-40 lg:w-60 xl:ml-5 2xl:ml-10">
           <a
             href={"https://github.com/chingu-voyages/V55-tier2-team-26"}
             className="mr-2 md:mr-2"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaGithub className="text-[50px] sm:text-[50px] md:text-4xl" />
-          </a>
-          <a
-            href={"https://github.com/chingu-voyages/V55-tier2-team-26"}
-            className="mr-2"
-          >
-            <h1>GitHub Repository</h1>
           </a>
         </div>
         <div className="w-80 flex flex-col items-top text-left justify-between sm:mr-5 sm:ml-5 sm:w-full sm:flex-row md:w-160 md:mr-5 lg:w-200 lg:mr-10 xl:w-240 xl:mr-5 2xl:w-260 2xl:mr-10">
@@ -31,14 +25,18 @@ const Footer = () => {
               <a
                 href={"https://github.com/mikalafranks"}
                 className="mb-2 sm:mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/mikala-franks-8b21b52a3/"}
                 className="mb-2 sm:mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
             <div className="flex items-center text-center">
@@ -60,14 +58,18 @@ const Footer = () => {
               <a
                 href={"https://github.com/xochfa"}
                 className="mb-4 sm:mb-0 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/xfarias-scrum-master/"}
                 className="mb-4 sm:mb-0 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
           </div>
@@ -80,14 +82,18 @@ const Footer = () => {
               <a
                 href={"https://github.com/mooglemoxie0018"}
                 className="mb-4 sm:mb-0 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/jessica-hackett-6725a4325/"}
                 className="mb-4 sm:mb-0 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
           </div>
@@ -97,14 +103,21 @@ const Footer = () => {
             </h1>
             <div className="flex items-center text-center">
               <p className="mb-2 mr-2 sm:mb-3">Bryan Hoyem</p>
-              <a href={"https://github.com/bhoyem"} className="mb-3 mr-2">
+              <a 
+                href={"https://github.com/bhoyem"} 
+                className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/bryanhoyem/"}
                 className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
             <div className="flex items-center text-center">
@@ -112,26 +125,37 @@ const Footer = () => {
               <a
                 href={"https://github.com/kristindailey"}
                 className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaGithub />
               </a>
               <a
-                href={"https://linkedin.com/in/kristindailey/"}
+                href={"https://linkedin.com/in/kristin-dailey/"}
                 className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
             <div className="flex items-center text-center">
               <p className="mb-2 mr-2 sm:mb-3">Matthew Neie</p>
-              <a href={"https://github.com/MatthewNeie"} className="mb-3 mr-2">
+              <a 
+                href={"https://github.com/MatthewNeie"} 
+                className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/matthew-neie/"}
                 className="mb-3 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
             <div className="flex items-center text-center">
@@ -139,17 +163,26 @@ const Footer = () => {
               <a
                 href={"https://github.com/Stevensauro?tab=repositories"}
                 className="mb-4 sm:mb-0 mr-2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaGithub />
               </a>
               <a
                 href={"https://www.linkedin.com/in/steverp/"}
                 className="mb-4 sm:mb-0"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedin style={{ color: "#0072B1" }} />
+                <FaLinkedin />
               </a>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col items-center text-center">
+          <Link to="/about" className="hover:cursor-pointer whitespace-pre-line">
+            About{"\n"}Resourcery
+          </Link>
         </div>
       </div>
     </>
