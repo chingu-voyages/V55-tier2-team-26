@@ -103,4 +103,22 @@ async function sendUserMessage(message) {
   }
 }
 
-module.exports = { sendUserMessage, clearHistoryFile };
+async function botGreeting(history=null) {
+  try {
+    const chat = await ai.chats.create({
+      model: "gemini-1.5-flash",
+      config: { systemInstruction },
+      history: history || await readHistoryFile(),
+    });
+
+    const botResponse = await chat.sendMessage({ message: "The chat window has opened for a new user. The Scryer must now greet them. Provide a unique and helpful welcome to Resourcery, prompting them to share what development resources or information they are looking for." });
+
+    writeHistoryFile(chat.getHistory());
+
+    return { botResponse: botResponse.text, chatHistory: chat.getHistory() };
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+module.exports = { sendUserMessage, botGreeting, clearHistoryFile };
