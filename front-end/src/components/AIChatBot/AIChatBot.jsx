@@ -51,7 +51,8 @@ const AIChatBot = () => {
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
     try {
-      const resultText = await sendChatResponse(input);
+      const responseObj = await sendChatResponse(input);
+      const resultText = responseObj.botResponse;
       // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       // const genAI = new GoogleGenerativeAI(apiKey);
       // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -59,6 +60,7 @@ const AIChatBot = () => {
       //   input + "keep response to under 120 words"
       // );
       // const resultText = result.response.text() || "No response text found";
+
       setLoading(false);
       setResponseText(resultText);
       setInput("");
