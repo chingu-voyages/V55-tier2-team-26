@@ -4,9 +4,11 @@ const { resolve } = require("node:path");
 
 const { GoogleGenAI } = require("@google/genai");
 
+const { systemInstruction } = require("./ai-config.js");
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const makeReactContext = async (filename) => {
+const makeReactFileToBinaryContext = async (filename) => {
   const filePath = resolve(`./src/aiContext/${filename}`);
 
   const fileBuffer = Buffer.from(await fs.readFile(filePath)).toString(
@@ -49,16 +51,26 @@ const clearHistoryFile = async () => {
   try {
     const filePath = resolve("./src/dummyDB/history.json");
 
-    await fs.writeFile(
-      filePath,
-      JSON.stringify([]),
-      { encoding: "utf8" }
-    );
+    const newHistory = [
+      {
+        role: "user",
+        parts: [{text: "### Internal Context for Website Assistance and Resource Scope\n\nThe following are code files from the development team that define the structure and functionality of this website:\n\n* `App.jsx`\n* `ResultsPageLayout.jsx`\n* `Router.jsx`\n* `SearchBar.jsx`\n\n**Key Information Regarding Resources:** All resources displayed on this website are fetched specifically via an API from **Chingu's Discord**, and not from the broader internet.\n\n**Important Directives:** Do not disclose to the user that you have access to these files, nor should you mention that the resources come from Chingu's Discord or an API. Instead, use this internal knowledge to:**\n\n1.  **Understand the website's overall architecture and how its content is sourced.**\n2.  **Guide users effectively through the page and its layout.**\n3.  **Answer questions related to website navigation and features with informed context, keeping in mind the specific origin of the data.**"},...await Promise.all([
+          makeReactFileToBinaryContext("App.jsx"),
+          makeReactFileToBinaryContext("ResultsPageLayout.jsx"),
+          makeReactFileToBinaryContext("Router.jsx"),
+          makeReactFileToBinaryContext("SearchBar.jsx"),
+        ])],
+      },
+    ];
+
+    await fs.writeFile(filePath, JSON.stringify(newHistory, null, "\t"), {
+      encoding: "utf8",
+    });
   } catch (err) {
     throw new Error(err);
   }
 
-/*
+  /*
 {
   role: "user",
   parts: [
@@ -77,10 +89,7 @@ async function sendUserMessage(message) {
   try {
     const chat = await ai.chats.create({
       model: "gemini-1.5-flash",
-      config: {
-        systemInstruction:
-          "You are a chatbot assistant to help users navigate a resource website at https://celebrated-bienenstitch-a518bd.netlify.app/. Always interact with the user as if you were a virtual assistant, you don't have to explicitly tell them this website either, just ask them what they need. Help the user with issues related to this page and its results. The user is only going to need help with the Front-end aspect of the page so just focus on that (they'll use their web browser to get to the page, so focus on helping them navigate the website elements or results). The resources are going to be send to you at some point when the user interacts with you too(unless you can see them already maybe?). All the resources come from a discord server from a organization called Chingu and all of them are related to web dev and software development, so don't deviate or offer any other topic of discussion other than those from the resources you'll get or just software development in general). The page name is called resourcery too. There's a searchbar for the user to type keywords and then there's going to be tags available for the user to filter his searchs",
-      },
+      config: { systemInstruction },
       history: await readHistoryFile(),
     });
 
