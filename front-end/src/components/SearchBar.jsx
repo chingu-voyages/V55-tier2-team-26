@@ -85,7 +85,7 @@ export default function SearchBar() {
     navigate(`/search?${searchParams.toString()}`);
   };
 
-  const handleClear = () => {
+  const handleReset = () => {
     searchInputRef.current.value = "";
     baseHandleUserInput({
       target: {
@@ -269,7 +269,6 @@ export default function SearchBar() {
                           onClick={(e) => {
                             e.preventDefault();
                             if (isDisabled) return;
-                            console.log("Selected tag ID:", id);
                             handleTagsInput({
                               target: {
                                 value: id,
@@ -329,6 +328,15 @@ export default function SearchBar() {
           }`}
         >
           Search
+        </button>
+      </div>
+
+      <div id="resetButton" className="w-[30%] flex justify-center">
+        <button
+          onClick={handleReset}
+          className="h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white"
+        >
+          Reset
         </button>
       </div>
     </div>
