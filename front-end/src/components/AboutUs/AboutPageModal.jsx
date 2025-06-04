@@ -60,7 +60,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
         <h3 className="text-center font-semibold pt-5 mt-10 text-lg">Credits</h3>
         <hr className="ml-4 mr-4 border-t-4 border-[#998675] my-4 mt-1 rounded"/>
         
-        <div className="credits-grid grid grid-cols-2 gap-4 px-6 pb-5 [&_h4]:font-semibold [&_h4]:mb-2">
+        <div className="credits-grid grid grid-cols-2 gap-4 px-8 sm:px-12 pb-5 [&_h4]:font-semibold [&_h4]:mb-2">
           <div className="credits-column">
             <h4>Developers</h4>
             <ul>
