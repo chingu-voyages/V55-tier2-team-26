@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { ResourcesContext } from "../../../../back-end/src/aiContext/resources-context";
+import { ResourcesContext } from "../../context/resources-context";
 
 const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
   const { tags } = useContext(ResourcesContext);
