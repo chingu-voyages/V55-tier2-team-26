@@ -85,12 +85,12 @@ const clearHistoryFile = async () => {
 */
 };
 
-async function sendUserMessage(message) {
+async function sendUserMessage(message, chatHistory) {
   try {
     const chat = await ai.chats.create({
       model: "gemini-1.5-flash",
       config: { systemInstruction },
-      history: await readHistoryFile(),
+      history: chatHistory,
     });
 
     const botResponse = await chat.sendMessage({ message });
