@@ -11,6 +11,7 @@ export default function App() {
 
   const handleOpenModal = () => {
     modalRef.current.showModal();
+    modalRef.current.scrollTop = 0;
   };
 
   const handleCloseModal = () => {
