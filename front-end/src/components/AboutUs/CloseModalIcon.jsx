@@ -1,4 +1,4 @@
-export default function CloseModalIcon({tailwindFillColor, onClose}) {
+export default function CloseModalIcon({ tailwindFillColor, onClose }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
