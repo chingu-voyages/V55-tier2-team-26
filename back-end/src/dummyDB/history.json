@@ -30,21 +30,5 @@
 				}
 			}
 		]
-	},
-	{
-		"role": "user",
-		"parts": [
-			{
-				"text": "Hello, I'm new to this page, can you tell me how to navigate it ?"
-			}
-		]
-	},
-	{
-		"parts": [
-			{
-				"text": "Greetings! I am The Scryer. Welcome to Resourcery!  To navigate, focus your intent on the search bar at the top. There, you can input keywords related to web development or software development to uncover the knowledge you seek.  You may also refine your search by using the filtering tags provided; they will appear once you begin typing in your search terms.  The results will then be displayed below, organized to illuminate your path to the resources you need. What specific development knowledge are you hoping to find today?\n"
-			}
-		],
-		"role": "model"
 	}
 ]
