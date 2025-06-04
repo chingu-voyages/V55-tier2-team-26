@@ -1,3 +1,20 @@
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.chat-modal {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -51,4 +68,26 @@
 .input-area button {
   padding: 10px 20px;
   margin-left: 10px;
+}
+
+.input-wrapper {
+  position: relative;
+  padding: 10px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 8px 68px 8px 20px; /* padding-right for space */
+  box-sizing: border-box;
+}
+
+.input-wrapper button {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }

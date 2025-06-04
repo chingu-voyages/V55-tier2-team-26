@@ -3,43 +3,64 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import Message from "./Message";
 import "./styles.css";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
+import { sendChatResponse } from "../../utils/gemini-api-utils";
+import ClearIcon from "@mui/icons-material/Clear";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import HourglassFullIcon from "@mui/icons-material/HourglassFull";
+import ScryerImg from "../../images/scryer-background.PNG";
 
 const AIChatBot = () => {
   const [input, setInput] = useState();
   const [responseText, setResponseText] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    const stored = localStorage.getItem("messages");
+    return stored
+      ? JSON.parse(stored)
+      : [
+          {
+            sender: "ai",
+            text: "Welcome to The Scryer! I am here to help you with any questions you have navigating Resourcery!",
+          },
+        ];
+  });
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
-  const responseEndRef = useRef(null);
+  const messageRef = useRef(null);
 
   useEffect(() => {
-    if (responseEndRef.current) {
-      const headerHeight = window.innerHeight * 0.09; // 7vh - The height of the header + the top margin
+    localStorage.setItem("messages", JSON.stringify(messages));
+    messageRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-      const elementPosition =
-        responseEndRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerHeight;
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        setShowChat(false);
+      }
+    };
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
-  }, [responseText]);
+    window.addEventListener("keydown", handleEsc);
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
 
   const fetchData = async (input) => {
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(
-        input + "keep response to under 150 words"
-      );
-      const resultText = result.response.text() || "No response text found";
+      const responseObj = await sendChatResponse(input);
+      const resultText = responseObj.botResponse;
+      // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      // const genAI = new GoogleGenerativeAI(apiKey);
+      // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      // const result = await model.generateContent(
+      //   input + "keep response to under 120 words"
+      // );
+      // const resultText = result.response.text() || "No response text found";
+
       setLoading(false);
       setResponseText(resultText);
       setInput("");
@@ -53,64 +74,103 @@ const AIChatBot = () => {
     }
   };
 
+  const handleClearMessages = () => {
+    localStorage.removeItem("messages");
+    setMessages([
+      {
+        sender: "ai",
+        text: "Welcome to The Scryer! I am here to help you with any questions you have navigating Resourcery!",
+      },
+    ]);
+  };
+
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") fetchData();
+    if (e.key === "Enter") fetchData(input);
   };
 
   return (
     <div className="flex flex-col items-end">
       {!showChat ? (
-        <div className="flex item-center justify-center">
+        <div className="chat-button flex item-center justify-center">
           <button
-            className="p-2 w-[6vw] border-2 bg-gray-600 text-white rounded-lg mr-10 cursor-pointer"
+            className="p-2 w-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
             onClick={() => {
               setShowChat(true);
             }}
           >
-            ChatBot
+            AI Helper
           </button>
         </div>
       ) : null}
       {!showChat ? null : (
-        <div className="w-[30vw] p-10 flex flex-col items-center justify-center bg-gray-600 rounded-lg">
-          <div className="w-[26vw] flex flex-row items-end justify-end">
+        <div className="chat-modal w-[400px] flex flex-col items-center justify-center border-2 border-gray-400 bg-[#998675] rounded-lg">
+          <div className="w-[400px] h-[40px] p-4 flex flex-row align-center items-center justify-between">
             <button
-              className="w-[3vw] h-[2.2vh] bg-black text-white cursor-pointer rounded-lg"
+              className="w-[80px] flex text-[24px] text-black cursor-pointer rounded-lg"
               onClick={() => setShowChat(false)}
             >
-              Close
+              <ClearIcon />
             </button>
+            <h1 className="w-[120px] flex text-center items-center justify-center font-bold text-[18px]">
+              The Scryer
+            </h1>
+            <h1 className="w-[80px] flex items-center align-center justify-end">
+              <HourglassFullIcon className="" />
+            </h1>
           </div>
           <div
-            ref={responseEndRef}
-            className="overflow-y-auto h-80 p-4 w-[26vw] mt-2 border-4 border-gray-400 bg-white"
+            className="overflow-y-auto h-80 p-4 w-[398px] mt-2 bg-cover"
+            style={{ backgroundImage: `url(${ScryerImg})` }}
           >
-            {messages.map((msg, index) => (
-              <Message
-                key={index}
-                sender={msg.sender}
-                text={msg.text}
-                loading={loading}
-              />
-            ))}
+            {messages.map((msg, index) => {
+              const isLast = index === messages.length - 1;
+              return (
+                <div key={index} ref={isLast ? messageRef : null}>
+                  <Message
+                    key={index}
+                    sender={msg.sender}
+                    text={msg.text}
+                    loading={loading}
+                  />
+                </div>
+              );
+            })}
             {loading && <LoadingIndicator />}
           </div>
           {/* <div className="mt-4 flex flex-row items-center justify-center align-center"> */}
-          <div className="input-area">
-            <textarea
-              className="w-[20vw] h-16 p-2 bg-white rounded-md"
+          <div className="input-wrapper w-[400px]">
+            <input
+              className="w-[290px] h-12 p-2 bg-white rounded-4xl"
+              placeholder="Ask the Scryer..."
+              value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
             />
             <button
-              className="w-[6vw] h-16 bg-red-800 text-white p-2 cursor-pointer rounded-md"
+              className="mr-11 text-[10px] h-16 text-black cursor-pointer"
+              onClick={() => {
+                setInput("");
+              }}
+            >
+              <ClearIcon />
+            </button>
+            <button
+              className="mr-4 text-[16px] h-16 text-black cursor-pointer"
               onClick={() => {
                 fetchData(input);
               }}
             >
-              Ask Gemini
+              <ChevronRightIcon />
             </button>
           </div>
+          <button
+            className="border-2 p-2 text-[14px] mb-2 cursor-pointer"
+            onClick={() => {
+              handleClearMessages();
+            }}
+          >
+            clear chat history
+          </button>
         </div>
       )}
     </div>
