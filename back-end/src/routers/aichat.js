@@ -18,7 +18,6 @@ router.post('/chatbotai/greeting', verification, async(req, res)=>{
 router.post("/chatbotai", verification, async (req, res) => {
   try {
     res.set({ "Content-Type": "application/json" });
-    console.log(req.body.userResponse);
 
     const botResponse = await sendUserMessage(req.body.userResponse);
     res.status(200).json({ ...botResponse });
