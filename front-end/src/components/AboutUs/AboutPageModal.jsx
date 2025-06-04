@@ -10,7 +10,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
 
   return (
     <dialog 
-      className="w-[90%] max-w-[800px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50 transition-all duration-200 ease-out"
+      className="w-[90%] max-w-[500px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50 transition-all duration-200 ease-out"
       onClick={handleBackdropClick} 
       onClose={handleCloseModal}
       {...props}
@@ -30,13 +30,13 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
         <img 
           src="../images/logo-placeholder.png" 
           alt="Resourcery logo" 
-          className="h-auto w-1/2 mx-auto mt-3"
+          className="h-auto w-1/2 max-w-[200px] mx-auto mt-3"
         />
-        <h1 className="text-center font-bold text-xl">Welcome to Resourcery</h1>
+        <h1 className="text-center font-bold text-lg sm:text-xl">Welcome to Resourcery</h1>
         <hr className="border-t-4 border-[#998675] my-4 rounded"/>
         <p className="mb-5">In today's fast-paced tech world, finding the right resource can feel like looking for a needle in a haystack. That's why we built Resourcery, a tool created by and for developers in the Chingu community.</p>
         <p className="mb-5">Here, you can search through hand-picked technical resources shared in the #resource-treasures channel on Discord. Whether you're diving into JavaScript, exploring DevOps, or learning more about AI, Resourcery helps you find exactly what you need to level up.</p>
-        <h2 className="text-center font-semibold mt-10 mb-4 text-lg">Features</h2>
+        <h2 className="text-center font-semibold mt-10 mb-4 text-base sm:text-lg">Features</h2>
         <ul>
           <li className="flex items-start gap-3 mb-2">
             <FaWandMagicSparkles className="mt-1 flex-shrink-0"/> 
@@ -71,7 +71,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
             </ul>
           </div>
 
-          <div className="credits-column ml-4">
+          <div className="credits-column">
             <h4>Designer</h4>
             <ul>
               <li>- Jessica Hackett</li>
@@ -85,7 +85,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
             </ul>
           </div>
 
-          <div className="credits-column ml-4">
+          <div className="credits-column">
             <h4>Scrum Masters</h4>
             <ul>
               <li>- Mikala Franks</li>
