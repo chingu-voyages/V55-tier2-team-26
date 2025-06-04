@@ -200,11 +200,9 @@ export default function SearchBar() {
                 />
                 <button
                   type="button"
-                  onClick={() => {
-                    searchInputRef.current.value = "";
-                    handleUserInput({ target: { value: "" } });
-                  }}
+                  onClick={handleReset}
                   className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                  aria-label="Reset search"
                 >
                   <i className="fa-solid fa-xmark" />
                 </button>
@@ -241,11 +239,9 @@ export default function SearchBar() {
                   />
                   <button
                     type="button"
-                    onClick={() => {
-                      searchInputRef.current.value = "";
-                      handleUserInput({ target: { value: "" } });
-                    }}
+                    onClick={handleReset}
                     className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                    aria-label="Reset search"
                   >
                     <i className="fa-solid fa-xmark" />
                   </button>
@@ -328,15 +324,6 @@ export default function SearchBar() {
           }`}
         >
           Search
-        </button>
-      </div>
-
-      <div id="resetButton" className="w-[30%] flex justify-center">
-        <button
-          onClick={handleReset}
-          className="h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white"
-        >
-          Reset
         </button>
       </div>
     </div>
