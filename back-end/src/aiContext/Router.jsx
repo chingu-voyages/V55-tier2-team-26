@@ -1,10 +1,5 @@
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router";
-import App from "./App";
-import ResultsPagination from "./components/ResultsComponent/ResultsPagination";
-import LandingPageLayout from "./components/LandingPageLayout";
-import ResultsPageLayout from "./components/ResultsPageLayout";
-
 const router = createBrowserRouter([
+  { path: "about/*", element: <Navigate to="/about" replace /> },
   { path: "search", element: <Navigate to="/search" replace /> },
   { path: "*", element: <Navigate to="/" replace /> },
   {
@@ -19,10 +14,23 @@ const router = createBrowserRouter([
           { path: ":page", element: <ResultsPagination /> },
         ],
       },
+      {
+        path: "about",
+        children: [
+          { index: true, element: <AboutUs /> },
+          {
+            path: "search",
+            children: [
+              { index: true, element: <ResultsPageLayout /> },
+              { path: ":page", element: <ResultsPagination /> },
+            ],
+          },
+        ],
+      },
     ],
   },
 ]);
 
-export default function Router() {
+function Router() {
   return <RouterProvider router={router} />;
 }

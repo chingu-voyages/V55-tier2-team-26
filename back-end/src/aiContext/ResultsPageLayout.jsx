@@ -1,7 +1,4 @@
-import SearchBar from "./SearchBar";
-import ResultsContainer from "./ResultsComponent/ResultsContainer";
-
-export default function ResultsPageLayout() {
+function ResultsPageLayout() {
   return (
     <>
       <SearchBar />
