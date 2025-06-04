@@ -9,19 +9,11 @@ export default function ResultsContainer() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { results, error } = useContext(ResourcesContext);
 
-  // Get starting page from URL or use page 1
+  // Get page state from URL on mount
   const [activePage, setActivePage] = useState(() => {
     const page = searchParams.get("page");
     return page ? parseInt(page) : 1;
   });
-
-  // Update activePage when URL changes (back/forward)
-  useEffect(() => {
-    const page = searchParams.get("page");
-    if (page) {
-      setActivePage(parseInt(page));
-    }
-  }, [searchParams]);
 
   const handlePagination = (newCurrentPage) => {
     setActivePage(newCurrentPage);
@@ -32,6 +24,12 @@ export default function ResultsContainer() {
     setSearchParams(params);
   };
 
+  // Keep page state in sync with URL changes
+  useEffect(() => {
+    const page = searchParams.get("page");
+    setActivePage(page ? parseInt(page) : 1);
+  }, [searchParams]);
+
   useEffect(() => {
     // Get current params
     const currentParams = new URLSearchParams(searchParams);
@@ -39,8 +37,7 @@ export default function ResultsContainer() {
     const tags = currentParams.get("tags");
 
     // Only reset pagination when search params change
-    if (keywords || tags) {
-      setActivePage(1);
+    if ((keywords || tags) && searchParams.get("page") !== "1") {
       currentParams.delete("page");
       setSearchParams(currentParams);
     }

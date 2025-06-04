@@ -93,9 +93,9 @@ export default function useSearchResources({ resources, tags, isFetching }) {
 
       // Debounce the URL update
       urlUpdateTimer.current = setTimeout(() => {
-        const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams);
 
-        // Only add keywords/tags to URL if they exist
+        // Only add keywords/tags/page to URL if they exist
         if (queryValue.keywords) params.set("keywords", queryValue.keywords);
         if (queryValue.tags.length > 0) params.set("tags", queryValue.tags.join(","));
 
