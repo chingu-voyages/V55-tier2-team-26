@@ -11,6 +11,7 @@ export default function SearchBar() {
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
+  const [showTagPills, setShowTagPills] = useState(false);
   const queryParams = searchParams.get("keywords");
 
   const {
@@ -28,6 +29,36 @@ export default function SearchBar() {
     activeTag: "bg-[#998675] text-black",
     inactiveTag: "bg-[#f6f6f6] text-black",
   };
+
+  useEffect(() => {
+    function handleClickOutsideForm(event) {
+      const searchInput = searchInputRef.current;
+      const tagsContainer = document.getElementById("dropdownTagsContainer");
+
+      if (
+        searchInput &&
+        tagsContainer &&
+        !searchInput.contains(event.target) &&
+        !tagsContainer.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+
+    if (dropdownOpen) {
+      document.addEventListener("click", handleClickOutsideForm);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutsideForm);
+    };
+  }, [dropdownOpen]);
+
+  useEffect(() => {
+    setShowTagPills(activeTags.length > 0);
+  }, [activeTags]);
+
+
 
   useEffect(() => {
     validateTags(activeTags);
@@ -162,7 +193,7 @@ export default function SearchBar() {
           {info.tags && (
             <div
               id="tags-info-message"
-              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${
+              className={`absolute top-[-18px] left-3 text-[.7rem] font-medium flex items-center gap-[6px] whitespace-nowrap ${
                 activeTags.length === 8 && "text-[#2E4057]"
               }`}
             >
@@ -214,12 +245,17 @@ export default function SearchBar() {
                 >
                   <i className="fa-solid fa-xmark" />
                 </button>
+                {showTagPills && (
+                  <div id="tagPillsContainer" className="flex border-amber-950 border-2 w-[50px] h-[50px]">
+
+                  </div>
+                )}
               </div>
             )}
             {dropdownOpen && (
               <div
                 id="theActualSearchBarWithDropdownOpen"
-                className="relative w-full max-w-md rounded-t-[20px] flex flex-col bg-white border-1 border-[#939AAA]"
+                className="relative w-full max-w-md rounded-[20px] flex flex-col bg-white border-1 border-[#939AAA]"
               >
                 <div
                   id="searchAndClearIconsContainer"
@@ -243,7 +279,7 @@ export default function SearchBar() {
                         : ""
                     }`}
                     // onFocus={() => setDropdownOpen((open) => true)}
-                    onBlur={() => setDropdownOpen((open) => false)}
+                    // onBlur={() => setDropdownOpen((open) => false)}
                   />
                   <button
                     type="button"
@@ -258,7 +294,7 @@ export default function SearchBar() {
                 </div>
                 <div
                   id="dropdownTagsContainer"
-                  className="w-full p-1 bg-white rounded-b-[10px] border-t-2 border-[#939AAA] border-collapse"
+                  className="w-full p-1 bg-white rounded-b-[20px] border-t-2 border-[#939AAA] border-collapse"
                 >
                   {filteredTags.length === 0 ? (
                     <div className="border-t-[1px]" />
