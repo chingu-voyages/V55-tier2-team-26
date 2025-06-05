@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import Message from "./Message";
 import "./styles.css";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
-import { sendChatResponse } from "../../utils/gemini-api-utils";
+import { sendChatResponse, getBotGreeting } from "../../utils/gemini-api-utils";
 import ClearIcon from "@mui/icons-material/Clear";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HourglassFullIcon from "@mui/icons-material/HourglassFull";
@@ -14,14 +14,7 @@ const AIChatBot = () => {
   const [responseText, setResponseText] = useState(null);
   const [messages, setMessages] = useState(() => {
     const stored = localStorage.getItem("messages");
-    return stored
-      ? JSON.parse(stored)
-      : [
-          {
-            sender: "ai",
-            text: "Welcome to The Scryer! I am here to help you with any questions you have navigating Resourcery!",
-          },
-        ];
+    return stored ? JSON.parse(stored) : [];
   });
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -29,6 +22,10 @@ const AIChatBot = () => {
   const messageRef = useRef(null);
 
   useEffect(() => {
+    if (messages.length === 0) {
+      getBotGreeting().then((res) => setMessages(res));
+    }
+
     localStorage.setItem("messages", JSON.stringify(messages));
     messageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -47,12 +44,14 @@ const AIChatBot = () => {
   }, []);
 
   const fetchData = async (input) => {
-    const userMessage = { sender: "user", text: input };
+    const userMessage = { role: "user", parts: [{ text: input }] };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
     try {
-      const responseObj = await sendChatResponse(input);
+      const savedLocalHistory = JSON.parse(localStorage.getItem("messages"));
+      const responseObj = await sendChatResponse(input, savedLocalHistory);
       const resultText = responseObj.botResponse;
+      const chatHistory = responseObj.chatHistory;
       // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       // const genAI = new GoogleGenerativeAI(apiKey);
       // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -61,11 +60,13 @@ const AIChatBot = () => {
       // );
       // const resultText = result.response.text() || "No response text found";
 
+      console.log(responseObj);
       setLoading(false);
       setResponseText(resultText);
       setInput("");
-      const aiResponse = { sender: "ai", text: resultText };
-      setMessages((prev) => [...prev, aiResponse]);
+      //const aiResponse = { sender: "ai", text: resultText };
+      //setMessages((prev) => [...prev, aiResponse]);
+      setMessages(chatHistory);
       return resultText;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,12 +77,7 @@ const AIChatBot = () => {
 
   const handleClearMessages = () => {
     localStorage.removeItem("messages");
-    setMessages([
-      {
-        sender: "ai",
-        text: "Welcome to The Scryer! I am here to help you with any questions you have navigating Resourcery!",
-      },
-    ]);
+    setMessages([]);
   };
 
   const handleKeyDown = (e) => {
@@ -124,12 +120,13 @@ const AIChatBot = () => {
           >
             {messages.map((msg, index) => {
               const isLast = index === messages.length - 1;
-              return (
+              return (index === 0 && msg.parts.length > 1) ||
+                index === 1 ? null : (
                 <div key={index} ref={isLast ? messageRef : null}>
                   <Message
                     key={index}
-                    sender={msg.sender}
-                    text={msg.text}
+                    sender={msg.role}
+                    text={msg.parts[0].text}
                     loading={loading}
                   />
                 </div>
