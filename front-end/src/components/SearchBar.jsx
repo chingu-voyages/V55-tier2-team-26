@@ -4,6 +4,8 @@ import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
+import "./SearchBarStyles.css"
+
 export default function SearchBar() {
   const [searchParams] = useSearchParams();
 
@@ -32,14 +34,15 @@ export default function SearchBar() {
 
   useEffect(() => {
     function handleClickOutsideForm(event) {
-      const searchInput = searchInputRef.current;
+      const searchArea = document.getElementById(
+        "theActualSearchBarWithDropdownOpen"
+      );
       const tagsContainer = document.getElementById("dropdownTagsContainer");
-
       if (
-        searchInput &&
-        tagsContainer &&
-        !searchInput.contains(event.target) &&
-        !tagsContainer.contains(event.target)
+        // searchInput &&
+        // tagsContainer &&
+        !searchArea.contains(event.target)
+        // !tagsContainer.contains(event.target)
       ) {
         setDropdownOpen(false);
       }
@@ -57,8 +60,6 @@ export default function SearchBar() {
   useEffect(() => {
     setShowTagPills(activeTags.length > 0);
   }, [activeTags]);
-
-
 
   useEffect(() => {
     validateTags(activeTags);
@@ -153,6 +154,8 @@ export default function SearchBar() {
     return true;
   };
 
+
+
   const validateTags = (currentTags) => {
     if (currentTags.length === 8) {
       setInfo((prev) => ({
@@ -165,6 +168,10 @@ export default function SearchBar() {
     setInfo((prev) => ({ ...prev, tags: "" }));
     return true;
   };
+
+  useEffect(() => {
+    if (dropdownOpen) searchInputRef.current.focus();
+  }, [dropdownOpen]);
 
   useEffect(() => {
     if (queryParams !== searchInputRef.current.value) {
@@ -240,16 +247,18 @@ export default function SearchBar() {
                   onClick={() => {
                     searchInputRef.current.value = "";
                     handleUserInput({ target: { value: "" } });
+                    handleClearTags();
                   }}
                   className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
                 >
                   <i className="fa-solid fa-xmark" />
                 </button>
-                {showTagPills && (
-                  <div id="tagPillsContainer" className="flex border-amber-950 border-2 w-[50px] h-[50px]">
-
-                  </div>
-                )}
+                {/* {showTagPills && (
+                  <div
+                    id="tagPillsContainer"
+                    className="absolute bottom-[-60px] left-0 max-w-[60%] w-full flex border-amber-950 border-1 w-[50px] h-[50px]"
+                  ></div>
+                )} */}
               </div>
             )}
             {dropdownOpen && (
@@ -286,6 +295,7 @@ export default function SearchBar() {
                     onClick={() => {
                       searchInputRef.current.value = "";
                       handleUserInput({ target: { value: "" } });
+                      handleClearTags();
                     }}
                     className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
                   >
@@ -294,7 +304,7 @@ export default function SearchBar() {
                 </div>
                 <div
                   id="dropdownTagsContainer"
-                  className="w-full p-1 bg-white rounded-b-[20px] border-t-2 border-[#939AAA] border-collapse"
+                  className="w-full p-1 bg-white rounded-b-[20px] border-t-2 border-[#939AAA] border-collapse max-h-[110px] overflow-y-auto rounded-scrollbar"
                 >
                   {filteredTags.length === 0 ? (
                     <div className="border-t-[1px]" />
@@ -339,24 +349,38 @@ export default function SearchBar() {
         </div>
       </div>
 
-      <div id="containerForSelectedTagsAndClearButton">
-        <div id="selectedTagsContainer"></div>
-
+      {showTagPills && (
         <div
-          id="tagsResetButtonsContainer"
-          className="flex w-full max-w-md justify-between w-[30%]"
+          id="containerForSelectedTagsAndClearButton"
+          className="flex min-w-[350px] h-auto justify-between"
         >
-          <div id="clearButton" className="w-full flex justify-end relative">
-            <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
-            <button
-              onClick={handleClearTags}
-              className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
-            >
-              Clear Tags
-            </button>
+          <div
+            id="tagPillsContainer"
+            className="w-[70%] flex border-amber-950 border-1 w-[50px] h-[50px]"
+          >
+            <div className="bg-[#A9DEF9] h-[30px] w-[31%] rounded-r-full rounded-l-full relative text-sm pl-2 flex items-center ">
+              <button>
+                <i className="fa-solid fa-xmark absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]" />
+              </button>
+              {activeTags.length > 0 && activeTags[0].name}
+            </div>
+          </div>
+          <div
+            id="tagsResetButtonsContainer"
+            className="flex max-w-md w-[30%]"
+          >
+            <div id="clearTagsButton" className="w-full flex items-center justify-end relative">
+              <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
+              <button
+                onClick={handleClearTags}
+                className="h-[40px] w-full rounded-[20px] cursor-pointer text-[.8rem] font-bold focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+              >
+                Clear Tags
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div id="submitButton" className="w-[30%] flex justify-center">
         <button
