@@ -24,19 +24,18 @@ export default function ResultsContainer() {
     setSearchParams(params);
   };
 
-  // Keep page state in sync with URL changes
+  // Read URL changes and update state
   useEffect(() => {
     const page = searchParams.get("page");
     setActivePage(page ? parseInt(page) : 1);
   }, [searchParams]);
 
+  // Reset pagination on search changes
   useEffect(() => {
-    // Get current params
     const currentParams = new URLSearchParams(searchParams);
     const keywords = currentParams.get("keywords");
     const tags = currentParams.get("tags");
 
-    // Only reset pagination when search params change
     if ((keywords || tags) && searchParams.get("page") !== "1") {
       currentParams.delete("page");
       setSearchParams(currentParams);

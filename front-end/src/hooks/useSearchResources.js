@@ -95,15 +95,30 @@ export default function useSearchResources({ resources, tags, isFetching }) {
       urlUpdateTimer.current = setTimeout(() => {
         const params = new URLSearchParams(searchParams);
 
-        // Only add keywords/tags/page to URL if they exist
-        if (queryValue.keywords) params.set("keywords", queryValue.keywords);
-        if (queryValue.tags.length > 0) params.set("tags", queryValue.tags.join(","));
+        // Sync URL with current search state, clean up empty/unwanted params
+        if (queryValue.keywords) {
+          params.set("keywords", queryValue.keywords);
+        } else {
+          params.delete("keywords");
+        }
+        
+        if (queryValue.tags.length > 0) {
+          params.set("tags", queryValue.tags.join(","));
+        } else {
+          params.delete("tags");
+        }
 
-        // Update URL
-        setSearchParams(params);
+        // Only update URL if keywords/tags changed
+        const currentKeywords = searchParams.get("keywords") || "";
+        const currentTags = searchParams.get("tags") || "";
+        const newTags = queryValue.tags.join(",");
+
+        if (currentKeywords !== queryValue.keywords || currentTags !== newTags) {
+          setSearchParams(params);
+        } 
       }, 1000); // Same debounce as search
     }
-  }, [queryValue, location.pathname]); // Run when queryValue or location changes
+  }, [queryValue.keywords, queryValue.tags, location.pathname]); // Run when queryValue or location changes
 
   useEffect(() => {
     if (!isFetching.resources && !isFetching.tags) {
