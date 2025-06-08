@@ -49,10 +49,10 @@ export default function useSearchResources({ resources, tags, isFetching }) {
   useEffect(() => {
     const refactoredTags = activeTags.map(({ id }) => id);
     setQueryValue({
-      keywords: searchInputRef.current.value,
+      keywords: queryValue.keywords, // Use state instead of DOM ref
       tags: refactoredTags,
     });
-  }, [activeTags]);
+  }, [activeTags, queryValue.keywords]); // Add dependency
 
   useEffect(() => {
     // When URL params change, update queryValue to match new URL pararms
@@ -122,10 +122,11 @@ export default function useSearchResources({ resources, tags, isFetching }) {
 
   useEffect(() => {
     if (!isFetching.resources && !isFetching.tags) {
-      if (queryValue === null)
+      if (queryValue === null) {
         return setResults(() =>
           searchBy({ data: resources, keywords: "", tags: [] })
         );
+      }
 
       const { keywords, tags } = queryValue;
       return setResults(() => searchBy({ data: resources, keywords, tags }));
