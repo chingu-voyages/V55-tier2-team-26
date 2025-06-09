@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
-import "./SearchBarStyles.css"
+import "./SearchBarStyles.css";
 
 export default function SearchBar() {
   const [searchParams] = useSearchParams();
@@ -14,6 +14,7 @@ export default function SearchBar() {
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
   const [showTagPills, setShowTagPills] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const queryParams = searchParams.get("keywords");
 
   const {
@@ -21,6 +22,7 @@ export default function SearchBar() {
     results,
     searchInputRef,
     activeTags,
+    setActiveTags,
     searchOnPageload,
     handleUserInput: baseHandleUserInput,
     handleTagsInput: baseHandleTagsInput,
@@ -78,24 +80,35 @@ export default function SearchBar() {
       : tagStyles.inactiveTag;
 
   const handleUserInput = (e) => {
-    if (validateSearchText(e.target.value)) {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+
+    if (validateSearchText(newValue)) {
       baseHandleUserInput(e);
     }
   };
 
   const handleTagsInput = (e) => {
     const tagId = e.target.value;
+    const tagName = e.target.textContent;
 
-    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
-      baseHandleTagsInput(e);
-      return;
-    }
+    setActiveTags((prevTags) => {
+      if (prevTags.some((tag) => tag.id === tagId)) {
+        return prevTags.filter((tag) => tag.id !== tagId);
+      }
 
-    if (activeTags.length >= 8) {
-      return;
-    }
+      if (activeTags.length < 8) {
+        return [...prevTags, { id: tagId, name: tagName }];
+      }
 
+      return prevTags;
+    });
     baseHandleTagsInput(e);
+  };
+
+  const removeTag = (id) => {
+    const updatedTags = activeTags.filter((tag) => tag.id !== id);
+    setActiveTags(updatedTags);
   };
 
   const handleSubmit = (e) => {
@@ -154,8 +167,6 @@ export default function SearchBar() {
     return true;
   };
 
-
-
   const validateTags = (currentTags) => {
     if (currentTags.length === 8) {
       setInfo((prev) => ({
@@ -180,12 +191,19 @@ export default function SearchBar() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("activeTags updated: ", activeTags);
+  }, [activeTags]);
+
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] m-auto mt-4 mb-20 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
+      className="w-[90%] h-[260px] m-auto mt-4 mb-20 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
-      <div id="searchBarContainer" className="w-full flex justify-center">
+      <div
+        id="searchBarContainer"
+        className="w-full flex flex-col items-center justify-center"
+      >
         <div className="flex items-center relative min-w-[350px]">
           {errors.searchText && (
             <div
@@ -227,6 +245,7 @@ export default function SearchBar() {
                   ref={searchInputRef}
                   type="text"
                   placeholder="What are you looking for?"
+                  value={inputValue}
                   onChange={handleUserInput}
                   aria-label="Search resources"
                   aria-invalid={!!errors.searchText}
@@ -245,7 +264,8 @@ export default function SearchBar() {
                 <button
                   type="button"
                   onClick={() => {
-                    searchInputRef.current.value = "";
+                    // searchInputRef.current.value = "";
+                    setInputValue("");
                     handleUserInput({ target: { value: "" } });
                     handleClearTags();
                   }}
@@ -276,6 +296,7 @@ export default function SearchBar() {
                     ref={searchInputRef}
                     type="text"
                     placeholder="What are you looking for?"
+                    value={inputValue}
                     onChange={handleUserInput}
                     aria-label="Search resources"
                     aria-invalid={!!errors.searchText}
@@ -293,7 +314,8 @@ export default function SearchBar() {
                   <button
                     type="button"
                     onClick={() => {
-                      searchInputRef.current.value = "";
+                      // searchInputRef.current.value = "";
+                      setInputValue("");
                       handleUserInput({ target: { value: "" } });
                       handleClearTags();
                     }}
@@ -347,40 +369,47 @@ export default function SearchBar() {
             )}
           </Form>
         </div>
-      </div>
-
-      {showTagPills && (
-        <div
-          id="containerForSelectedTagsAndClearButton"
-          className="flex min-w-[350px] h-auto justify-between"
-        >
+        {showTagPills && !dropdownOpen && (
           <div
-            id="tagPillsContainer"
-            className="w-[70%] flex border-amber-950 border-1 w-[50px] h-[50px]"
+            id="containerForSelectedTagsAndClearButton"
+            className="flex min-w-[350px] h-auto justify-between m-1"
           >
-            <div className="bg-[#A9DEF9] h-[30px] w-[31%] rounded-r-full rounded-l-full relative text-sm pl-2 flex items-center ">
-              <button>
-                <i className="fa-solid fa-xmark absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]" />
-              </button>
-              {activeTags.length > 0 && activeTags[0].name}
+            <div
+              id="tagPillsContainer"
+              className="w-[70%] grid grid-cols-3 grid-rows-3 gap-1"
+            >
+              {activeTags.map((tag) => (
+                <div
+                  key={tag.id}
+                  className="bg-[#A9DEF9] h-[30px] rounded-[10px] relative text-[12px] pl-2 flex items-center justify-between"
+                >
+                  {tag.name}
+                  <button type="button" onClick={() => removeTag(tag.id)}>
+                    <i className="fa-solid fa-xmark cursor-pointer pr-2 text-black hover:text-[120%]" />
+                  </button>
+                </div>
+              ))}
             </div>
-          </div>
-          <div
-            id="tagsResetButtonsContainer"
-            className="flex max-w-md w-[30%]"
-          >
-            <div id="clearTagsButton" className="w-full flex items-center justify-end relative">
-              <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
-              <button
-                onClick={handleClearTags}
-                className="h-[40px] w-full rounded-[20px] cursor-pointer text-[.8rem] font-bold focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+            <div
+              id="tagsResetButtonsContainer"
+              className="flex max-w-md w-[30%]"
+            >
+              <div
+                id="clearTagsButton"
+                className="w-full flex items-center justify-end relative"
               >
-                Clear Tags
-              </button>
+                <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
+                <button
+                  onClick={handleClearTags}
+                  className="h-[40px] w-full rounded-[20px] cursor-pointer text-[.8rem] font-bold focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+                >
+                  Clear Tags
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div id="submitButton" className="w-[30%] flex justify-center">
         <button

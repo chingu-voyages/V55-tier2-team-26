@@ -34,6 +34,7 @@ export default function useSearchResources({ resources, isFetching }) {
   };
 
   const clearAllTags = () => {
+    console.log("ActiveTags before clearing: ", activeTags);
     setActiveTags([]);
     searchInputRef.current.focus();
   };
