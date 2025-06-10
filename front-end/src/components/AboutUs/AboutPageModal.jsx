@@ -10,7 +10,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
 
   return (
     <dialog 
-      className="w-[90%] max-w-[500px] h-[90%] max-h-[800px] p-0 m-auto backdrop:bg-black/50 transition-all duration-200 ease-out"
+      className="w-[430px] sm:w-[768px] lg:w-[1280px] h-[1785px] lg:h-[800px] max-w-[90vw] max-h-[90vh] p-0 m-auto backdrop:bg-black/50 transition-all duration-200 ease-out"
       onClick={handleBackdropClick} 
       onClose={handleCloseModal}
       {...props}
@@ -32,11 +32,11 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
           alt="Resourcery logo" 
           className="h-auto w-1/2 max-w-[200px] mx-auto mt-3"
         />
-        <h1 className="text-center font-syne font-semibold text-2xl">Welcome to Resourcery</h1>
+        <h1 className="text-center font-syne font-semibold text-xl">Welcome to Resourcery</h1>
         <hr className="border-t-4 border-[#998675] mt-2 mb-4 ml-4 mr-4 rounded"/>
         <p className="mb-5 ml-4 mr-4 font-inter font-light">In today's fast-paced tech world, finding the right resource can feel like looking for a needle in a haystack. That's why we built Resourcery, a tool created by and for developers in the Chingu community.</p>
         <p className="mb-5 ml-4 mr-4 font-inter font-light">Here, you can search through hand-picked technical resources shared in the #resource-treasures channel on Discord. Whether you're diving into JavaScript, exploring DevOps, or learning more about AI, Resourcery helps you find exactly what you need to level up.</p>
-        <h2 className="text-center font-syne font-medium mt-10 mb-4 text-2xl">Features</h2>
+        <h2 className="text-center font-syne font-medium mt-10 mb-4 text-xl">Features</h2>
         <ul>
           <li className="flex items-start gap-3 mb-2 ml-4 mr-4 font-inter font-light">
             <FaWandMagicSparkles className="mt-1 flex-shrink-0"/> 
@@ -57,7 +57,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
       </section>
 
       <section className="px-4 bg-[#EDE1D4]">
-        <h3 className="text-center font-syne font-medium pt-5 mt-10 text-2xl">Credits</h3>
+        <h3 className="text-center font-syne font-medium pt-5 mt-10 text-xl">Credits</h3>
         <hr className="border-t-4 border-[#998675] mt-2 mb-4 ml-4 mr-4 rounded"/>
         
         <div className="credits-grid grid grid-cols-2 gap-4 px-6 pb-5 [&_h4]:font-medium [&_h4]:mb-2">
