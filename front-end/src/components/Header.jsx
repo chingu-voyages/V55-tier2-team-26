@@ -52,7 +52,7 @@ const Header = () => {
         />
       </div>
       <div className="text-center">
-        <h1 className="font-sans font-normal text-base sm:text-lg md:text-xl text-[#222222]">{getCurrentDateUTC()}</h1>
+        <h1 className="font-inter font-normal text-base sm:text-lg md:text-xl text-[#222222]">{getCurrentDateUTC()}</h1>
       </div>
       <div></div>
     </div>
