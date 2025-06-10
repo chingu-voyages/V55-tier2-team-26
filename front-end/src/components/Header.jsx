@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const getCurrentDateUTC = () => {
     const now = new Date();
     const year = now.getUTCFullYear();
@@ -36,17 +39,22 @@ const Header = () => {
     return `${monthName()} ${day}, ${year}`;
   };
 
+  const handleHomeClick = () => {
+    navigate("/");
+  };
+
   return (
-    <div className="h-16 flex items-end text-center justify-between pb-2 bg-[#998675] t-[#F9F5FF] text-[14px]">
-      {/* <div className="w-40"> */}
-        {/* <h1>[App Name]</h1> */}
-      {/* </div> */}
-      <div className="w-full text-[16px] sm:text-[24px]">
-        <h1>{getCurrentDateUTC()}</h1>
+    <div className="h-12 sm:h-14 md:h-16 grid grid-cols-3 items-center bg-[#998675]">
+      <div className="flex items-end ml-3 sm:ml-4 md:ml-6">
+        <FaHome 
+          className="text-[#2E4057] text-2xl sm:text-3xl md:text-4xl cursor-pointer hover:text-[#222222] transition-colors"
+          onClick={handleHomeClick}
+        />
       </div>
-      {/* <div className="w-40"> */}
-        {/* <h1>[Logo]</h1> */}
-      {/* </div> */}
+      <div className="text-center">
+        <h1 className="font-inter font-normal text-base sm:text-lg md:text-xl text-[#222222]">{getCurrentDateUTC()}</h1>
+      </div>
+      <div></div>
     </div>
   );
 };
