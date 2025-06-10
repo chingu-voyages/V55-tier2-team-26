@@ -13,7 +13,6 @@ export const ResourcesContext = createContext({
   isFetching: {},
   error: null,
   searchInputRef: {},
-  searchOnPageload: () => {},
   handleUserInput: () => {},
   handleTagsInput: () => {},
   clearAllTags: () => {},
@@ -33,7 +32,6 @@ export default function ResourceContextProvider({ children }) {
   const {
     results,
     searchInputRef,
-    searchOnPageload,
     handleUserInput,
     handleTagsInput,
     clearAllTags,
@@ -48,7 +46,6 @@ export default function ResourceContextProvider({ children }) {
     setActiveTags,
     results,
     searchInputRef,
-    searchOnPageload,
     handleUserInput,
     handleTagsInput,
     clearAllTags,

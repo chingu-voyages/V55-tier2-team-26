@@ -1,29 +1,29 @@
-import { Form, useSearchParams } from "react-router";
+import { Form, useSearchParams, useNavigate, useLocation } from "react-router";
 import { useContext, useState, useEffect } from "react";
-
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
 import "./SearchBarStyles.css";
 
 export default function SearchBar() {
-  const [searchParams] = useSearchParams();
-
+  const [, setSearchParams] = useSearchParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
   const [showTagPills, setShowTagPills] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const queryParams = searchParams.get("keywords");
+  //const queryParams = searchParams.get("keywords");
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   const {
     tags,
-    results,
     searchInputRef,
     activeTags,
     setActiveTags,
-    searchOnPageload,
+    //searchOnPageload,
     handleUserInput: baseHandleUserInput,
     handleTagsInput: baseHandleTagsInput,
     clearAllTags,
@@ -112,6 +112,8 @@ export default function SearchBar() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -122,16 +124,16 @@ export default function SearchBar() {
       return;
     }
 
-    const searchData = {
-      keywords: currentSearchText,
-      tags: tagIds,
-    };
+    // Update URL with both keywords and tags
+    const searchParams = new URLSearchParams();
+    if (currentSearchText) searchParams.set("keywords", currentSearchText);
+    if (tagIds.length > 0) searchParams.set("tags", tagIds.join(","));
 
-    console.log("Search data:", searchData);
-    console.log("Search results:", results);
+    // Navigate to search page with params
+    navigate(`/search?${searchParams.toString()}`);
   };
 
-  const handleClear = () => {
+  const handleReset = () => {
     searchInputRef.current.value = "";
     baseHandleUserInput({
       target: {
@@ -141,6 +143,11 @@ export default function SearchBar() {
 
     clearAllTags();
     setErrors({ searchText: "", tags: "" });
+
+    // Clears URL params if on the search page
+    if (location.pathname === "/search") {
+      setSearchParams({});
+    }
   };
 
   const handleClearTags = () => {
@@ -184,12 +191,12 @@ export default function SearchBar() {
     if (dropdownOpen) searchInputRef.current.focus();
   }, [dropdownOpen]);
 
-  useEffect(() => {
-    if (queryParams !== searchInputRef.current.value) {
-      searchInputRef.current.value = queryParams;
-      searchOnPageload(queryParams);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (queryParams !== searchInputRef.current.value) {
+  //     searchInputRef.current.value = queryParams;
+  //     searchOnPageload(queryParams);
+  //   }
+  // }, []);
 
   useEffect(() => {
     console.log("activeTags updated: ", activeTags);
@@ -228,11 +235,8 @@ export default function SearchBar() {
           )}
 
           <Form
-            id="searchTermForm"
-            action={"/search"}
-            className="w-full flex dropdown"
+            className="w-full flex"
             onSubmit={handleSubmit}
-            method="get"
           >
             {!dropdownOpen && (
               <div
@@ -262,14 +266,16 @@ export default function SearchBar() {
                   // aria-label="Select tags to filter results"
                 />
                 <button
-                  type="button"
+                  type="button" 
                   onClick={() => {
                     // searchInputRef.current.value = "";
                     setInputValue("");
                     handleUserInput({ target: { value: "" } });
                     handleClearTags();
                   }}
+                  //onClick={handleReset}
                   className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                  aria-label="Reset search"
                 >
                   <i className="fa-solid fa-xmark" />
                 </button>
@@ -319,7 +325,9 @@ export default function SearchBar() {
                       handleUserInput({ target: { value: "" } });
                       handleClearTags();
                     }}
+                    //onClick={handleReset}
                     className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                    aria-label="Reset search"
                   >
                     <i className="fa-solid fa-xmark" />
                   </button>
@@ -343,7 +351,6 @@ export default function SearchBar() {
                           onClick={(e) => {
                             e.preventDefault();
                             if (isDisabled) return;
-                            console.log("Selected tag ID:", id);
                             handleTagsInput({
                               target: {
                                 value: id,
