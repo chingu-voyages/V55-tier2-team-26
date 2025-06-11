@@ -1,5 +1,7 @@
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import CloseModalIcon from "./CloseModalIcon";
+import aboutModalImg from "../../../images/about-modal.jpg"
+import logoPlaceholderImg from "../../../images/logo-placeholder.png"
 
 export default function AboutPageModal({ handleCloseModal, ...props }) {
   const handleBackdropClick = (e) => {
@@ -17,7 +19,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
     >
       <section className="relative">
         <img 
-          src="../images/about-modal.jpg" 
+          src={aboutModalImg} 
           alt="Two blue chairs in front of a bookshelf full of books" 
           className="h-auto w-full"
         />
@@ -28,7 +30,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
 
       <section className="px-4">
         <img 
-          src="../images/logo-placeholder.png" 
+          src={logoPlaceholderImg}
           alt="Resourcery logo" 
           className="h-auto w-1/2 max-w-[200px] mx-auto mt-3"
         />
