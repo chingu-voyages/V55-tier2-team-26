@@ -27,10 +27,11 @@ export default function ResourceContextProvider({ children }) {
     tags: true,
   });
 
-  const [activeTags, setActiveTags] = useState([]);
+  // const [activeTags, setActiveTags] = useState([]);
 
   const {
     results,
+    activeTags,
     searchInputRef,
     handleUserInput,
     handleTagsInput,
@@ -43,7 +44,7 @@ export default function ResourceContextProvider({ children }) {
     isFetching,
     error,
     activeTags,
-    setActiveTags,
+    
     results,
     searchInputRef,
     handleUserInput,
