@@ -1,9 +1,7 @@
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import CloseModalIcon from "./CloseModalIcon";
-import aboutModalImg from "../../../images/about-modal.jpg"
-import logoPlaceholderImg from "../../../images/logo-placeholder.png"
-import aboutModalImg from "../../../images/about-modal.jpg"
-import logoPlaceholderImg from "../../../images/logo-placeholder.png"
+import aboutModalImg from "../../../images/about-modal.jpg";
+import logoImg from "../../../images/logo.png";
 
 export default function AboutPageModal({ handleCloseModal, ...props }) {
   const handleBackdropClick = (e) => {
@@ -33,7 +31,7 @@ export default function AboutPageModal({ handleCloseModal, ...props }) {
             <CloseModalIcon onClose={handleCloseModal} tailwindFillColor="fill-[#222222]"/>
           </span>
           <img 
-            src={logoPlaceholderImg}
+            src={logoImg}
             alt="Resourcery logo" 
             className="h-auto w-1/2 max-w-[200px] mx-auto mt-3"
           />

@@ -1,4 +1,4 @@
-import logoImg from "../../images/logo-placeholder.png"
+import logoImg from "../../images/logo.png"
 
 export default function HeroArea() {
   return (
