@@ -52,7 +52,7 @@ By following these steps, you should have a local instance of DevEx Tools runnin
 
 ### Scrum Masters:
 - Mikala Franks — [Github](https://github.com/mikalafranks)|[LinkedIn](https://www.linkedin.com/in/mikala-franks-8b21b52a3/)
-- Oghenerukevwe Egbaivwie — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Oghenerukevwe Egbaivwie — [Github](https://github.com/Ruky-Ericson)|[LinkedIn](https://www.linkedin.com/in/oghenerukevwe-egbaivwie/)
 
 ### UI/UX Designer: 
 - Jessica Hackett — [Github](https://github.com/mooglemoxie0018)|[LinkedIn](https://www.linkedin.com/in/jessica-hackett-6725a4325/)
