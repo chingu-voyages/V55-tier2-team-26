@@ -55,7 +55,8 @@ const AIChatBot = () => {
     };
   }, []);
 
-  const fetchData = async (input) => {
+  const fetchData = async (input="") => {
+    console.log(input)
     const userMessage = { role: "user", parts: [{ text: input }] };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
