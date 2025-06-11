@@ -35,14 +35,14 @@ export default function ResultsPagination({
     <Pagination className={className}>
       <PaginationContent>
         <PaginationItem>
-          {activePage > 1 ? (
-            <PaginationPrevious
-              className={"hover:bg-[#222222] hover:text-white"}
-              onClick={(e) =>
-                activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
-              }
-            />
-          ) : null}
+          <PaginationPrevious
+            className={`hover:bg-[#222222] hover:text-white ${
+              activePage <= 1 ? "pointer-events-none text-[#505050]" : null
+            }`}
+            onClick={(e) =>
+              activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
+            }
+          />
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
@@ -106,16 +106,14 @@ export default function ResultsPagination({
           {activePage + 1 >= maxPages ? null : <PaginationEllipsis />}
         </PaginationItem>
         <PaginationItem>
-          {activePage < maxPages ? (
-            <PaginationNext
-              onClick={(e) =>
-                activePage >= maxPages
-                  ? e.preventDefault()
-                  : onClick(activePage + 1)
-              }
-              className={"hover:bg-[#222222] hover:text-white"}
-            />
-          ) : null}
+          <PaginationNext
+            onClick={(e) =>
+              activePage >= maxPages
+                ? e.preventDefault()
+                : onClick(activePage + 1)
+            }
+            className={`hover:bg-[#222222] hover:text-white ${activePage >= maxPages ? "pointer-events-none text-[#505050]" : null}`}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
