@@ -19,9 +19,9 @@ function getCards(results, activePage) {
   ));
 }
 
-export default function Results({ results, activePage }) {
+export default function Results({ results, activePage, className }) {
   return (
-    <div className="grid grid-cols-1 border-6 rounded-sm gap-y-10 max-sm:p-2 md:p-5 lg:p-">
+    <div className={`grid grid-cols-1 gap-y-10 overflow-y-scroll overflow-x-hidden max-sm:px-5 md:px-40 xl:px-90 ${className}`}>
       {getCards(results, activePage)}
     </div>
   );
