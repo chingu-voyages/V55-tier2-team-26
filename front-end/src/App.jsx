@@ -25,7 +25,7 @@ export default function App() {
         handleCloseModal={handleCloseModal}
       />
       <Header />
-      <MainContainer>
+      <MainContainer className={""}>
         <Outlet />
         <AIChatBot />
       </MainContainer>

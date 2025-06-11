@@ -2,6 +2,8 @@ import { FaWandMagicSparkles } from "react-icons/fa6";
 import CloseModalIcon from "./CloseModalIcon";
 import aboutModalImg from "../../../images/about-modal.jpg"
 import logoPlaceholderImg from "../../../images/logo-placeholder.png"
+import aboutModalImg from "../../../images/about-modal.jpg"
+import logoPlaceholderImg from "../../../images/logo-placeholder.png"
 
 export default function AboutPageModal({ handleCloseModal, ...props }) {
   const handleBackdropClick = (e) => {

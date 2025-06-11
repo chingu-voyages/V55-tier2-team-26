@@ -1,2 +1,3 @@
-back-end/config/dev.env
+back-end/config/
 /back-end/node_modules
+/front-end/config
