@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import Message from "./Message";
 import "./styles.css";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
