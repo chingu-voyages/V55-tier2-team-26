@@ -15,7 +15,6 @@ router.post("/chatbotai/greeting", verification, async (req, res) => {
     res.set({ "Content-Type": "application/json" });
 
     const botResponse = await botGreeting();
-
     if (Boolean(isDevEnv)) {
       return setTimeout(() => {
         res.status(200).json({ ...botResponse });
@@ -36,7 +35,6 @@ router.post("/chatbotai", verification, async (req, res) => {
       req.body.userResponse,
       req.body.chatHistory
     );
-
     if (Boolean(isDevEnv)) {
       return setTimeout(() => {
         res.status(200).json({ ...botResponse });
