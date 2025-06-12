@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 const Footer = ({ handleOpenModal }) => {
   return (
     <>
-      <div className="h-120 w-full flex flex-col items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:h-70 sm:text-[14px] md:flex-row md:text-[12px] md:h-80 lg:text-[16px] xl:text-[18px]">
+      <div className="h-20 w-full flex items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:text-[14px] md:flex-row md:text-[12px] lg:text-[16px] xl:h-80 xl:text-[18px]">
         <div className="flex items-center text-center ml-0 sm:ml-10 md:ml-2 md:w-40 lg:w-60 xl:ml-5 2xl:ml-10">
           <a
             href={"https://github.com/chingu-voyages/V55-tier2-team-26"}
@@ -14,7 +14,7 @@ const Footer = ({ handleOpenModal }) => {
             <FaGithub className="text-[50px] sm:text-[50px] md:text-4xl" />
           </a>
         </div>
-        <div className="w-80 flex flex-col items-top text-left justify-between sm:mr-5 sm:ml-5 sm:w-full sm:flex-row md:w-160 md:mr-5 lg:w-200 lg:mr-10 xl:w-240 xl:mr-5 2xl:w-260 2xl:mr-10">
+        <div className="hidden xl:block items-top text-left justify-between xl:w-full xl:flex xl:flex-row xl:w-240 xl:mr-5 2xl:w-260 2xl:mr-10">
           <div>
             <h1 className="underline text-[9px] mb-2 sm:mb-4 sm:text-[10px] md:text-[9px] lg:text-[12px]">
               Scrum Masters
@@ -102,8 +102,8 @@ const Footer = ({ handleOpenModal }) => {
             </h1>
             <div className="flex items-center text-center">
               <p className="mb-2 mr-2 sm:mb-3">Bryan Hoyem</p>
-              <a 
-                href={"https://github.com/bhoyem"} 
+              <a
+                href={"https://github.com/bhoyem"}
                 className="mb-3 mr-2"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -140,8 +140,8 @@ const Footer = ({ handleOpenModal }) => {
             </div>
             <div className="flex items-center text-center">
               <p className="mb-2 mr-2 sm:mb-3">Matthew Neie</p>
-              <a 
-                href={"https://github.com/MatthewNeie"} 
+              <a
+                href={"https://github.com/MatthewNeie"}
                 className="mb-3 mr-2"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -179,9 +179,9 @@ const Footer = ({ handleOpenModal }) => {
           </div>
         </div>
         <div className="flex flex-col items-center text-center">
-          <button 
+          <button
             onClick={handleOpenModal}
-            className="hover:cursor-pointer whitespace-pre-line"
+            className="hover:cursor-pointer whitespace-pre-line font-bold"
           >
             About{"\n"}Resourcery
           </button>

@@ -21,7 +21,7 @@ function getCards(results, activePage) {
 
 export default function Results({ results, activePage }) {
   return (
-    <div className="grid grid-cols-1 border-6 rounded-sm gap-y-10 max-sm:p-2 md:p-5 lg:p-">
+    <div className="flex flex-col items-center gap-y-10 max-sm:p-2 md:p-5 lg:p-">
       {getCards(results, activePage)}
     </div>
   );

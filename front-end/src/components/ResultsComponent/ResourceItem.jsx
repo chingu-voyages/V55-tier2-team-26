@@ -9,7 +9,11 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
       return "No URL";
     }
     const match = text.match(/https?:\/\/[^\s]+/);
-    return match ? match[0] : "No URL Provided";
+    const truncate = (url) => {
+      if (!url) return "";
+      return url.length > 10 ? url.substring(0, 40) + "..." : url;
+    };
+    return truncate(match) ? truncate(match[0]) : "No URL Provided";
   };
 
   const tagNames = (item) => {
@@ -28,11 +32,11 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
 
   return (
     <>
-      <div className="p-5 border-b-1">
+      <div className="w-80 sm:w-180 p-5 border-1 border-black bg-white">
         <div className="mb-2">
           <a
             href={extractUrl(url)}
-            className="text-[20px] mb-2 underline cursor-pointer md:text-[26px]"
+            className="text-[16px] mb-2 underline cursor-pointer sm:text-[20px] md:text-[24px] lg:text-[26px]"
           >
             {name}
           </a>
@@ -40,23 +44,31 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
         <div className="mb-2">
           <a
             href={extractUrl(url)}
-            className="text-[14px] mb-2 text-blue-600 cursor-pointer md:text-[16px]"
+            className="text-[12px] mb-2 text-blue-600 cursor-pointer sm:text-[14px] md:text-[14px] lg:text-[16px]"
           >
             {extractUrl(url)}
           </a>
         </div>
+
         <div>
-          <h1 className="text-[14px] mb-2 md:text-[16px]">
-            {tagNames(appliedTags)}
+          <h1 className="text-[12px] mb-2 sm:text-[14px] md:text-[14px] lg:text-[16px]">
+            {author}
           </h1>
         </div>
         <div>
-          <h1 className="text-[14px] mb-2 md:text-[16px]">{author}</h1>
-        </div>
-        <div>
-          <h1 className="text-[14px] mb-2 md:text-[16px]">
+          <h1 className="text-[12px] mb-2 sm:text-[14px] md:text-[14px] lg:text-[16px]">
             {resourceDate(createdAt)}
           </h1>
+        </div>
+        <div>
+          <div className="flex flex-row text-[12px] mb-2 sm:text-[14px] md:text-[14px] lg:text-[16px]">
+            {/* {tagNames(appliedTags)} */}
+            {tagNames(appliedTags).map((i, index) => (
+              <div className="mr-2 pl-2 pr-2 rounded-lg bg-blue-200">
+                <p key={index}>{i}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
