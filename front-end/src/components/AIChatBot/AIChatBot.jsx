@@ -7,8 +7,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HourglassFullIcon from "@mui/icons-material/HourglassFull";
-import ScryerBackground from "../../images/scryer-background.PNG";
-import ScryerImg from "../../images/scryer.png";
+import ScryerBackground from "../../../images/scryer-background.PNG";
+import ScryerImg from "../../../images/scryer.png";
 
 const AIChatBot = () => {
   const [isFetchingApi, setIsFetchingApi] = useState(false);
