@@ -10,6 +10,7 @@ import HourglassFullIcon from "@mui/icons-material/HourglassFull";
 import ScryerImg from "../../../images/scryer-background.PNG";
 
 const AIChatBot = () => {
+  const [isFetchingApi, setIsFetchingApi] = useState(false);
   const [input, setInput] = useState();
   const [responseText, setResponseText] = useState(null);
   const [messages, setMessages] = useState(() => {
@@ -22,8 +23,19 @@ const AIChatBot = () => {
   const messageRef = useRef(null);
 
   useEffect(() => {
+    const waitForBotResponse = async () => {
+      try {
+        setIsFetchingApi(true);
+        const response = await getBotGreeting();
+        setMessages(response);
+        setIsFetchingApi(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     if (messages.length === 0) {
-      getBotGreeting().then((res) => setMessages(res));
+      waitForBotResponse();
     }
 
     localStorage.setItem("messages", JSON.stringify(messages));
@@ -43,11 +55,13 @@ const AIChatBot = () => {
     };
   }, []);
 
-  const fetchData = async (input) => {
+  const fetchData = async (input="") => {
+    console.log(input)
     const userMessage = { role: "user", parts: [{ text: input }] };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
     try {
+      setIsFetchingApi(true);
       const savedLocalHistory = JSON.parse(localStorage.getItem("messages"));
       const responseObj = await sendChatResponse(input, savedLocalHistory);
       const resultText = responseObj.botResponse;
@@ -67,6 +81,7 @@ const AIChatBot = () => {
       //const aiResponse = { sender: "ai", text: resultText };
       //setMessages((prev) => [...prev, aiResponse]);
       setMessages(chatHistory);
+      setIsFetchingApi(false);
       return resultText;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -137,6 +152,7 @@ const AIChatBot = () => {
           {/* <div className="mt-4 flex flex-row items-center justify-center align-center"> */}
           <div className="input-wrapper w-[400px]">
             <input
+              disabled={isFetchingApi}
               className="w-[290px] h-12 p-2 bg-white rounded-4xl"
               placeholder="Ask the Scryer..."
               value={input}
@@ -144,24 +160,42 @@ const AIChatBot = () => {
               onKeyDown={handleKeyDown}
             />
             <button
-              className="mr-11 text-[10px] h-16 text-black cursor-pointer"
+              className={`mr-11 text-[10px] h-16 text-black`}
               onClick={() => {
                 setInput("");
               }}
             >
-              <ClearIcon />
+              <ClearIcon
+                className={`${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-20"
+                    : "hover:cursor-pointer"
+                }`}
+              />
             </button>
             <button
-              className="mr-4 text-[16px] h-16 text-black cursor-pointer"
+              disabled={isFetchingApi}
+              className={`mr-4 text-[16px] h-16`}
               onClick={() => {
                 fetchData(input);
               }}
             >
-              <ChevronRightIcon />
+              <ChevronRightIcon
+                className={`${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-20"
+                    : "hover:cursor-pointer"
+                }`}
+              />
             </button>
           </div>
           <button
-            className="border-2 p-2 text-[14px] mb-2 cursor-pointer"
+            disabled={isFetchingApi}
+            className={`border-2 p-2 text-[14px] mb-2 ${
+              isFetchingApi
+                ? "hover:cursor-progress contrast-50"
+                : "hover:cursor-pointer"
+            }`}
             onClick={() => {
               handleClearMessages();
             }}

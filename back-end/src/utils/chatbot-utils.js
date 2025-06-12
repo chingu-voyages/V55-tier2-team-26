@@ -25,28 +25,6 @@ const makeReactFileToBinaryContext = async (filename) => {
   return contextObj;
 };
 
-const readHistoryFile = async () => {
-  try {
-    const filePath = resolve("./src/dummyDB/history.json");
-    const content = await fs.readFile(filePath, { encoding: "utf8" });
-
-    return JSON.parse(content);
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-const writeHistoryFile = async (newHistory) => {
-  try {
-    const filePath = resolve("./src/dummyDB/history.json");
-    const historyJson = JSON.stringify(newHistory, null, "\t");
-
-    await fs.writeFile(filePath, historyJson, { encoding: "utf8" });
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
 const isFirstTimeUsersInteraction = async () => {
   try {
     const filePath = resolve("./src/dummyDB/history.json");
