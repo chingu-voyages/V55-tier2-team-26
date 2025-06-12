@@ -1,14 +1,14 @@
 .chat-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 80px;
+  right: -20px;
   cursor: pointer;
   z-index: 1000;
 }
 
 .chat-modal {
   position: fixed;
-  bottom: 20px;
+  bottom: 60px;
   right: 20px;
   z-index: 1000;
   display: flex;
@@ -43,14 +43,15 @@
 }
 
 .message.user .bubble {
-  background-color: #007bff;
-  color: white;
+  background-color: white;
+  border: 1px black solid;
+  color: black;
   margin-bottom: 8px;
 }
 
 .message.ai .bubble {
-  background-color: #e4e6eb;
-  color: black;
+  background-color: #51a3fa;
+  color: white;
   margin-bottom: 8px;
 }
 
@@ -90,4 +91,8 @@
   border: none;
   background: transparent;
   cursor: pointer;
+}
+
+.placeholder-italic::placeholder {
+  font-style: italic;
 }

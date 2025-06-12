@@ -4,9 +4,11 @@ import "./styles.css";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import { sendChatResponse, getBotGreeting } from "../../utils/gemini-api-utils";
 import ClearIcon from "@mui/icons-material/Clear";
+import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HourglassFullIcon from "@mui/icons-material/HourglassFull";
-import ScryerImg from "../../../images/scryer-background.PNG";
+import ScryerBackground from "../../images/scryer-background.PNG";
+import ScryerImg from "../../images/scryer.png";
 
 const AIChatBot = () => {
   const [isFetchingApi, setIsFetchingApi] = useState(false);
@@ -103,18 +105,20 @@ const AIChatBot = () => {
       {!showChat ? (
         <div className="chat-button flex item-center justify-center">
           <button
-            className="p-2 w-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
+            className="p-2 w-[120px] h-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
+            style={{ backgroundImage: `url(${ScryerImg})` }}
             onClick={() => {
               setShowChat(true);
             }}
           >
             AI Helper
           </button>
+          {/* <ScryerImg /> */}
         </div>
       ) : null}
       {!showChat ? null : (
-        <div className="chat-modal w-[400px] flex flex-col items-center justify-center border-2 border-gray-400 bg-[#998675] rounded-lg">
-          <div className="w-[400px] h-[40px] p-4 flex flex-row align-center items-center justify-between">
+        <div className="chat-modal w-[300px] md:w-[400px] flex flex-col items-center justify-center border-2 border-gray-400 bg-[#998675] rounded-lg">
+          <div className="w-[300px] md:w-[400px] h-[40px] p-4 flex flex-row align-center items-center justify-between">
             <button
               className="w-[80px] flex text-[24px] text-black cursor-pointer rounded-lg"
               onClick={() => setShowChat(false)}
@@ -124,13 +128,26 @@ const AIChatBot = () => {
             <h1 className="w-[120px] flex text-center items-center justify-center font-bold text-[18px]">
               The Scryer
             </h1>
-            <h1 className="w-[80px] flex items-center align-center justify-end">
-              <HourglassFullIcon className="" />
+            <h1 className="w-[80px] flex items-center align-center justify-end group">
+              <button
+                className={`fa fa-solid fa-broom ${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-50"
+                    : "hover:cursor-pointer"
+                }`}
+                disabled={isFetchingApi}
+                onClick={() => {
+                  handleClearMessages();
+                }}
+              />
+              <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 text-sm text-white bg-[#2E4057] rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                Clear Chat History
+              </div>
             </h1>
           </div>
           <div
-            className="overflow-y-auto h-80 p-4 w-[398px] mt-2 bg-cover"
-            style={{ backgroundImage: `url(${ScryerImg})` }}
+            className="overflow-y-auto h-80 p-4 w-[298px] md:w-[398px] mt-2 bg-cover"
+            style={{ backgroundImage: `url(${ScryerBackground})` }}
           >
             {messages.map((msg, index) => {
               const isLast = index === messages.length - 1;
@@ -149,38 +166,37 @@ const AIChatBot = () => {
             {loading && <LoadingIndicator />}
           </div>
           {/* <div className="mt-4 flex flex-row items-center justify-center align-center"> */}
-          <div className="input-wrapper w-[400px]">
+          <div className="input-wrapper w-[300px] md:w-[400px]">
             <input
+              placeholder="Ask the Scryer"
+              className="placeholder-italic w-[290px] h-10 p-2 bg-white rounded-4xl"
               disabled={isFetchingApi}
-              className="w-[290px] h-12 p-2 bg-white rounded-4xl"
-              placeholder="Ask the Scryer..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            <button
-              className={`mr-11 text-[10px] h-16 text-black`}
+            {/* <button
+              className="mr-11 text-[10px] h-16 text-black cursor-pointer"
               onClick={() => {
                 setInput("");
               }}
             >
-              <ClearIcon
-                className={`${
+              <ClearIcon className={`${
                   isFetchingApi
                     ? "hover:cursor-progress contrast-20"
                     : "hover:cursor-pointer"
-                }`}
-              />
-            </button>
+                }`}/>
+            </button> */}
             <button
+              className="flex items-center mr-3 text-black"
               disabled={isFetchingApi}
-              className={`mr-4 text-[16px] h-16`}
               onClick={() => {
                 fetchData(input);
               }}
             >
-              <ChevronRightIcon
-                className={`${
+              <ExpandCircleDownIcon
+                fontSize="large"
+                className={`rotate-270 text-[#2E4057] hover:text-blue-400 ${
                   isFetchingApi
                     ? "hover:cursor-progress contrast-20"
                     : "hover:cursor-pointer"
@@ -188,19 +204,6 @@ const AIChatBot = () => {
               />
             </button>
           </div>
-          <button
-            disabled={isFetchingApi}
-            className={`border-2 p-2 text-[14px] mb-2 ${
-              isFetchingApi
-                ? "hover:cursor-progress contrast-50"
-                : "hover:cursor-pointer"
-            }`}
-            onClick={() => {
-              handleClearMessages();
-            }}
-          >
-            clear chat history
-          </button>
         </div>
       )}
     </div>
