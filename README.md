@@ -1,8 +1,12 @@
-# Our App Name
+# Resourcery
+![Resourcery](./front-end/images/logo-placeholder.png)
 
-Our App Name Description... Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. 
+# 💻 Overview
 
-## Features
+Resoucery is...
+
+
+# 📲 Features
 
 ***Project Name*** includes the following utilities:
 
