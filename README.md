@@ -1,58 +1,67 @@
-# Our App Name
+# Resourcery
+<img src="./front-end/images/resourcery_logo.png" alt="resourcery logo">
 
-Our App Name Description... Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. 
+# 💻 Overview
 
-## Features
+***Resourcery*** is an app built with React that assists software development professionals by simplifying how they find high-quality learning resources at [Chingu](https://www.chingu.com). 
+This saves them time and helps them reach their learning goals faster. With Resourcery, learning becomes more focused, efficient, and tailored, making it the go-to tool for continuous growth in the Chingu community.
 
-***Project Name*** includes the following utilities:
 
-- **Feature 1:** Feature Description.
+# 📲 Features
 
-More about our features... Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. 
+***Resourcery*** includes the following utilities:
 
-## App Experience
+- **Feature 1:** Search bar with filter options.
+- **Feature 2:** Search results with pagination.
+- **Feature 3:** Clear and reset buttons for ease of search refinement.
+- **Feature 4:** Landing page with header, footer, and current date.
+- **Feature 5:** AI chat popup utilizing Google Gemini API to provide additional assistance when needed.
 
-Visit ***Our app name*** online [here](https://github.com/chingu-voyages/v55-tier2-team-26) to experience the tools firsthand. Below, you will find screenshots of ***our app*** page.
-
-![Our App Feature or page Example ](https://media.tenor.com/sbfBfp3FeY8AAAAj/oia-uia.gif)
-
-# Tech Stack
+#  🧰  Tech Stack
 
 - React
 - Vite
 - Tailwind CSS
-- Google Gemini API (maybe...)
+- Google Gemini API
 
-## Getting Started
+#  🌐 App Experience
 
-Follow these steps to get ***our app*** running on your local machine:
+***Resourcery*** is deployed here via Netlify: [Resourcery](https://celebrated-bienenstitch-a518bd.netlify.app/)
 
-1. **Clone the repository:**
+[![Resourcery](./front-end/images/Screenshot-landing-page.png)](https://celebrated-bienenstitch-a518bd.netlify.app/)
 
-   Use the following command to clone the project repository to your local system: 
+The repository is also available in GitHub here: [GitHub](https://github.com/chingu-voyages/v55-tier2-team-26)
+
+
+
+# ▶️ Running The Project
+
+Follow these steps within your command line interface (CLI) to run ***Resourcery*** on your local machine:
+
+1. **Clone the repository** to your local system using:
    `git clone https://github.com/chingu-voyages/v55-tier2-team-26.git` 
    
-2. **Navigate to the project directory:**
-After cloning, move into the 'front-end' or 'back-end' directory by running: `cd front-end` or `cd back-end`
+2. **Navigate into the newly created project directory** using: `cd V55-tier2-team-26`
 
-3. **Install dependencies:**
-Install the project's dependencies to ensure it runs smoothly: `npm install`
+3. **Navigate into the 'front-end' directory**, 'front-end' using: `cd front-end`
 
-4. **Start the development server:**
-Launch the application in development mode with Vite: `npm run dev`  
+4. **Install the project's dependencies** to ensure it runs smoothly: `npm install`
 
-This command starts a local development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the app.
+8. **Start the development server**, launching the application in development mode with Vite using: `npm run dev`  
+
+
+This starts a local development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the app.
 
 By following these steps, you should have a local instance of DevEx Tools running and ready for development or exploration.
 
-## Our Team
+# 👥 Our Team
 
 ### Product Owners:
 - Xochitl Farias — [Github](https://github.com/xochfa)|[LinkedIn](https://www.linkedin.com/in/xfarias-scrum-master/)
 
 ### Scrum Masters:
 - Mikala Franks — [Github](https://github.com/mikalafranks)|[LinkedIn](https://www.linkedin.com/in/mikala-franks-8b21b52a3/)
-- Oghenerukevwe Egbaivwie — [Github](https://github.com/chingu-voyages/v55-tier2-team-26)|[LinkedIn](https://www.linkedin.com/)
+- Oghenerukevwe Egbaivwie — [Github](https://github.com/Ruky-Ericson)|[LinkedIn](https://www.linkedin.com/in/oghenerukevwe-egbaivwie/)
 
 ### UI/UX Designer: 
 - Jessica Hackett — [Github](https://github.com/mooglemoxie0018)|[LinkedIn](https://www.linkedin.com/in/jessica-hackett-6725a4325/)

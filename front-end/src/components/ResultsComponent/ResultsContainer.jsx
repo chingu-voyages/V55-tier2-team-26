@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
+
+import { ResourcesContext } from "../../context/resources-context";
+
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
-import { ResourcesContext } from "../../context/resources-context";
 
 export default function ResultsContainer() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,7 +81,7 @@ export default function ResultsContainer() {
 
   return (
     <section>
-      <div className="w-svw">
+      <div className="flex flex-col w-svw max-[380px]:h-[50svh] min-[390px]:h-[60svh] sm:h-[60svh] xl:h-[50svh]">
         {!results ? (
           <LoadingIndicator />
         ) : results.error ? (
@@ -96,8 +98,8 @@ export default function ResultsContainer() {
           </div>
         ) : (
           <>
-            <Results results={results} activePage={activePage} />
-            <ResultsPagination
+            <Results results={results} activePage={activePage} className=""/>
+            <ResultsPagination className={"pt-5 max-md:pb-3 md:pb-11"}
               totalResults={results.length}
               activePage={activePage}
               onClick={handlePagination}
