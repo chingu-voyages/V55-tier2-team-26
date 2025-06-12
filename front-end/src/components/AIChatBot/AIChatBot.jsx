@@ -9,7 +9,7 @@ import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HourglassFullIcon from "@mui/icons-material/HourglassFull";
 import ScryerBackground from "../../images/scryer-background.PNG";
-// import ScryerImg from "../../images/scryer.png";
+import ScryerImg from "../../images/scryer.png";
 
 const AIChatBot = () => {
   const [input, setInput] = useState();
@@ -91,13 +91,15 @@ const AIChatBot = () => {
       {!showChat ? (
         <div className="chat-button flex item-center justify-center">
           <button
-            className="p-2 w-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
+            className="p-2 w-[120px] h-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
+            style={{ backgroundImage: `url(${ScryerImg})` }}
             onClick={() => {
               setShowChat(true);
             }}
           >
             AI Helper
           </button>
+          {/* <ScryerImg /> */}
         </div>
       ) : null}
       {!showChat ? null : (
