@@ -16,7 +16,7 @@ More about our features... Lorem ipsum dolor sit amet consectetur adipiscing eli
 
 ## App Experience
 
-Visit ***Our app name*** online [here](https://github.com/chingu-voyages/v55-tier2-team-26) to experience the tools firsthand. Below, you will find screenshots of ***our app*** page.
+Visit Resourcery online [here](https://github.com/chingu-voyages/v55-tier2-team-26) to experience the tools firsthand. Below, you will find screenshots of ***our app*** page.
 
 ![Our App Feature or page Example ](https://media.tenor.com/sbfBfp3FeY8AAAAj/oia-uia.gif)
 
