@@ -129,8 +129,10 @@ export default function SearchBar() {
 
     // Clears URL params if on the search page
     if (location.pathname === "/search") {
-      setSearchParams({});
+      return setSearchParams({});
     }
+
+    setSearchParams({});
   };
 
   const handleClearTags = () => {
