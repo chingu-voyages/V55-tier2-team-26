@@ -32,7 +32,7 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
 
   return (
     <>
-      <div className="w-80 sm:w-180 p-5 border-1 border-black bg-white">
+      <div className="p-5 border-1 border-black bg-white">
         <div className="mb-2">
           <a
             href={extractUrl(url)}

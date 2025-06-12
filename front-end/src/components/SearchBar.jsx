@@ -175,7 +175,7 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] h-[260px] m-auto mt-4 mb-20 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
+      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 mb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
       <div
         id="searchBarContainer"
@@ -227,7 +227,12 @@ export default function SearchBar() {
                 id={dropdownOpen ? "searchAndClearIconsContainer" : undefined}
                 className="relative w-full flex items-center"
               >
-                <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
+                <button
+                  form="searchTermForm"
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3"
+                />
                 <input
                   name="keywords"
                   ref={searchInputRef}
@@ -358,19 +363,21 @@ export default function SearchBar() {
           </div>
         )}
         <div id="submitButton" className="w-[30%] flex justify-center">
-          <button
-            form="searchTermForm"
-            type="submit"
-            onClick={handleSubmit}
-            className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+          {location.pathname === "/search" ? null : (
+            <button
+              form="searchTermForm"
+              type="submit"
+              onClick={handleSubmit}
+              className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
           ${
             errors.searchText
               ? "border-2 border-red-500 border-l-0"
               : "border-gray-400 border-l-0"
           }`}
-          >
-            Search
-          </button>
+            >
+              Search
+            </button>
+          )}
         </div>
       </div>
     </div>
