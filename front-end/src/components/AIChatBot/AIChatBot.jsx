@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import Message from "./Message";
 import "./styles.css";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
@@ -12,6 +11,7 @@ import ScryerBackground from "../../images/scryer-background.PNG";
 import ScryerImg from "../../images/scryer.png";
 
 const AIChatBot = () => {
+  const [isFetchingApi, setIsFetchingApi] = useState(false);
   const [input, setInput] = useState();
   const [responseText, setResponseText] = useState(null);
   const [messages, setMessages] = useState(() => {
@@ -24,8 +24,19 @@ const AIChatBot = () => {
   const messageRef = useRef(null);
 
   useEffect(() => {
+    const waitForBotResponse = async () => {
+      try {
+        setIsFetchingApi(true);
+        const response = await getBotGreeting();
+        setMessages(response);
+        setIsFetchingApi(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     if (messages.length === 0) {
-      getBotGreeting().then((res) => setMessages(res));
+      waitForBotResponse();
     }
 
     localStorage.setItem("messages", JSON.stringify(messages));
@@ -45,11 +56,13 @@ const AIChatBot = () => {
     };
   }, []);
 
-  const fetchData = async (input) => {
+  const fetchData = async (input="") => {
+    console.log(input)
     const userMessage = { role: "user", parts: [{ text: input }] };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
     try {
+      setIsFetchingApi(true);
       const savedLocalHistory = JSON.parse(localStorage.getItem("messages"));
       const responseObj = await sendChatResponse(input, savedLocalHistory);
       const resultText = responseObj.botResponse;
@@ -69,6 +82,7 @@ const AIChatBot = () => {
       //const aiResponse = { sender: "ai", text: resultText };
       //setMessages((prev) => [...prev, aiResponse]);
       setMessages(chatHistory);
+      setIsFetchingApi(false);
       return resultText;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -115,8 +129,13 @@ const AIChatBot = () => {
               The Scryer
             </h1>
             <h1 className="w-[80px] flex items-center align-center justify-end group">
-              <i
-                className="fa fa-solid fa-broom cursor-pointer"
+              <button
+                className={`fa fa-solid fa-broom ${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-50"
+                    : "hover:cursor-pointer"
+                }`}
+                disabled={isFetchingApi}
                 onClick={() => {
                   handleClearMessages();
                 }}
@@ -151,6 +170,7 @@ const AIChatBot = () => {
             <input
               placeholder="Ask the Scryer"
               className="placeholder-italic w-[290px] h-10 p-2 bg-white rounded-4xl"
+              disabled={isFetchingApi}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -161,17 +181,26 @@ const AIChatBot = () => {
                 setInput("");
               }}
             >
-              <ClearIcon />
+              <ClearIcon className={`${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-20"
+                    : "hover:cursor-pointer"
+                }`}/>
             </button> */}
             <button
-              className="flex items-center mr-3 text-black cursor-pointer"
+              className="flex items-center mr-3 text-black"
+              disabled={isFetchingApi}
               onClick={() => {
                 fetchData(input);
               }}
             >
               <ExpandCircleDownIcon
                 fontSize="large"
-                className="rotate-270 text-[#2E4057] hover:text-blue-400"
+                className={`rotate-270 text-[#2E4057] hover:text-blue-400 ${
+                  isFetchingApi
+                    ? "hover:cursor-progress contrast-20"
+                    : "hover:cursor-pointer"
+                }`}
               />
             </button>
           </div>

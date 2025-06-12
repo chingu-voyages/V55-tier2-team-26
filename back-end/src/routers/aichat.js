@@ -1,3 +1,5 @@
+const isDevEnv = process.env.IS_DEV_ENV;
+
 const express = require("express");
 const {
   sendUserMessage,
@@ -13,6 +15,12 @@ router.post("/chatbotai/greeting", verification, async (req, res) => {
     res.set({ "Content-Type": "application/json" });
 
     const botResponse = await botGreeting();
+    if (Boolean(isDevEnv)) {
+      return setTimeout(() => {
+        res.status(200).json({ ...botResponse });
+      }, 5000);
+    }
+
     res.status(200).json({ ...botResponse });
   } catch (err) {
     res.status(400).json({ errors: err });
@@ -27,6 +35,11 @@ router.post("/chatbotai", verification, async (req, res) => {
       req.body.userResponse,
       req.body.chatHistory
     );
+    if (Boolean(isDevEnv)) {
+      return setTimeout(() => {
+        res.status(200).json({ ...botResponse });
+      }, 5000);
+    }
 
     res.status(200).json({ ...botResponse });
   } catch (err) {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext} from "react";
 import { ResourcesContext } from "../../context/resources-context";
 
 const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {

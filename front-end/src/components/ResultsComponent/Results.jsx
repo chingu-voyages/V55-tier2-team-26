@@ -19,9 +19,11 @@ function getCards(results, activePage) {
   ));
 }
 
-export default function Results({ results, activePage }) {
+export default function Results({ results, activePage, className }) {
   return (
     <div className="flex flex-col items-center gap-y-10 max-sm:p-2 md:p-5 lg:p-">
+    // <div
+    //   className={`grid grid-cols-1 gap-y-10 overflow-y-scroll overflow-x-hidden max-sm:px-5 md:px-40 xl:px-90 ${className}`
       {getCards(results, activePage)}
     </div>
   );
