@@ -40,12 +40,18 @@ const Footer = ({ handleOpenModal }) => {
             </div>
             <div className="flex items-center text-center">
               <p className="mb-4 sm:mb-0 mr-2">Oghenerukevwe Egbaivwie</p>
-              {/* <a href={"https://www.google.com/"} className="mb-4 sm:mb-0 mr-2">
-              <FaGithub />
-            </a>
-            <a href={"https://www.google.com/"} className="mb-4 sm:mb-0 mr-2">
-              <FaLinkedin style={{ color: "#0072B1" }} />
-            </a> */}
+              <a
+                href={"https://github.com/Ruky-Ericson"}
+                className="mb-4 sm:mb-0 mr-2"
+              >
+                <FaGithub />
+              </a>
+              <a
+                href={"https://www.linkedin.com/in/oghenerukevwe-egbaivwie/"}
+                className="mb-4 sm:mb-0 mr-2"
+              >
+                <FaLinkedin />
+              </a>
             </div>
           </div>
           <div>

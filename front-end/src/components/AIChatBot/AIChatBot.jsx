@@ -56,8 +56,8 @@ const AIChatBot = () => {
     };
   }, []);
 
-  const fetchData = async (input="") => {
-    console.log(input)
+  const fetchData = async (input = "") => {
+    console.log(input);
     const userMessage = { role: "user", parts: [{ text: input }] };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
@@ -105,15 +105,12 @@ const AIChatBot = () => {
       {!showChat ? (
         <div className="chat-button flex item-center justify-center">
           <button
-            className="p-2 w-[120px] h-[120px] border-2 bg-[#998675] text-black font-bold rounded-lg mr-10 cursor-pointer"
+            className="p-2 w-[70px] h-[80px] lg:w-[100px] lg:h-[120px] text-black font-bold rounded-lg mr-10 cursor-pointer bg-cover"
             style={{ backgroundImage: `url(${ScryerImg})` }}
             onClick={() => {
               setShowChat(true);
             }}
-          >
-            AI Helper
-          </button>
-          {/* <ScryerImg /> */}
+          ></button>
         </div>
       ) : null}
       {!showChat ? null : (
@@ -132,8 +129,8 @@ const AIChatBot = () => {
               <button
                 className={`fa fa-solid fa-broom ${
                   isFetchingApi
-                    ? "hover:cursor-progress contrast-50"
-                    : "hover:cursor-pointer"
+                    ? "hover:cursor-progress hover:text-[#2E4057] contrast-50"
+                    : "hover:cursor-pointer hover:text-[#2E4057]"
                 }`}
                 disabled={isFetchingApi}
                 onClick={() => {

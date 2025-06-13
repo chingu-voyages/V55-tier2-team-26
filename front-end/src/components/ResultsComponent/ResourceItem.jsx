@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { ResourcesContext } from "../../context/resources-context";
 
 const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
@@ -64,7 +64,7 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
           <div className="flex flex-row text-[12px] mb-2 sm:text-[14px] md:text-[14px] lg:text-[16px]">
             {/* {tagNames(appliedTags)} */}
             {tagNames(appliedTags).map((i, index) => (
-              <div className="mr-2 pl-2 pr-2 rounded-lg bg-blue-200">
+              <div className="mr-2 pl-2 pr-2 rounded-lg bg-[#A9DEF9]">
                 <p key={index}>{i}</p>
               </div>
             ))}
