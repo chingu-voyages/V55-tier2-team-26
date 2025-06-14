@@ -12,6 +12,7 @@ export default function ResultsPagination({
   activePage,
   onClick,
   totalResults,
+  className,
 }) {
   const maxPages = Math.ceil(totalResults / 10);
 
@@ -22,7 +23,7 @@ export default function ResultsPagination({
 
   const paginationItemTwoValue =
     (activePage <= 1 && activePage + 1) ||
-    ((activePage >= maxPages && maxPages>=3) && activePage - 1) ||
+    (activePage >= maxPages && maxPages >= 3 && activePage - 1) ||
     activePage;
 
   const paginationItemThreeValue =
@@ -31,25 +32,30 @@ export default function ResultsPagination({
     activePage + 1;
 
   return totalResults <= 10 ? null : (
-    <Pagination>
+    <Pagination className={className}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
+            className={`hover:bg-[#222222] hover:text-white ${
+              activePage <= 1 ? "pointer-events-none text-[#505050]" : null
+            }`}
             onClick={(e) =>
               activePage <= 1 ? e.preventDefault() : onClick(activePage - 1)
             }
-            to={`/search?page=${activePage - 1}`}
           />
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
+            className={`${
+              activePage === paginationItemOneValue
+                ? "bg-[#2E4057] text-white"
+                : ""
+            } hover:bg-[#222222] hover:text-white`}
             onClick={(e) => {
               const pageNumber = parseInt(e.target.innerText);
-              console.log(pageNumber);
               activePage <= 1 ? e.preventDefault() : onClick(pageNumber);
             }}
             isActive={activePage === paginationItemOneValue ? true : false}
-            to={`/search?page=${paginationItemOneValue}`}
           >
             {paginationItemOneValue}
           </PaginationLink>
@@ -58,6 +64,11 @@ export default function ResultsPagination({
         {totalResults >= 11 ? (
           <PaginationItem>
             <PaginationLink
+              className={`${
+                activePage === paginationItemTwoValue
+                  ? "bg-[#2E4057] text-white"
+                  : ""
+              } hover:bg-[#222222] hover:text-white`}
               onClick={(e) => {
                 const pageNumber = parseInt(e.target.innerText);
                 pageNumber === activePage
@@ -65,7 +76,6 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemTwoValue ? true : false}
-              to={`/search?page=${paginationItemTwoValue}`}
             >
               {paginationItemTwoValue}
             </PaginationLink>
@@ -75,6 +85,11 @@ export default function ResultsPagination({
         {totalResults >= 21 ? (
           <PaginationItem>
             <PaginationLink
+              className={`${
+                activePage === paginationItemThreeValue
+                  ? "bg-[#2E4057] text-white"
+                  : ""
+              } hover:bg-[#222222] hover:text-white`}
               onClick={(e) => {
                 const pageNumber = parseInt(e.target.innerText);
                 activePage >= maxPages
@@ -82,14 +97,13 @@ export default function ResultsPagination({
                   : onClick(pageNumber);
               }}
               isActive={activePage === paginationItemThreeValue ? true : false}
-              to={`/search?page=${paginationItemThreeValue}`}
             >
               {paginationItemThreeValue}
             </PaginationLink>
           </PaginationItem>
         ) : null}
         <PaginationItem>
-          <PaginationEllipsis />
+          {activePage + 1 >= maxPages || maxPages <= 3 ? null : <PaginationEllipsis />}
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
@@ -98,7 +112,7 @@ export default function ResultsPagination({
                 ? e.preventDefault()
                 : onClick(activePage + 1)
             }
-            to={`/search?page=${activePage + 1}`}
+            className={`hover:bg-[#222222] hover:text-white ${activePage >= maxPages ? "pointer-events-none text-[#505050]" : null}`}
           />
         </PaginationItem>
       </PaginationContent>

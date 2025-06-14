@@ -1,16 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { searchBy } from "../utils/resource-api-utils";
+import { useSearchParams, useLocation } from "react-router";
 
-export default function useSearchResources({ resources, isFetching }) {
+export default function useSearchResources({ resources, tags, isFetching }) {
   const timerRef = useRef();
   const searchInputRef = useRef();
-
-  const [queryValue, setQueryValue] = useState({ keywords: "", tags: [] });
+  const urlUpdateTimer = useRef();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [queryValue, setQueryValue] = useState({ 
+    keywords: searchParams.get("keywords") || "", 
+    tags: searchParams.get("tags") ? searchParams.get("tags").split(",") : []
+  });
   const [activeTags, setActiveTags] = useState([]);
   const [userInput, setUserInput] = useState(null);
   const [results, setResults] = useState(null);
 
   const handleUserInput = (e) => {
+    console.log("baseHandleUserInput called")
     const refactoredTags = activeTags.map(({ id }) => id);
     setUserInput({ keywords: e.target.value, tags: refactoredTags });
   };
@@ -30,7 +37,6 @@ export default function useSearchResources({ resources, isFetching }) {
 
   const clearAllTags = () => {
     setActiveTags([]);
-    searchInputRef.current.focus();
   };
 
   useEffect(() => {
@@ -43,17 +49,84 @@ export default function useSearchResources({ resources, isFetching }) {
   useEffect(() => {
     const refactoredTags = activeTags.map(({ id }) => id);
     setQueryValue({
-      keywords: searchInputRef.current.value,
+      keywords: queryValue.keywords, // Use state instead of DOM ref
       tags: refactoredTags,
     });
-  }, [activeTags]);
+  }, [activeTags, queryValue.keywords]); // Add dependency
+
+  useEffect(() => {
+    // When URL params change, update queryValue to match new URL pararms
+    setQueryValue({
+      keywords: searchParams.get("keywords") || "",
+      tags: searchParams.get("tags") ? searchParams.get("tags").split(",") : []
+    });
+  }, [searchParams]); // Only run this effect when searchParams changes
+
+  useEffect(() => {
+    // Set search input value to match URL
+    searchInputRef.current.value = queryValue.keywords;
+
+    // Only set activeTags from URL on initial load or direct URL navigation
+    if (queryValue.tags.length > 0 && tags && !activeTags.length) {
+      const initialActiveTags = queryValue.tags
+        .map((tagId) => {
+          const foundTag = tags.find((t) => t.id === tagId);
+          return foundTag ? { id: foundTag.id, name: foundTag.tag } : null;
+        })
+        .filter((tag) => tag !== null); // Remove any tags that weren't found
+      
+      setActiveTags(initialActiveTags);
+    }
+
+    // Set user input to match URL
+    setUserInput({
+      keywords: queryValue.keywords,
+      tags: queryValue.tags
+    });
+  }, [searchParams, tags, queryValue]); // Run this effect with URL params, tags, or queryValue changes
+
+  useEffect(() => {
+    // Only update URL on search page
+    if (location.pathname === "/search") {
+      // Clear pending URL updates
+      clearTimeout(urlUpdateTimer.current);
+
+      // Debounce the URL update
+      urlUpdateTimer.current = setTimeout(() => {
+        const params = new URLSearchParams(searchParams);
+
+        // Sync URL with current search state, clean up empty/unwanted params
+        if (queryValue.keywords) {
+          params.set("keywords", queryValue.keywords);
+        } else {
+          params.delete("keywords");
+        }
+        
+        if (queryValue.tags.length > 0) {
+          params.set("tags", queryValue.tags.join(","));
+        } else {
+          params.delete("tags");
+        }
+
+        // Only update URL if keywords/tags changed
+        const currentKeywords = searchParams.get("keywords") || "";
+        const currentTags = searchParams.get("tags") || "";
+        const newTags = queryValue.tags.join(",");
+
+        if (currentKeywords !== queryValue.keywords || currentTags !== newTags) {
+          setSearchParams(params);
+        } 
+      }, 1000); // Same debounce as search
+    }
+  }, [queryValue.keywords, queryValue.tags, location.pathname]); // Run when queryValue or location changes
 
   useEffect(() => {
     if (!isFetching.resources && !isFetching.tags) {
-      if (queryValue === null)
+      if (queryValue === null) {
         return setResults(() =>
           searchBy({ data: resources, keywords: "", tags: [] })
         );
+      }
 
       const { keywords, tags } = queryValue;
       return setResults(() => searchBy({ data: resources, keywords, tags }));

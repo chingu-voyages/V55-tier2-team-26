@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { fetchResources, fetchTags } from "../utils/resource-api-utils";
-import useSearchResources from "../hooks/useSearchResources";
+import {
+  fetchResources,
+  fetchTags,
+} from "../../../front-end/src/utils/resource-api-utils";
+import useSearchResources from "../../../front-end/src/hooks/useSearchResources";
 
 export const ResourcesContext = createContext({
   tags: [],
@@ -24,6 +27,8 @@ export default function ResourceContextProvider({ children }) {
     tags: true,
   });
 
+  // const [activeTags, setActiveTags] = useState([]);
+
   const {
     results,
     activeTags,
@@ -39,6 +44,7 @@ export default function ResourceContextProvider({ children }) {
     isFetching,
     error,
     activeTags,
+    
     results,
     searchInputRef,
     handleUserInput,
@@ -62,7 +68,8 @@ export default function ResourceContextProvider({ children }) {
       } catch (error) {
         setError({
           type: "API_UNAVAILABLE",
-          message: "Unable to connect to the server. Please check your connection and try again.",
+          message:
+            "Unable to connect to the server. Please check your connection and try again.",
           originalError: error,
         });
         setIsFetching(() => ({ resources: false, tags: false }));

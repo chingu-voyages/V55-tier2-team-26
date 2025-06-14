@@ -38,6 +38,9 @@ async function fetchTags() {
 }
 
 function searchBy({ data, keywords, tags }) {
+  if(!data)
+    return null
+
   if (keywords === null)
     return console.log(
       new Error(`"keywords" property missing when parsing object...`)
@@ -66,17 +69,23 @@ function searchBy({ data, keywords, tags }) {
   };
 
   const checkMatchKeywords = (name) => {
-    const kewordsToRegExpStr = `${sanitizedKeywords
+    const escapeRegex = (string) => {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    };
+
+    const escapedKeywords = escapeRegex(sanitizedKeywords);
+
+    const keywordsToRegExpStr = `${sanitizedKeywords
       .split(" ")
       .map((word) =>
-        word.length >= 3 ? `(${word.slice(0, 3)})${word.slice(3)}` : word
+        word.length >= 3 ? `(${escapeRegex(word.slice(0, 3))})${escapeRegex(word.slice(3))}` : escapeRegex(word)
       )
       .join("|")}`;
 
     const nameKeywordsArr = name.split(" ");
 
     const keywordsRegEx = new RegExp(
-      `${sanitizedKeywords}|${kewordsToRegExpStr}`,
+      `${escapedKeywords}|${keywordsToRegExpStr}`,
       "gm"
     );
 

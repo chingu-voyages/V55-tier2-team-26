@@ -1,16 +1,23 @@
+import { Form, useSearchParams, useNavigate, useLocation } from "react-router";
 import { useContext, useState, useEffect } from "react";
 import { ResourcesContext } from "../context/resources-context";
 import { FaExclamationCircle, FaInfoCircle } from "react-icons/fa";
 
+import "./SearchBarStyles.css";
+
 export default function SearchBar() {
+  const [, setSearchParams] = useSearchParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
+  const [showTagPills, setShowTagPills] = useState(false);
+  // const [inputValue, setInputValue] = useState(""); //Trying not to use this state####################################
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     tags,
-    results,
     searchInputRef,
     activeTags,
     handleUserInput: baseHandleUserInput,
@@ -18,23 +25,56 @@ export default function SearchBar() {
     clearAllTags,
   } = useContext(ResourcesContext);
 
+  const tagStyles = {
+    activeTag: "bg-[#998675] text-black",
+    inactiveTag: "bg-[#f6f6f6] text-black",
+  };
+
+  useEffect(() => {
+    function handleClickOutsideForm(event) {
+      const searchArea = document.getElementById(
+        "theActualSearchBarWithDropdownOpen"
+      );
+      const tagsContainer = document.getElementById("dropdownTagsContainer");
+      if (!searchArea.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    if (dropdownOpen) {
+      document.addEventListener("click", handleClickOutsideForm);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutsideForm);
+    };
+  }, [dropdownOpen]);
+
+  useEffect(() => {
+    setShowTagPills(activeTags.length > 0);
+  }, [activeTags]);
+
   useEffect(() => {
     validateTags(activeTags);
   }, [activeTags]);
 
   let filteredTags = [];
   if (tags !== null) {
-      filteredTags = tags.filter(({ tag }) =>
-        tag.toLowerCase().includes(filter.toLowerCase())
+    filteredTags = tags.filter(({ tag }) =>
+      tag.toLowerCase().includes(filter.toLowerCase())
     );
   }
 
   const highlightActiveTags = (id) =>
     activeTags.some((tag) => tag.id === id)
-      ? "bg-[#6D597A] text-white"
-      : "bg-[#f6f6f6] text-black";
+      ? tagStyles.activeTag
+      : tagStyles.inactiveTag;
 
   const handleUserInput = (e) => {
+    //Remove these two lines now that we're not using the inputValue state#################
+    // const newValue = e.target.value;
+    // setInputValue(newValue);
+    //##################################################################
     if (validateSearchText(e.target.value)) {
       baseHandleUserInput(e);
     }
@@ -42,11 +82,7 @@ export default function SearchBar() {
 
   const handleTagsInput = (e) => {
     const tagId = e.target.value;
-
-    if (activeTags.findIndex((activeTag) => activeTag.id === tagId) !== -1) {
-      baseHandleTagsInput(e);
-      return;
-    }
+    const tagName = e.target.textContent;
 
     if (activeTags.length >= 8) {
       return;
@@ -57,6 +93,7 @@ export default function SearchBar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const currentSearchText = searchInputRef.current.value;
     const tagIds = activeTags.map((tag) => tag.id);
 
@@ -67,25 +104,40 @@ export default function SearchBar() {
       return;
     }
 
-    const searchData = {
-      keywords: currentSearchText,
-      tags: tagIds,
-    };
+    // Update URL with both keywords and tags
+    const searchParams = new URLSearchParams();
+    if (currentSearchText) searchParams.set("keywords", currentSearchText);
+    if (tagIds.length > 0) searchParams.set("tags", tagIds.join(","));
 
-    console.log("Search data:", searchData);
-    console.log("Search results:", results);
+    // Navigate to search page with params
+    navigate(`/search?${searchParams.toString()}`);
   };
 
-  const handleClear = () => {
-    searchInputRef.current.value = "";
-    baseHandleUserInput({
-      target: {
-        value: "",
-      },
-    });
+  const handleReset = () => {
+    // setInputValue(""); //Not using this state###################################
+    console.log("handleReset was called");
+
+    if (searchInputRef.current) {
+      searchInputRef.current.value = "";
+    }
+
+    console.log("Calling baseHandleUserInput with an empty string");
+    baseHandleUserInput({ target: { value: "" } });
 
     clearAllTags();
     setErrors({ searchText: "", tags: "" });
+
+    // Clears URL params if on the search page
+    if (location.pathname === "/search") {
+      return setSearchParams({});
+    }
+
+    setSearchParams({});
+  };
+
+  const handleClearTags = () => {
+    clearAllTags();
+    setErrors({ tags: "" });
   };
 
   const validateSearchText = (text) => {
@@ -98,7 +150,8 @@ export default function SearchBar() {
     if (text.trim().length > 250) {
       setErrors((prev) => ({
         ...prev,
-        searchText: "Please shorten your search terms to 250 characters or less.",
+        searchText:
+          "Please shorten your search terms to 250 characters or less.",
       }));
       return false;
     }
@@ -122,139 +175,209 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[80%] m-auto mt-20 mb-20 flex flex-col gap-[15px] items-center justify-between"
+      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 mb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
-      <div id="searchBarContainer" className="w-md">
-        <div className="flex items-center relative">
+      <div
+        id="searchBarContainer"
+        className="w-full flex flex-col items-center justify-center"
+      >
+        <div className="flex items-center relative min-w-[350px]">
           {errors.searchText && (
-            <div 
-              id="search-error-message" 
-              role="alert" 
+            <div
+              id="search-error-message"
+              role="alert"
               className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
             >
-              <FaExclamationCircle aria-hidden="true" /> 
+              <FaExclamationCircle aria-hidden="true" />
               {errors.searchText}
             </div>
           )}
           {info.tags && (
-            <div 
+            <div
               id="tags-info-message"
-              className={`absolute top-[-35px] left-0 text-base font-medium flex items-center gap-[6px] whitespace-nowrap ${activeTags.length === 8 && "text-[#2E4057]"}`}
+              className={`absolute top-[-18px] left-3 text-[.7rem] font-medium flex items-center gap-[6px] whitespace-nowrap ${
+                activeTags.length === 8 && "text-[#2E4057]"
+              }`}
             >
-              <FaInfoCircle aria-hidden="true" /> 
+              <FaInfoCircle aria-hidden="true" />
               {info.tags}
             </div>
           )}
-          <form className="w-full flex" onSubmit={handleSubmit}>
-            <div className="relative w-full max-w-md rounded-[20px] h-[40px] outline-[1px] flex">
-              <button
-                type="submit"
-                className={`absolute right-0 top-0 h-full w-[20%] rounded-tr-[20px] rounded-br-[20px] flex items-center justify-center cursor-pointer focus:font-bold bg-[#A9DEF9] text-[#22222] text-md hover:font-bold ${errors.searchText ? "border-2 border-red-500 border-l-0" : "border-gray-400 border-l-0"}`}
-              >
-                Submit
-                {/* <i className="fa fa-search"></i> */}
-              </button>
-              <i className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search..."
-                onChange={handleUserInput}
-                aria-label="Search resources"
-                aria-invalid={!!errors.searchText}
-                aria-describedby={errors.searchText ? "search-error-message" : undefined}
-                className={`w-full p-2 pl-10 text-lg rounded-[20px] bg-[#F9F5FF] text-black focus:outline-none ${errors.searchText ? "border-2 border-red-500 border-r-0" : "border border-[#F9F5FF] border-l-0"}`}
-              />
-            </div>
-          </form>
-        </div>
-      </div>
 
-      <div
-        id="tagsResetButtonsContainer"
-        className="flex w-full max-w-md justify-between"
-      >
-        <div id="tagsDropdownContainer" className="relative w-[75%]">
-          <div className="dropdown w-full">
-            {!dropdownOpen && (
-              <button
-                className="w-full h-[40px] rounded-[20px] bg-[#2E4057] text-white text-[16px] cursor-pointer hover:font-bold focus:font-bold"
-                type="button"
-                onClick={() => setDropdownOpen((open) => !open)}
-                aria-describedby={info.tags ? "tags-info-message" : undefined}
-                aria-label="Select tags to filter results"
-              >
-                Tags
-              </button>
-
-            )}
-            {dropdownOpen && (
+          <Form
+            id="searchTermForm"
+            action={"/search"}
+            className="w-full flex dropdown"
+            onSubmit={handleSubmit}
+            method="get"
+          >
+            <div
+              id={
+                dropdownOpen
+                  ? "theActualSearchBarWithDropdownOpen"
+                  : "theActualSearchBar"
+              }
+              className={`relative w-full max-w-md ${
+                dropdownOpen
+                  ? "rounded-t-[20px] flex flex-col bg-white border-1 border-[#939AAA]"
+                  : "rounded-[20px] h-[40px] border-1 border-[#939AAA] flex"
+              }`}
+            >
               <div
-                id="myDropdown"
-                className="absolute left-0 w-full p-2 flex flex-col bg-[#f6f6f6] rounded-t-[20px] border-t-[1px] border-r-[1px] border-l-[1px]"
+                id={dropdownOpen ? "searchAndClearIconsContainer" : undefined}
+                className="relative w-full flex items-center"
               >
-                <div id="tagsSearchBarContainer" className="flex ">
-                  <input
-                    type="text"
-                    placeholder="Search tags..."
-                    id="myInput"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                  />
+                <button
+                  form="searchTermForm"
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="fa fa-search absolute top-1/2 transform -translate-y-1/2 left-3"
+                />
+                <input
+                  name="keywords"
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="What are you looking for?"
+                  // value={inputValue}
+                  onChange={handleUserInput}
+                  aria-label="Search resources"
+                  aria-invalid={!!errors.searchText}
+                  aria-describedby={
+                    errors.searchText ? "search-error-message" : undefined
+                  }
+                  className={`placeholder:italic w-full pt-2 pl-10 pr-10 ${
+                    dropdownOpen ? "pb-1" : "pb-2"
+                  } text-md rounded-[20px] bg-white text-black focus:outline-none ${
+                    errors.searchText
+                      ? "border-2 border-red-500 border-r-0"
+                      : dropdownOpen
+                      ? ""
+                      : "border border-[#F9F5FF] border-l-0"
+                  }`}
+                  onClick={() => setDropdownOpen((open) => true)}
+                  onFocus={() => setDropdownOpen((open) => true)}
+                />
+                <button
+                  id="xResetButton"
+                  type="button"
+                  onClick={() => {
+                    handleReset();
+                    handleClearTags();
+                  }}
+                  className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
+                  aria-label="Reset search"
+                >
+                  <i className="fa-solid fa-xmark" />
+                </button>
+              </div>
+              {dropdownOpen && (
+                <div
+                  id="dropdownTagsContainer"
+                  className="w-full p-1 bg-white rounded-b-[20px] border-t-2 border-[#939AAA] border-collapse max-h-[110px] overflow-y-auto rounded-scrollbar"
+                >
+                  {filteredTags.length === 0 ? (
+                    <div className="border-t-[1px]" />
+                  ) : (
+                    filteredTags.map(({ tag, id }) => {
+                      const isActive = activeTags.some((tag) => tag.id === id);
+                      const isDisabled = !isActive && activeTags.length >= 8;
+
+                      return (
+                        <a
+                          id={id}
+                          href={`#${tag.toLowerCase()}`}
+                          key={tag}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (isDisabled) return;
+                            handleTagsInput({
+                              target: {
+                                value: id,
+                                textContent: tag,
+                              },
+                            });
+                          }}
+                          className={`block w-full mb-[.5px] rounded-md ${
+                            isDisabled
+                              ? "text-gray-400 cursor-not-allowed opacity-50"
+                              : `hover:font-bold text-gray-950 ${highlightActiveTags(
+                                  id
+                                )}`
+                          }`}
+                        >
+                          {tag}
+                        </a>
+                      );
+                    })
+                  )}
+                </div>
+              )}
+            </div>
+          </Form>
+        </div>
+        {showTagPills && !dropdownOpen && (
+          <div
+            id="containerForSelectedTagsAndClearButton"
+            className="flex min-w-[350px] h-auto justify-between m-1"
+          >
+            <div
+              id="tagPillsContainer"
+              className="w-[70%] grid grid-cols-3 grid-rows-3 gap-1"
+            >
+              {activeTags.map((tag) => (
+                <div
+                  key={tag.id}
+                  className="bg-[#A9DEF9] h-[30px] rounded-[10px] relative text-[12px] pl-2 flex items-center justify-between"
+                >
+                  {tag.name}
                   <button
-                    id="closeTagsDropdown"
-                    className="absolute w-[40px] right-[0px] w-[14px] top-[0px] h-[40px] hover:scale-120 focus:scale-120"
-                    onClick={() => setDropdownOpen((open) => !open)}
+                    type="button"
+                    onClick={() =>
+                      handleTagsInput({
+                        target: { value: tag.id, textContent: tag.name },
+                      })
+                    }
                   >
-                    <i className="fa-solid fa-xmark top-1/2 absolute transform -translate-y-1/2 -translate-x-1/2" />
+                    <i className="fa-solid fa-xmark cursor-pointer pr-2 text-black hover:text-[120%]" />
                   </button>
                 </div>
-                {filteredTags.length === 0 ? (
-                  <div className="border-t-[1px]" />
-                ) : (
-                  filteredTags.map(({ tag, id }) => {
-                    const isActive = activeTags.some((tag) => tag.id === id);
-                    const isDisabled = !isActive && activeTags.length >= 8;
-
-                    return (
-                      <a
-                        id={id}
-                        href={`#${tag.toLowerCase()}`}
-                        key={tag}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (isDisabled) return;
-                          console.log("Selected tag ID:", id);
-                          handleTagsInput({
-                            target: {
-                              value: id,
-                              textContent: tag,
-                            },
-                          });
-                        }}
-                        className={`block w-full p-1 m-[.5px] rounded-md ${
-                          isDisabled 
-                            ? "text-gray-400 cursor-not-allowed opacity-50" 
-                            : `hover:font-bold text-gray-700 ${highlightActiveTags(id)}`
-                        }`}
-                      >
-                        {tag}
-                      </a>
-                    );
-                  })
-                )}
+              ))}
+            </div>
+            <div
+              id="tagsResetButtonsContainer"
+              className="flex max-w-md w-[30%]"
+            >
+              <div
+                id="clearTagsButton"
+                className="w-full flex items-center justify-end relative"
+              >
+                <i className="fa fa-solid fa-broom absolute top-1/2 transform -translate-y-1/2 left-3 text-[#2E4057]" />
+                <button
+                  onClick={handleClearTags}
+                  className="h-[40px] w-full rounded-[20px] cursor-pointer text-[.8rem] font-bold focus:font-extrabold hover:font-extrabold text-[#2E4057] pl-8"
+                >
+                  Clear Tags
+                </button>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-
-        <div id="clearButton" className="w-[20%] flex justify-end">
-          <button
-            onClick={handleClear}
-            className="h-[40px] w-full rounded-[20px] cursor-pointer focus:font-bold hover:font-bold bg-[#A9DEF9] text-black"
-          >
-            Reset
-          </button>
+        )}
+        <div id="submitButton" className="w-[30%] flex justify-center">
+          {location.pathname === "/search" ? null : (
+            <button
+              form="searchTermForm"
+              type="submit"
+              onClick={handleSubmit}
+              className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+          ${
+            errors.searchText
+              ? "border-2 border-red-500 border-l-0"
+              : "border-gray-400 border-l-0"
+          }`}
+            >
+              Search
+            </button>
+          )}
         </div>
       </div>
     </div>

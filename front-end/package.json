@@ -4,17 +4,24 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "dotenvx run -f config/dev.env -- vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@google/generative-ai": "^0.24.1",
+    "@mui/icons-material": "^7.1.1",
+    "@mui/material": "^7.1.1",
     "@radix-ui/react-slot": "^1.2.2",
     "@tailwindcss/vite": "^4.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "install": "^0.13.0",
     "lucide-react": "^0.511.0",
+    "npm": "^11.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
@@ -23,6 +30,7 @@
     "tailwindcss": "^4.1.5"
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.44.1",
     "@eslint/js": "^9.25.0",
     "@types/node": "^22.15.19",
     "@types/react": "^19.1.2",

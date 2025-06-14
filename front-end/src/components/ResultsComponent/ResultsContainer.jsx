@@ -1,30 +1,53 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-import ResultsPagination from "./ResultsPagination";
-import Results from "./Results";
-
 import { ResourcesContext } from "../../context/resources-context";
 
-export default function ResultsContainer() {
-  let [searchParams] = useSearchParams();
-  //searchParams.get("page") //This get the urlParam for the page
+import ResultsPagination from "./ResultsPagination";
+import Results from "./Results";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
-  const { results, tags, error } = useContext(ResourcesContext);
+export default function ResultsContainer({className}) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { results, error } = useContext(ResourcesContext);
 
-  const [activePage, setActivePage] = useState(1);
+  // Get page state from URL on mount
+  const [activePage, setActivePage] = useState(() => {
+    const page = searchParams.get("page");
+    return page ? parseInt(page) : 1;
+  });
 
   const handlePagination = (newCurrentPage) => {
     setActivePage(newCurrentPage);
+
+    // Keep URL in sync with user interactions while preserving search params
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newCurrentPage);
+    setSearchParams(params);
   };
 
+  // Read URL changes and update state
   useEffect(() => {
-    setActivePage(1)
-  }, [results])
+    const page = searchParams.get("page");
+    setActivePage(page ? parseInt(page) : 1);
+  }, [searchParams]);
+
+  // Reset pagination on search changes
+  useEffect(() => {
+    const currentParams = new URLSearchParams(searchParams);
+    const keywords = currentParams.get("keywords");
+    const tags = currentParams.get("tags");
+
+    if ((keywords || tags) && searchParams.get("page") !== "1") {
+      currentParams.delete("page");
+      setSearchParams(currentParams);
+    }
+
+  }, [searchParams.get("keywords"), searchParams.get("tags")]);
 
   if (error) {
     return (
-      <section>
+      <section className={className}>
         <div className="w-svw p-4 text-center">
           <div 
           className="bg-red-100 border border-red-400 text-red-700 px-y py-3 rounded"
@@ -57,10 +80,10 @@ export default function ResultsContainer() {
   }
 
   return (
-    <section>
-      <div className="w-svw">
+    <section className={className}>
+      <div className="flex flex-col w-svw max-[380px]:h-[65svh] min-[390px]:h-[70svh] md:h-[74svh] xl:h-[70svh]">
         {!results ? (
-          <p>Loading resources...</p> 
+          <LoadingIndicator />
         ) : results.error ? (
           <div className="w-full p-4 text-center">
             <div
@@ -75,8 +98,8 @@ export default function ResultsContainer() {
           </div>
         ) : (
           <>
-            <Results results={results} activePage={activePage} />
-            <ResultsPagination
+            <Results results={results} activePage={activePage}/>
+            <ResultsPagination className={"pt-5 max-md:pb-3 md:pb-11"}
               totalResults={results.length}
               activePage={activePage}
               onClick={handlePagination}
