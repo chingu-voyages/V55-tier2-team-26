@@ -20,16 +20,20 @@ export default function App() {
 
   return (
     <>
-      <AboutPageModal 
-        ref={modalRef} 
-        handleCloseModal={handleCloseModal}
-      />
-      <Header />
-      <MainContainer className={""}>
+      <AboutPageModal ref={modalRef} handleCloseModal={handleCloseModal} />
+      <Header className={"max-sm:h-[6svh] sm:h-[6svh] md:h-[7svh]"} />
+      <MainContainer
+        className={
+          "overflow-hidden max-[380px]:h-[85svh] min-[390px]:h-[85svh] sm:h-[85svh] md:h-[84svh]"
+        }
+      >
         <Outlet />
         <AIChatBot />
       </MainContainer>
-      <Footer handleOpenModal={handleOpenModal} />
+      <Footer
+        handleOpenModal={handleOpenModal}
+        className={"h-[9svh] xl:h-80"}
+      />
     </>
   );
 }

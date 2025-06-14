@@ -7,7 +7,7 @@ import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
-export default function ResultsContainer() {
+export default function ResultsContainer({className}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { results, error } = useContext(ResourcesContext);
 
@@ -47,7 +47,7 @@ export default function ResultsContainer() {
 
   if (error) {
     return (
-      <section>
+      <section className={className}>
         <div className="w-svw p-4 text-center">
           <div 
           className="bg-red-100 border border-red-400 text-red-700 px-y py-3 rounded"
@@ -80,8 +80,8 @@ export default function ResultsContainer() {
   }
 
   return (
-    <section>
-      <div className="flex flex-col w-svw max-[380px]:h-[50svh] min-[390px]:h-[60svh] sm:h-[60svh] xl:h-[50svh]">
+    <section className={className}>
+      <div className="flex flex-col w-svw max-[380px]:h-[65svh] min-[390px]:h-[70svh] md:h-[74svh] xl:h-[70svh]">
         {!results ? (
           <LoadingIndicator />
         ) : results.error ? (
@@ -98,7 +98,7 @@ export default function ResultsContainer() {
           </div>
         ) : (
           <>
-            <Results results={results} activePage={activePage} className=""/>
+            <Results results={results} activePage={activePage}/>
             <ResultsPagination className={"pt-5 max-md:pb-3 md:pb-11"}
               totalResults={results.length}
               activePage={activePage}

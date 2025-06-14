@@ -103,7 +103,7 @@ export default function ResultsPagination({
           </PaginationItem>
         ) : null}
         <PaginationItem>
-          {activePage + 1 >= maxPages ? null : <PaginationEllipsis />}
+          {activePage + 1 >= maxPages || maxPages <= 3 ? null : <PaginationEllipsis />}
         </PaginationItem>
         <PaginationItem>
           <PaginationNext

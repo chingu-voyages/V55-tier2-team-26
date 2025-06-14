@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ResourcesContext } from "../../context/resources-context";
 
-const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
+const ResourceItem = ({ name, author, url, appliedTags, createdAt, className }) => {
   const { tags } = useContext(ResourcesContext);
 
   const extractUrl = (text) => {
@@ -32,7 +32,7 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt }) => {
 
   return (
     <>
-      <div className="p-5 border-1 border-black bg-white">
+      <div className={`p-5 border-1 border-black bg-white ${className}`}>
         <div className="mb-2">
           <a
             href={extractUrl(url)}
