@@ -5,7 +5,7 @@ export default function ResultsPageLayout() {
   return (
     <>
       <SearchBar />
-      <ResultsContainer />
+      <ResultsContainer/>
     </>
   );
 }

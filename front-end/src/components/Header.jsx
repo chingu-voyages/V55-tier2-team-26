@@ -1,7 +1,7 @@
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
-const Header = () => {
+const Header = ({className}) => {
   const navigate = useNavigate();
 
   const getCurrentDateUTC = () => {
@@ -44,7 +44,7 @@ const Header = () => {
   };
 
   return (
-    <div className="h-12 sm:h-14 md:h-16 grid grid-cols-3 items-center bg-[#998675]">
+    <div className={`grid grid-cols-3 items-center bg-[#998675] ${className}`}>
       <div className="flex items-end ml-3 sm:ml-4 md:ml-6">
         <FaHome 
           className="text-[#2E4057] text-2xl sm:text-3xl md:text-4xl cursor-pointer hover:text-[#222222] transition-colors"

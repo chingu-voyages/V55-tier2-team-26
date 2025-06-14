@@ -1,9 +1,9 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-const Footer = ({ handleOpenModal }) => {
+const Footer = ({ handleOpenModal, className }) => {
   return (
     <>
-      <div className="h-20 w-full flex items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:text-[14px] md:flex-row md:text-[12px] lg:text-[16px] xl:h-80 xl:text-[18px]">
+      <div className={`w-full flex items-center text-center justify-between p-4 border-solid border-2 border-gray-400 rounded-md bg-[#998675] text-[14px] sm:text-[14px] md:flex-row md:text-[12px] lg:text-[16px] xl:text-[18px] ${className}`}>
         <div className="flex items-center text-center ml-0 sm:ml-10 md:ml-2 md:w-40 lg:w-60 xl:ml-5 2xl:ml-10">
           <a
             href={"https://github.com/chingu-voyages/V55-tier2-team-26"}
