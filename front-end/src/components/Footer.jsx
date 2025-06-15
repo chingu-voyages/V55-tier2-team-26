@@ -12,7 +12,7 @@ const Footer = ({ handleOpenModal, className }) => {
             rel="noopener noreferrer"
           >
             <FaGithub 
-              className="text-[#2E4057] text-3xl sm:text-4xl md:text-4xl"
+              className="text-[#2E4057] text-3xl sm:text-4xl md:text-4xl hover:text-[#222222] transition-colors"
               style={{
                 filter: "drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16))",
                 opacity: 1
@@ -200,7 +200,7 @@ const Footer = ({ handleOpenModal, className }) => {
         <div className="flex flex-col items-center text-center">
           <button
             onClick={handleOpenModal}
-            className="hover:cursor-pointer whitespace-pre-line font-inter font-semibold text-xs sm:text-sm md:text-sm xl:text-base"
+            className="hover:cursor-pointer whitespace-pre-line font-inter font-semibold text-xs sm:text-sm md:text-sm xl:text-base hover:font-bold transition-all"
             style={{
                 textShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
                 opacity: 1
