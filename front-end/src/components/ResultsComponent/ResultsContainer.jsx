@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-
 import { ResourcesContext } from "../../context/resources-context";
-
 import ResultsPagination from "./ResultsPagination";
 import Results from "./Results";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
@@ -48,7 +46,7 @@ export default function ResultsContainer({className}) {
   if (error) {
     return (
       <section className={className}>
-        <div className="w-svw p-4 text-center">
+        <div className="w-svw p-4 text-center font-inter">
           <div 
           className="bg-red-100 border border-red-400 text-red-700 px-y py-3 rounded"
           role="alert"
@@ -85,7 +83,7 @@ export default function ResultsContainer({className}) {
         {!results ? (
           <LoadingIndicator />
         ) : results.error ? (
-          <div className="w-full p-4 text-center">
+          <div className="w-full p-4 text-center font-inter">
             <div
               className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded"
               role="alert"
