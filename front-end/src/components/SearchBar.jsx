@@ -181,7 +181,7 @@ export default function SearchBar() {
         id="searchBarContainer"
         className="w-full flex flex-col items-center justify-center"
       >
-        <div className="flex items-center relative min-w-[350px]">
+        <div className={`flex items-center relative min-w-[350px] ${errors.searchText || info.tags && location.pathname === "/search" ? "mt-8" : ""}`}>
           {errors.searchText && (
             <div
               id="search-error-message"
