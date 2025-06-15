@@ -186,7 +186,7 @@ export default function SearchBar() {
             <div
               id="search-error-message"
               role="alert"
-              className="absolute top-[-35px] left-0 text-red-500 text-base font-medium flex items-center gap-[6px] whitespace-nowrap"
+              className="absolute top-[-25px] left-0 text-red-500 text-base font-inter font-semibold text-sm flex items-center gap-[6px] whitespace-nowrap"
             >
               <FaExclamationCircle aria-hidden="true" />
               {errors.searchText}
@@ -195,7 +195,7 @@ export default function SearchBar() {
           {info.tags && (
             <div
               id="tags-info-message"
-              className={`absolute top-[-18px] left-3 text-[.7rem] font-medium flex items-center gap-[6px] whitespace-nowrap ${
+              className={`absolute top-[-24px] left-3 text-sm font-inter font-semibold flex items-center gap-[6px] whitespace-nowrap ${
                 activeTags.length === 8 && "text-[#2E4057]"
               }`}
             >
@@ -248,7 +248,7 @@ export default function SearchBar() {
                     dropdownOpen ? "pb-1" : "pb-2"
                   } text-md rounded-[20px] bg-white text-black focus:outline-none ${
                     errors.searchText
-                      ? "border-2 border-red-500 border-r-0"
+                      ? "border-2 border-red-500"
                       : dropdownOpen
                       ? ""
                       : "border border-[#2E4057]"
@@ -374,8 +374,8 @@ export default function SearchBar() {
               className={`h-[35px] w-full max-w-[120px] rounded-[7px] cursor-pointer bg-[#2E4057] hover:bg-[#91CEF9] text-white font-inter font-light text-base
           ${
             errors.searchText
-              ? "border-2 border-red-500 border-l-0"
-              : "border-gray-400 border-l-0"
+              ? "border-2 border-red-500"
+              : "border-gray-400"
           }`}
             >
               Search
