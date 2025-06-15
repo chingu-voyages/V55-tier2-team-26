@@ -238,21 +238,20 @@ export default function SearchBar() {
                   ref={searchInputRef}
                   type="text"
                   placeholder="What are you looking for?"
-                  // value={inputValue}
                   onChange={handleUserInput}
                   aria-label="Search resources"
                   aria-invalid={!!errors.searchText}
                   aria-describedby={
                     errors.searchText ? "search-error-message" : undefined
                   }
-                  className={`placeholder:italic w-full pt-2 pl-10 pr-10 ${
+                  className={`placeholder:italic placeholder:font-inter placeholder:text-[#222222] placeholder:font-extralight w-full pt-2 pl-10 pr-10 ${
                     dropdownOpen ? "pb-1" : "pb-2"
                   } text-md rounded-[20px] bg-white text-black focus:outline-none ${
                     errors.searchText
                       ? "border-2 border-red-500 border-r-0"
                       : dropdownOpen
                       ? ""
-                      : "border border-[#F9F5FF] border-l-0"
+                      : "border border-[#2E4057]"
                   }`}
                   onClick={() => setDropdownOpen((open) => true)}
                   onFocus={() => setDropdownOpen((open) => true)}
@@ -267,7 +266,7 @@ export default function SearchBar() {
                   className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
                   aria-label="Reset search"
                 >
-                  <i className="fa-solid fa-xmark" />
+                  <i className="fa-solid fa-xmark"/>
                 </button>
               </div>
               {dropdownOpen && (
@@ -362,13 +361,17 @@ export default function SearchBar() {
             </div>
           </div>
         )}
-        <div id="submitButton" className="w-[30%] flex justify-center">
+        <div id="submitButton" className="w-[30%] flex justify-center mt-20">
           {location.pathname === "/search" ? null : (
             <button
               form="searchTermForm"
               type="submit"
               onClick={handleSubmit}
-              className={`h-[30px] w-full max-w-[100px] rounded-[7px] cursor-pointer focus:font-bold hover:font-bold bg-[#2E4057] text-white
+              style={{
+                boxShadow: "0px 3px 6px #00000029",
+                opacity: 1
+              }}
+              className={`h-[35px] w-full max-w-[120px] rounded-[7px] cursor-pointer bg-[#2E4057] hover:bg-[#91CEF9] text-white font-inter font-light text-base
           ${
             errors.searchText
               ? "border-2 border-red-500 border-l-0"
