@@ -175,7 +175,7 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 mb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
+      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 pb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
       <div
         id="searchBarContainer"
@@ -323,7 +323,7 @@ export default function SearchBar() {
         {showTagPills && !dropdownOpen && (
           <div
             id="containerForSelectedTagsAndClearButton"
-            className="flex min-w-[350px] h-auto justify-between m-1"
+            className="flex min-w-[350px] h-[fit-content] justify-between m-1"
           >
             <div
               id="tagPillsContainer"
