@@ -175,13 +175,19 @@ export default function SearchBar() {
   return (
     <div
       id="searchFormContainer"
-      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 mb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
+      className="w-[90%] min-h-[100px] max-h-content m-auto mt-4 pb-2 flex flex-col gap-[15px] items-center justify-between rounded-[20px]"
     >
       <div
         id="searchBarContainer"
         className="w-full flex flex-col items-center justify-center"
       >
-        <div className={`flex items-center relative min-w-[350px] ${errors.searchText || info.tags && location.pathname === "/search" ? "mt-8" : ""}`}>
+        <div
+          className={`flex items-center relative min-w-[350px] ${
+            errors.searchText || (info.tags && location.pathname === "/search")
+              ? "mt-8"
+              : ""
+          }`}
+        >
           {errors.searchText && (
             <div
               id="search-error-message"
@@ -266,7 +272,7 @@ export default function SearchBar() {
                   className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-black hover:text-[120%]"
                   aria-label="Reset search"
                 >
-                  <i className="fa-solid fa-xmark"/>
+                  <i className="fa-solid fa-xmark" />
                 </button>
               </div>
               {dropdownOpen && (
@@ -317,7 +323,7 @@ export default function SearchBar() {
         {showTagPills && !dropdownOpen && (
           <div
             id="containerForSelectedTagsAndClearButton"
-            className="flex min-w-[350px] h-auto justify-between m-1"
+            className="flex min-w-[350px] h-[fit-content] justify-between m-1"
           >
             <div
               id="tagPillsContainer"
@@ -361,27 +367,23 @@ export default function SearchBar() {
             </div>
           </div>
         )}
-        <div id="submitButton" className="w-[30%] flex justify-center mt-20">
-          {location.pathname === "/search" ? null : (
+        {location.pathname === "/search" ? null : (
+          <div id="submitButton" className="w-[30%] flex justify-center mt-20">
             <button
               form="searchTermForm"
               type="submit"
               onClick={handleSubmit}
               style={{
                 boxShadow: "0px 3px 6px #00000029",
-                opacity: 1
+                opacity: 1,
               }}
               className={`h-[35px] w-full max-w-[120px] rounded-[7px] cursor-pointer bg-[#2E4057] hover:bg-[#91CEF9] text-white font-inter font-light text-base
-          ${
-            errors.searchText
-              ? "border-2 border-red-500"
-              : "border-gray-400"
-          }`}
+          ${errors.searchText ? "border-2 border-red-500" : "border-gray-400"}`}
             >
               Search
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
