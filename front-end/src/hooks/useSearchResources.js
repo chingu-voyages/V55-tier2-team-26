@@ -30,6 +30,8 @@ export default function useSearchResources({ resources, tags, isFetching }) {
       const filteredTags = activeTags.filter(({ id }) => id !== tagId);
       searchInputRef.current.focus();
       return setActiveTags(filteredTags);
+    } else if (activeTags.length >= 8) {
+      return;
     }
     searchInputRef.current.focus();
     setActiveTags((oldState) => [...oldState, { id: tagId, name: tagName }]);
