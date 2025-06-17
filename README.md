@@ -47,12 +47,16 @@ Follow these steps within your command line interface (CLI) to run ***Resourcery
 
 4. **Install the project's dependencies** to ensure it runs smoothly: `npm install`
 
-8. **Start the development server**, launching the application in development mode with Vite using: `npm run dev`  
+5. **Start the front-end development server**, launching the application in development mode with Vite using: `npm run dev`
+   - This starts a local development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the app.
 
+7. **Start the back-end development server**, you'll have to do steps 3,4, and 5 again but on the 'back-end', and then you can use the command: `npm run dev`
 
-This starts a local development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the app.
+8. **Security Measures**, you'll have to create a folder named 'config' on both /front-end and /back-end folders, inside of both folders you'll need a file named *dev.env* and you'll have to add a couple of keys
+   - *BACK-END KEYS AND VALUES:*  GEMINI_API_KEY='key', JWT_SECRET='any secret here for your jwt key', PORT=3000, IS_DEV_ENV=true
+   - *FRONT-END KEYS AND VALUES:* VITE_TOKEN='String of any generated jwt key to be used as a key for the back-end to receive and give access to the gemini api, the secret used should be in the back end'  
 
-By following these steps, you should have a local instance of DevEx Tools running and ready for development or exploration.
+By following these steps, you should have a local instance of Resourcery running and ready for development or exploration.
 
 # 👥 Our Team
 
