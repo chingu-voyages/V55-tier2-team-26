@@ -53,8 +53,13 @@ Follow these steps within your command line interface (CLI) to run ***Resourcery
 7. **Start the back-end development server**, you'll have to do steps 3,4, and 5 again but on the 'back-end', and then you can use the command: `npm run dev`
 
 8. **Security Measures**, you'll have to create a folder named 'config' on both /front-end and /back-end folders, inside of both folders you'll need a file named *dev.env* and you'll have to add a couple of keys
-   - *BACK-END KEYS AND VALUES:*  GEMINI_API_KEY='key', JWT_SECRET='any secret here for your jwt key', PORT=3000, IS_DEV_ENV=true
-   - *FRONT-END KEYS AND VALUES:* VITE_TOKEN='String of any generated jwt key to be used as a key for the back-end to receive and give access to the gemini api, the secret used should be in the back end'  
+   - *BACK-END KEYS AND VALUES:*
+      - GEMINI_API_KEY='key'
+      - JWT_SECRET='any secret here for your jwt key'
+      - PORT=3000
+      - IS_DEV_ENV=true
+   - *FRONT-END KEYS AND VALUES:*
+      - VITE_TOKEN='String of any generated jwt key to be used as a key for the back-end to receive and give access to the gemini api, the secret used should be in the back end'  
 
 By following these steps, you should have a local instance of Resourcery running and ready for development or exploration.
 
