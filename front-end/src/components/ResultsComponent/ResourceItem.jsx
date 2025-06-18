@@ -50,7 +50,7 @@ const ResourceItem = ({
       <div className={`p-5 border-1 border-black bg-white ${className}`}>
         <div className="mb-2">
           <a
-            href={extractUrl(url)}
+            href={getUrl(url)}
             className="text-[16px] mb-2 underline cursor-pointer sm:text-[20px] md:text-[24px] lg:text-[26px]"
           >
             {name}
