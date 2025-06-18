@@ -84,10 +84,6 @@ export default function SearchBar() {
     const tagId = e.target.value;
     const tagName = e.target.textContent;
 
-    if (activeTags.length >= 8) {
-      return;
-    }
-
     baseHandleTagsInput(e);
   };
 
