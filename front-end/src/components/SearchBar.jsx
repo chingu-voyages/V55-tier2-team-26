@@ -12,7 +12,6 @@ export default function SearchBar() {
   const [errors, setErrors] = useState({ searchText: "" });
   const [info, setInfo] = useState({ tags: "" });
   const [showTagPills, setShowTagPills] = useState(false);
-  // const [inputValue, setInputValue] = useState(""); //Trying not to use this state####################################
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -71,10 +70,6 @@ export default function SearchBar() {
       : tagStyles.inactiveTag;
 
   const handleUserInput = (e) => {
-    //Remove these two lines now that we're not using the inputValue state#################
-    // const newValue = e.target.value;
-    // setInputValue(newValue);
-    //##################################################################
     if (validateSearchText(e.target.value)) {
       baseHandleUserInput(e);
     }
@@ -110,14 +105,11 @@ export default function SearchBar() {
   };
 
   const handleReset = () => {
-    // setInputValue(""); //Not using this state###################################
-    console.log("handleReset was called");
 
     if (searchInputRef.current) {
       searchInputRef.current.value = "";
     }
 
-    console.log("Calling baseHandleUserInput with an empty string");
     baseHandleUserInput({ target: { value: "" } });
 
     clearAllTags();

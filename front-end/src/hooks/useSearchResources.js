@@ -17,7 +17,6 @@ export default function useSearchResources({ resources, tags, isFetching }) {
   const [results, setResults] = useState(null);
 
   const handleUserInput = (e) => {
-    console.log("baseHandleUserInput called")
     const refactoredTags = activeTags.map(({ id }) => id);
     setUserInput({ keywords: e.target.value, tags: refactoredTags });
   };

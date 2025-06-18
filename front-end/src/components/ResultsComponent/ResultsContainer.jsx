@@ -79,7 +79,7 @@ export default function ResultsContainer({className}) {
 
   return (
     <section className={className}>
-      <div className="flex flex-col w-svw max-[380px]:h-[65svh] min-[390px]:h-[70svh] md:h-[74svh] xl:h-[70svh]">
+      <div className="flex flex-col w-svw max-[380px]:h-[63svh] min-[381px]:h-[63svh] md:h-[65svh] xl:h-[65svh]">
         {!results ? (
           <LoadingIndicator />
         ) : results.error ? (
