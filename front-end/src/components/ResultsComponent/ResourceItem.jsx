@@ -1,8 +1,23 @@
 import { useContext } from "react";
 import { ResourcesContext } from "../../context/resources-context";
 
-const ResourceItem = ({ name, author, url, appliedTags, createdAt, className }) => {
+const ResourceItem = ({
+  name,
+  author,
+  url,
+  appliedTags,
+  createdAt,
+  className,
+}) => {
   const { tags } = useContext(ResourcesContext);
+
+  const getUrl = (text) => {
+    if (!text) {
+      return "No URL";
+    }
+    const match = text.match(/https?:\/\/[^\s]+/);
+    return match ? match[0] : "No URL Provided";
+  };
 
   const extractUrl = (text) => {
     if (!text) {
@@ -43,7 +58,7 @@ const ResourceItem = ({ name, author, url, appliedTags, createdAt, className }) 
         </div>
         <div className="mb-2">
           <a
-            href={extractUrl(url)}
+            href={getUrl(url)}
             className="text-[12px] mb-2 text-blue-600 cursor-pointer sm:text-[14px] md:text-[14px] lg:text-[16px]"
           >
             {extractUrl(url)}
